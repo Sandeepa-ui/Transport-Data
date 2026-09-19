@@ -7,5 +7,5 @@
  */
 window.IMO_DRIVE_CONFIG = {
   url: 'https://script.google.com/macros/s/AKfycbyuSpS8N3M6IfV0N454sJaAf9LBGuxhuh4YHFvk6OgUrCaBIVzW15uUCcF2O-ILgSH6XQ/exec',
-  key: ''
+  key: 'IMO-Transport-2026-Key-8472'
 };
