@@ -1,0 +1,2768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imo Chicken &amp; Agro (Pvt) Ltd — Employee Transport Management System</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2310265e'/%3E%3Crect x='14' y='14' width='36' height='27' rx='5' fill='none' stroke='%23c9a227' stroke-width='4'/%3E%3Cpath d='M14 28h36' stroke='%23c9a227' stroke-width='3'/%3E%3Ccircle cx='24' cy='48' r='4.5' fill='%23c9a227'/%3E%3Ccircle cx='40' cy='48' r='4.5' fill='%23c9a227'/%3E%3C/svg%3E">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#10265e; --navy2:#0c1d4a; --royal:#1d3f9e; --royal2:#2a52c0; --royal3:#4a72d4;
+  --royal4:#8aa4e8; --royal5:#dfe7f8; --royal6:#eef2fb;
+  --gold:#c9a227; --gold2:#a5821f; --gold3:#8a6d1a; --gold4:#e6cf7a; --gold5:#f6ecd2; --gold6:#fbf7ea;
+  --white:#ffffff; --paper:#f4f6fb; --line:#d9e1f2; --ink:#14264f; --muted:#4c5f8a;
+  --serif:'Times New Roman', Times, serif;
+  --sans:Calibri, 'Times New Roman', serif;
+  --sh:0 1px 2px rgba(16,38,94,.05), 0 4px 16px rgba(16,38,94,.08);
+  --shl:0 8px 30px rgba(16,38,94,.18);
+}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:15px;line-height:1.45}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--navy);font-weight:bold;line-height:1.25}
+button{font-family:var(--sans);cursor:pointer}
+input,select{font-family:var(--sans);font-size:14.5px;color:var(--ink)}
+a{color:var(--royal)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.hidden{display:none!important}
+.ic{flex:none;vertical-align:-3px}
+.mono{font-weight:600;color:var(--royal);letter-spacing:.3px}
+.gold-t{color:var(--gold3)}
+.req{color:var(--gold2);font-weight:bold}
+#boot-error{display:none;position:fixed;top:0;left:0;right:0;z-index:600;background:var(--navy2);color:#fff;padding:10px 16px;font-size:13px;border-bottom:3px solid var(--gold);box-shadow:0 4px 18px rgba(12,29,74,.35)}
+#boot-error b{color:var(--gold4)}
+#boot-ok{display:none;margin:12px auto 0;max-width:420px;text-align:center;color:var(--royal);font-size:12.5px;font-weight:700;letter-spacing:.4px}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;display:flex;background:var(--paper);z-index:50}
+.lg-brand{flex:1.15;background:var(--navy);color:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:56px 60px}
+.lg-brand svg.deco{position:absolute;right:-30px;bottom:-20px;width:70%;opacity:.5;pointer-events:none}
+.lg-mark{width:58px;height:58px;border-radius:14px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:26px}
+.lg-badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;color:var(--gold4);margin-bottom:14px;font-weight:600}
+.lg-brand h1{font-size:40px;color:#fff;max-width:520px}
+.lg-brand h1 span{color:var(--gold4)}
+.lg-rule{width:74px;height:3px;background:var(--gold);margin:20px 0}
+.lg-sub{color:var(--royal5);max-width:460px;font-size:15.5px}
+.lg-feats{margin-top:34px;display:flex;flex-direction:column;gap:13px}
+.lg-feat{display:flex;gap:11px;align-items:center;color:var(--royal5);font-size:14.5px}
+.lg-feat .ic{color:var(--gold)}
+.lg-panel{width:500px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 46px;box-shadow:-6px 0 30px rgba(16,38,94,.10)}
+.lg-box{width:100%;max-width:360px}
+.lg-box h2{font-size:26px}
+.lg-box .lg-tag{color:var(--muted);margin:4px 0 24px}
+.lg-field{margin-bottom:15px}
+.lg-field label{display:block;font-size:12px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--royal);margin-bottom:6px}
+.lg-in{position:relative}
+.lg-in .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--royal3)}
+.lg-in input{width:100%;padding:11px 12px 11px 38px;border:1px solid var(--line);border-radius:8px;background:var(--royal6)}
+.lg-in input:focus{outline:none;border-color:var(--royal2);background:#fff;box-shadow:0 0 0 3px rgba(42,82,192,.12)}
+.lg-err{display:none;background:var(--gold5);border:1px solid var(--gold4);color:var(--gold3);padding:9px 12px;border-radius:8px;font-size:13.5px;margin-bottom:14px}
+.lg-btn{width:100%;margin-top:4px}
+.lg-forgot{width:100%;margin-top:9px}
+.lg-demo{margin-top:24px;border:1px dashed var(--gold4);background:var(--gold6);border-radius:10px;padding:12px 14px}
+.lg-demo b{font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold3);display:block;margin-bottom:8px}
+.lg-demo-row{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:13px}
+.lg-demo-row:hover{background:var(--gold5)}
+.lg-demo-row code{font-family:var(--sans);color:var(--royal);font-weight:700}
+.lg-demo-row i{font-style:normal;color:var(--muted)}
+.lg-foot{margin-top:22px;font-size:12px;color:var(--muted);text-align:center}
+.lg-mstrip{display:none}
+@media(max-width:920px){
+  .lg-brand{display:none}
+  .lg-panel{width:100%;box-shadow:none}
+  .lg-mstrip{display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;padding:16px 22px;width:100%}
+  .lg-mstrip .lg-mark{width:40px;height:40px;margin:0;border-radius:10px}
+  .lg-mstrip b{font-family:var(--serif);font-size:17px}
+  .lg-mstrip span{display:block;font-size:11px;color:var(--royal4);letter-spacing:1.6px;text-transform:uppercase}
+  #login-screen{flex-direction:column}
+  .lg-panel{justify-content:flex-start;padding-top:34px;overflow:auto}
+}
+
+/* APP SHELL */
+#app{min-height:100vh}
+#sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:var(--navy);color:#fff;display:flex;flex-direction:column;z-index:90;transition:width .18s ease;overflow:hidden}
+body.sb-collapsed #sidebar{width:72px}
+.sb-brand{display:flex;align-items:center;gap:12px;padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.12);min-height:66px}
+.sb-brand .mark{width:40px;height:40px;flex:none;border-radius:11px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center}
+.sb-bname{white-space:nowrap;line-height:1.2}
+.sb-bname b{font-family:var(--serif);font-size:15.5px;display:block;color:#fff}
+.sb-bname span{font-size:12px;color:var(--gold4)}
+body.sb-collapsed .sb-bname,body.sb-collapsed .sb-grp,body.sb-collapsed .sb-lb,body.sb-collapsed .sb-foot span{display:none}
+body.sb-collapsed .sb-brand{justify-content:center;padding:16px 8px}
+#sb-nav{flex:1;overflow-y:auto;padding:10px 10px 14px}
+.sb-grp{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--royal4);padding:14px 10px 6px;white-space:nowrap}
+.sb-item{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;color:var(--royal5);padding:11px 12px;border-radius:9px;font-size:14.5px;text-align:left;position:relative;margin-bottom:2px;white-space:nowrap}
+.sb-item:hover{background:rgba(255,255,255,.09);color:#fff}
+.sb-item.on{background:rgba(255,255,255,.13);color:#fff;box-shadow:inset 3px 0 0 var(--gold)}
+.sb-item.on .ic{color:var(--gold)}
+body.sb-collapsed .sb-item{justify-content:center;padding:12px 8px}
+body.sb-collapsed .sb-item:hover::after{content:attr(data-tip);position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:var(--navy2);color:#fff;border:1px solid var(--gold);padding:6px 11px;border-radius:7px;font-size:12.5px;white-space:nowrap;z-index:120}
+.sb-foot{padding:12px;border-top:1px solid rgba(255,255,255,.12)}
+#sb-collapse{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;color:var(--royal4);padding:9px 12px;border-radius:8px;font-size:13.5px}
+#sb-collapse:hover{background:rgba(255,255,255,.09);color:#fff}
+body.sb-collapsed #sb-collapse{justify-content:center}
+#sb-overlay{display:none;position:fixed;inset:0;background:rgba(12,29,74,.5);z-index:85}
+#sb-toggle{display:none}
+.main-wrap{margin-left:250px;min-height:100vh;display:flex;flex-direction:column;transition:margin .18s ease;min-width:0}
+body.sb-collapsed .main-wrap{margin-left:72px}
+
+/* HEADER */
+.topbar{position:sticky;top:0;height:62px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 20px;z-index:80}
+.iconbtn{width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;color:var(--royal)}
+.iconbtn:hover{border-color:var(--royal3);background:var(--royal6)}
+.crumbs{display:flex;align-items:center;gap:4px;font-size:13.5px;color:var(--muted);overflow:hidden;white-space:nowrap}
+.crumb{background:none;border:none;color:var(--royal);font-size:13.5px;display:inline-flex;align-items:center;gap:5px;padding:4px 6px;border-radius:6px}
+.crumb:hover{background:var(--royal6)}
+.crumb-cur{font-weight:700;color:var(--navy);padding:4px 6px}
+.crumb-sep{color:var(--royal4)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.tb-clock{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;padding:6px 12px;font-size:13px;color:var(--muted);background:var(--royal6)}
+.tb-clock b{color:var(--navy);font-weight:700}
+.tb-clock i{font-style:normal;border-left:1px solid var(--line);padding-left:8px}
+.bell-wrap,.uchip-wrap{position:relative}
+.bell-badge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;border-radius:99px;background:var(--gold);color:var(--navy);font-size:10.5px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 4px;border:1.5px solid #fff}
+.dd{position:absolute;right:0;top:calc(100% + 9px);background:#fff;border:1px solid var(--line);border-radius:11px;box-shadow:var(--shl);min-width:250px;z-index:110;display:none;overflow:hidden}
+.dd.open{display:block}
+.dd-hd{padding:11px 15px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--royal);font-weight:700;border-bottom:1px solid var(--line);background:var(--royal6)}
+.dd-item{display:flex;gap:11px;align-items:flex-start;width:100%;background:none;border:none;text-align:left;padding:11px 15px;font-size:13.5px;color:var(--ink);border-bottom:1px solid var(--royal6)}
+.dd-item:last-child{border-bottom:none}
+.dd-item:hover{background:var(--royal6)}
+.dd-item .ic{color:var(--royal);margin-top:1px}
+.dd-item small{display:block;color:var(--muted);font-size:12px}
+.dd-item.danger .ic,.dd-item.danger{color:var(--navy);font-weight:600}
+.uchip-btn{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:5px 11px 5px 6px}
+.uchip-btn:hover{border-color:var(--royal3);background:var(--royal6)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--gold);color:var(--navy);display:inline-flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:bold;font-size:14px;flex:none}
+.uinfo{text-align:left;line-height:1.15}
+.uinfo b{display:block;font-size:13.5px;color:var(--navy)}
+.uinfo i{font-style:normal;font-size:11.5px;color:var(--muted)}
+@media(max-width:760px){.uinfo,.tb-clock{display:none}}
+
+/* CONTENT */
+.content{padding:20px 24px 54px;max-width:1500px;width:100%;margin:0 auto}
+.page{display:none}
+.page.active{display:block}
+.page-hd{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin:6px 0 18px;flex-wrap:wrap}
+.page-hd h1{font-size:26px}
+.page-hd .sub{color:var(--muted);font-size:13.5px;margin-top:3px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh)}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tick-h{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:17.5px;color:var(--navy)}
+.tick-h::before{content:'';width:4px;height:17px;background:var(--gold);border-radius:2px;flex:none}
+.tick-h small{font-family:var(--sans);font-weight:400;font-size:12.5px;color:var(--muted)}
+.pad{padding:18px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:9px;font-size:14px;font-weight:600;border:1px solid transparent;transition:background .12s,border-color .12s}
+.btn-primary{background:var(--royal);color:#fff;border-color:var(--royal)}
+.btn-primary:hover{background:var(--navy);border-color:var(--navy)}
+.btn-gold{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.btn-gold:hover{background:var(--gold4);border-color:var(--gold2)}
+.btn-outline{background:#fff;color:var(--royal);border-color:var(--royal3)}
+.btn-outline:hover{background:var(--royal6)}
+.btn-plain{background:#fff;color:var(--muted);border-color:var(--line)}
+.btn-plain:hover{border-color:var(--royal3);color:var(--royal)}
+.btn-danger{background:var(--navy);color:var(--gold4);border-color:var(--navy)}
+.btn-danger:hover{background:var(--navy2)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.rowbtn{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--royal);margin-left:6px}
+.rowbtn:hover{border-color:var(--royal);background:var(--royal6)}
+.rowbtn.gold{color:var(--gold2)}.rowbtn.gold:hover{border-color:var(--gold);background:var(--gold5)}
+.rowbtn.dark{color:var(--navy)}.rowbtn.dark:hover{border-color:var(--navy);background:var(--royal5)}
+
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:99px;font-size:12px;font-weight:700;border:1px solid;white-space:nowrap}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.p-ok{background:var(--royal6);color:var(--royal);border-color:var(--royal4)}
+.p-warn{background:var(--gold5);color:var(--gold3);border-color:var(--gold4)}
+.p-full{background:var(--royal);color:#fff;border-color:var(--royal)}
+.p-inact{background:var(--gold5);color:var(--gold3);border-color:var(--gold4)}
+.p-navy{background:var(--navy);color:#fff;border-color:var(--navy)}
+.p-out{background:#fff;color:var(--royal);border-color:var(--royal4)}
+
+.field{margin-bottom:4px}
+.field label{display:block;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--royal);margin-bottom:6px}
+.field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.field input:focus,.field select:focus{outline:none;border-color:var(--royal2);box-shadow:0 0 0 3px rgba(42,82,192,.12)}
+.field input.inv,.field select.inv{border-color:var(--gold2);background:var(--gold6)}
+.f-err{min-height:18px;font-size:12.5px;color:var(--gold3);font-weight:700;padding-top:3px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+.frm-card{max-width:840px}
+.frm-sec{padding:16px 20px 6px}
+.frm-sec h3{font-size:16.5px;display:flex;align-items:center;gap:9px}
+.frm-sec h3 .ic{color:var(--gold2)}
+.frm-sec p{color:var(--muted);font-size:13px;margin-top:3px}
+.frm-body{padding:14px 20px 20px}
+.frm-actions{display:flex;gap:10px;margin-top:10px;padding-top:16px;border-top:1px solid var(--line)}
+.hint{display:flex;gap:8px;align-items:flex-start;margin-top:10px;padding:10px 13px;border-radius:9px;font-size:13.5px;border:1px solid;background:var(--royal6);border-color:var(--royal5);color:var(--royal)}
+.hint.warn{background:var(--gold6);border-color:var(--gold4);color:var(--gold3)}
+.hint.err{background:var(--navy);border-color:var(--navy);color:#fff}
+.hint .ic{margin-top:1px;flex:none}
+
+.tbl-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.search{position:relative;flex:1;min-width:200px;max-width:340px}
+.search .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--royal3)}
+.search input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--line);border-radius:8px}
+.search input:focus{outline:none;border-color:var(--royal2);box-shadow:0 0 0 3px rgba(42,82,192,.12)}
+.fsel{padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);max-width:190px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl{width:100%;border-collapse:collapse;min-width:720px}
+.tbl th{background:var(--royal);color:#fff;text-align:left;padding:11px 13px;font-size:11.8px;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;font-weight:700}
+.tbl td{padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:14px}
+.tbl tbody tr:hover{background:var(--royal6)}
+.tbl .acts{white-space:nowrap;text-align:right}
+.tbl .num{text-align:right}
+.empty{padding:36px 20px;text-align:center;color:var(--muted)}
+.empty .ic{color:var(--royal4);margin-bottom:8px}
+.empty b{display:block;font-family:var(--serif);font-size:16px;color:var(--navy);margin-bottom:3px}
+.pgn{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;flex-wrap:wrap;border-top:1px solid var(--line)}
+.pgn-info{font-size:13px;color:var(--muted)}
+.pgbtns{display:flex;gap:5px;flex-wrap:wrap}
+.pgbtn{min-width:32px;height:32px;padding:0 8px;border:1px solid var(--line);background:#fff;border-radius:7px;font-size:13px;color:var(--royal);display:inline-flex;align-items:center;justify-content:center}
+.pgbtn:hover{border-color:var(--royal)}
+.pgbtn.on{background:var(--royal);color:#fff;border-color:var(--royal)}
+.pgbtn:disabled{opacity:.45;cursor:default}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:13px}
+.kpi{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:11px;padding:14px 15px;box-shadow:var(--sh)}
+.kpi .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.kpi .l{font-size:11.8px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kpi .kic{width:34px;height:34px;border-radius:9px;background:var(--royal6);color:var(--royal);display:flex;align-items:center;justify-content:center;flex:none}
+.kpi .v{font-family:var(--serif);font-size:27px;color:var(--navy);line-height:1}
+.kpi .s{font-size:12px;color:var(--muted);margin-top:5px}
+.kpi.gold{border-left-color:var(--royal)}
+.kpi.gold .kic{background:var(--gold5);color:var(--gold2)}
+.dash-hero{display:grid;grid-template-columns:400px 1fr;gap:16px;margin-bottom:16px}
+.hero-util{display:flex;gap:20px;align-items:center;flex-wrap:wrap;padding:20px}
+.legend{display:flex;flex-direction:column;gap:9px;flex:1;min-width:150px}
+.lg-row{display:flex;align-items:center;gap:9px;font-size:13.5px}
+.lg-sw{width:12px;height:12px;border-radius:3.5px;flex:none}
+.lg-row b{margin-left:auto;font-family:var(--serif);font-size:16px;color:var(--navy)}
+.stat-div{border-top:1px dashed var(--line);margin:16px 0 12px;width:100%}
+.cst-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:13.5px}
+.cst-row .bar{flex:1;height:9px;background:var(--royal5);border-radius:99px;overflow:hidden}
+.cst-row .bar span{display:block;height:100%;border-radius:99px}
+.cst-row b{width:26px;text-align:right;font-family:var(--serif);font-size:15px;color:var(--navy)}
+.dash-g2{display:grid;grid-template-columns:2fr 3fr;gap:16px;margin-bottom:16px}
+.dash-g3{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.scroll-x{overflow-x:auto}
+.ax{font-family:Calibri;font-size:11px;fill:var(--muted)}
+.axl{font-family:Calibri;font-size:11.5px;fill:var(--ink);font-weight:600}
+.cb{cursor:pointer}
+.cb:hover{opacity:.8}
+.ch-legend{display:flex;gap:16px;flex-wrap:wrap;padding:10px 16px 14px;font-size:12.5px;color:var(--muted)}
+.ch-legend span{display:inline-flex;align-items:center;gap:7px}
+.hbars{padding:6px 18px 14px;max-height:360px;overflow-y:auto}
+.hb{display:flex;align-items:center;gap:11px;padding:6px 0}
+.hb-l{width:150px;flex:none;font-size:13px;font-weight:600;color:var(--navy);line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-l i{display:block;font-style:normal;font-weight:400;font-size:11px;color:var(--muted)}
+.hb-t{flex:1;height:14px;background:var(--royal6);border-radius:99px;overflow:hidden}
+.hb-f{display:block;height:100%;border-radius:99px;min-width:2px}
+.hb-v{width:38px;text-align:right;font-family:var(--serif);font-weight:bold;color:var(--navy)}
+.capbar{height:11px;background:var(--gold4);border-radius:99px;overflow:hidden;display:flex;min-width:110px}
+.capbar span{display:block;height:100%;background:var(--royal)}
+.dn-wrap{position:relative;flex:none}
+.dn-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.dn-c b{font-family:var(--serif);font-size:29px;color:var(--navy)}
+.dn-c span{font-size:11.5px;color:var(--muted);letter-spacing:.6px;text-transform:uppercase}
+#ctip{position:fixed;z-index:300;background:var(--navy2);color:#fff;padding:6px 11px;border-radius:7px;font-size:12.5px;pointer-events:none;display:none;border:1px solid var(--gold);max-width:260px;box-shadow:var(--shl)}
+
+.hero{background:var(--navy);border-radius:14px;color:#fff;padding:26px 30px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;box-shadow:var(--sh);position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-70px;top:-70px;width:230px;height:230px;border:2px solid rgba(201,162,39,.25);border-radius:50%}
+.hero::before{content:'';position:absolute;right:-30px;top:-30px;width:150px;height:150px;border:2px solid rgba(201,162,39,.18);border-radius:50%}
+.w-tag{font-size:11.5px;letter-spacing:2.6px;text-transform:uppercase;color:var(--gold4);font-weight:700;margin-bottom:10px}
+.hero h1{color:#fff;font-size:31px}
+.w-co{font-family:var(--serif);font-size:18px;color:var(--gold4);margin-top:7px}
+.w-role{display:inline-flex;margin-top:14px}
+.clockbox{display:flex;align-items:center;gap:20px;z-index:1}
+.ana{width:104px;height:104px;flex:none}
+.dig{text-align:right}
+.dig .day{display:inline-block;background:var(--gold);color:var(--navy);font-weight:700;font-size:12px;letter-spacing:1.6px;text-transform:uppercase;padding:4px 12px;border-radius:99px;margin-bottom:8px}
+.dig .time{font-family:var(--serif);font-size:40px;line-height:1;color:#fff}
+.dig .date{color:var(--royal4);font-size:14px;margin-top:6px}
+.home-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.dl-row{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.dl-row:last-child{border-bottom:none}
+.dl-row .k{color:var(--muted)}
+.dl-row .v{font-weight:700;color:var(--navy);text-align:right}
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.qa{display:flex;flex-direction:column;gap:9px;align-items:flex-start;border:1px solid var(--gold4);background:var(--gold6);border-radius:11px;padding:14px;text-align:left}
+.qa:hover{border-color:var(--gold);background:var(--gold5)}
+.qa .qa-ic{width:34px;height:34px;border-radius:9px;background:var(--royal);color:#fff;display:flex;align-items:center;justify-content:center}
+.qa b{color:var(--navy);font-size:14px}
+.qa span{font-size:12px;color:var(--muted)}
+.sum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:13px}
+.sumcard{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:15px;box-shadow:var(--sh)}
+.sumcard .kic{width:42px;height:42px;border-radius:11px;background:var(--royal6);color:var(--royal);display:flex;align-items:center;justify-content:center;flex:none}
+.sumcard.alt .kic{background:var(--gold5);color:var(--gold2)}
+.sumcard .v{font-family:var(--serif);font-size:24px;color:var(--navy);line-height:1.1}
+.sumcard .l{font-size:12px;color:var(--muted);margin-top:2px}
+.stackbar{display:flex;height:16px;border-radius:99px;overflow:hidden;background:var(--royal5)}
+.stackbar span{display:block;height:100%}
+
+.cfg-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px;margin-bottom:16px}
+.cfg-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:center;box-shadow:var(--sh);cursor:pointer;text-align:left}
+.cfg-card:hover{border-color:var(--gold)}
+.cfg-card.on{border-color:var(--royal);box-shadow:0 0 0 1px var(--royal),var(--sh)}
+.cfg-ic{width:46px;height:46px;border-radius:12px;background:var(--navy);color:var(--gold4);display:flex;align-items:center;justify-content:center;flex:none}
+.cfg-card b{font-family:var(--serif);font-size:16.5px;color:var(--navy);display:block}
+.cfg-card .n{font-size:12.5px;color:var(--muted)}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--line);overflow-x:auto}
+.tab{padding:11px 17px;font-weight:700;font-size:13.8px;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap}
+.tab:hover{color:var(--royal)}
+.tab.on{color:var(--royal);border-bottom-color:var(--gold)}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(12,29,74,.5);display:flex;align-items:center;justify-content:center;z-index:150;padding:18px}
+.modal{background:#fff;border-radius:13px;width:100%;max-height:92vh;display:flex;flex-direction:column;box-shadow:var(--shl)}
+.modal-hd{display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid var(--line)}
+.modal-hd .ic{color:var(--gold2)}
+.modal-hd h3{font-size:17.5px;flex:1}
+.modal-bd{padding:18px;overflow-y:auto}
+.modal-ft{display:flex;justify-content:flex-end;gap:10px;padding:14px 18px;border-top:1px solid var(--line)}
+.cf-msg{font-size:14.5px;color:var(--ink)}
+.pv-row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.pv-row .k{color:var(--muted)}
+.pv-row .v{font-weight:700;color:var(--navy);text-align:right}
+.pv-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+#toast-root{position:fixed;top:74px;right:16px;z-index:250;display:flex;flex-direction:column;gap:10px;width:min(370px,calc(100vw - 32px))}
+.toast{background:#fff;border:1px solid var(--line);border-left:4px solid var(--royal);border-radius:10px;box-shadow:var(--shl);padding:13px 14px;display:flex;gap:11px}
+.toast.out{opacity:0;transform:translateX(24px);transition:all .25s}
+.toast .t-ic{color:var(--royal);margin-top:1px}
+.toast .t-b{flex:1}
+.toast .t-b b{display:block;font-size:14px;color:var(--navy)}
+.toast .t-b p{font-size:13px;color:var(--muted);margin-top:2px}
+.toast .t-x{background:none;border:none;color:var(--muted);align-self:flex-start}
+.toast.warning{border-left-color:var(--gold);background:var(--gold6)}
+.toast.warning .t-ic,.toast.warning .t-b b{color:var(--gold3)}
+.toast.info{border-left-color:var(--royal3)}
+.toast.error{background:var(--navy);border-color:var(--navy);border-left:4px solid var(--gold)}
+.toast.error .t-ic{color:var(--gold)}
+.toast.error .t-b b{color:#fff}
+.toast.error .t-b p{color:var(--royal4)}
+.toast.error .t-x{color:var(--royal4)}
+
+.rep-wrap{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
+.rep-item{display:flex;gap:11px;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--royal6);padding:12px 15px}
+.rep-item:hover{background:var(--royal6)}
+.rep-item.on{background:var(--royal6);box-shadow:inset 3px 0 0 var(--gold)}
+.rep-item .ic{color:var(--royal);margin-top:2px}
+.rep-item b{display:block;font-size:14px;color:var(--navy)}
+.rep-item span{font-size:12px;color:var(--muted)}
+.rep-filters{padding:14px 15px;border-top:1px solid var(--line)}
+.rep-filters .field{margin-bottom:10px}
+.rep-hd{padding:20px 22px 14px;border-bottom:3px solid var(--gold)}
+.rep-co{font-family:var(--serif);font-size:21px;color:var(--navy)}
+.rep-sys{font-size:13px;color:var(--muted);margin-top:1px}
+.rep-title{font-family:var(--serif);font-size:16.5px;color:var(--royal);margin-top:10px}
+.rep-meta{font-size:12.5px;color:var(--muted);margin-top:4px}
+.rep-actions{display:flex;gap:8px;flex-wrap:wrap;padding:13px 22px;border-bottom:1px solid var(--line)}
+.rep-sum{padding:13px 22px;background:var(--gold6);border-top:1px solid var(--gold5);font-weight:700;color:var(--navy);font-size:13.5px}
+
+.sw{position:relative;width:42px;height:23px;background:var(--royal5);border:1px solid var(--royal4);border-radius:99px;cursor:pointer;flex:none;display:inline-block}
+.sw::after{content:'';position:absolute;top:2px;left:2px;width:17px;height:17px;background:#fff;border:1px solid var(--royal4);border-radius:50%;transition:.15s}
+.sw.on{background:var(--royal);border-color:var(--royal)}
+.sw.on::after{left:20px;background:var(--gold);border-color:var(--gold)}
+.sw-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-bottom:1px dashed var(--line)}
+.sw-row:last-child{border:none}
+.sw-row b{color:var(--navy);font-size:14.5px;display:block}
+.sw-row span{font-size:12.5px;color:var(--muted)}
+.danger-zone{border:1px dashed var(--gold4);background:var(--gold6);border-radius:10px;padding:15px;margin-top:20px}
+.danger-zone b{color:var(--gold3)}
+
+#print-area{display:none}
+@page{margin:13mm}
+@media print{
+  body{background:#fff}
+  #app,#login-screen,#toast-root,#modal-root,#ctip,#boot-error{display:none!important}
+  #print-area{display:block!important;font-family:Calibri}
+  .pr-co{font-family:'Times New Roman';font-size:21px;color:#10265e;font-weight:bold}
+  .pr-sys{font-size:12.5px;color:#4c5f8a;margin-top:2px}
+  .pr-brand{border-bottom:3px solid #c9a227;padding-bottom:10px}
+  .pr-title{font-family:'Times New Roman';font-size:16.5px;color:#1d3f9e;margin:12px 0 3px}
+  .pr-meta{font-size:11px;color:#4c5f8a;margin-bottom:10px}
+  .pr-tbl{width:100%;border-collapse:collapse;font-size:11.5px}
+  .pr-tbl th{background:#1d3f9e;color:#fff;border:1px solid #10265e;padding:6px 8px;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-tbl td{border:1px solid #b9c6e4;padding:5px 8px}
+  .pr-tbl tr:nth-child(even) td{background:#eef2fb;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pr-sum{margin-top:10px;font-weight:bold;color:#10265e;font-size:12px}
+  .pr-foot{margin-top:16px;border-top:2px solid #c9a227;padding-top:6px;font-size:10.5px;color:#4c5f8a}
+}
+
+@media(max-width:1100px){.dash-hero{grid-template-columns:1fr}.dash-g2{grid-template-columns:1fr}}
+@media(max-width:1024px){
+  #sidebar{transform:translateX(-100%);transition:transform .2s ease}
+  body.sb-open #sidebar{transform:none}
+  body.sb-collapsed #sidebar{width:250px}
+  body.sb-collapsed .sb-bname,body.sb-collapsed .sb-grp,body.sb-collapsed .sb-lb,body.sb-collapsed .sb-foot span{display:block}
+  body.sb-collapsed .sb-item{justify-content:flex-start;padding:11px 12px}
+  #sb-toggle{display:inline-flex}
+  body.sb-open #sb-overlay{display:block}
+  .main-wrap,body.sb-collapsed .main-wrap{margin-left:0}
+  #sb-collapse{display:none}
+  .rep-wrap{grid-template-columns:1fr}
+}
+@media(max-width:860px){.dash-g3,.home-g{grid-template-columns:1fr}.fgrid{grid-template-columns:1fr}.content{padding:16px 14px 46px}.hero{padding:22px}.dig{text-align:left}}
+@media(max-width:560px){.qa-grid{grid-template-columns:1fr}.dig .time{font-size:32px}.hero h1{font-size:25px}.tbl{min-width:640px}}
+</style>
+</head>
+<body>
+
+<div id="boot-error"></div>
+<noscript><div style="background:#10265e;color:#fff;padding:12px 18px;font-family:Calibri">JavaScript is disabled in this viewer. Please download this file and open it directly in Google Chrome, Microsoft Edge or Firefox.</div></noscript>
+
+<!-- ============ LOGIN (static — demo accounts always visible) ============ -->
+<div id="login-screen">
+  <div class="lg-brand">
+    <svg class="deco" viewBox="0 0 400 220" fill="none">
+      <path d="M-10 190 C 90 150, 150 210, 250 160 S 380 90, 430 120" stroke="#c9a227" stroke-width="1.6"/>
+      <path d="M-10 150 C 100 120, 170 180, 270 130 S 390 60, 440 90" stroke="#4a72d4" stroke-width="1.4"/>
+      <path d="M-10 110 C 110 90, 190 150, 290 100 S 400 30, 450 60" stroke="#8aa4e8" stroke-width="1.2"/>
+      <circle cx="90" cy="164" r="4" fill="#c9a227"/><circle cx="250" cy="160" r="4" fill="#c9a227"/>
+      <rect x="300" y="30" width="64" height="34" rx="7" stroke="#c9a227" stroke-width="2.4"/>
+      <path d="M300 47h64" stroke="#c9a227" stroke-width="2"/>
+      <circle cx="315" cy="70" r="4" fill="#c9a227"/><circle cx="349" cy="70" r="4" fill="#c9a227"/>
+    </svg>
+    <div class="lg-mark"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="2.5"/><path d="M4 10h16"/><path d="M8 3v7M12 3v7M16 3v7"/><circle cx="8.5" cy="19.5" r="1.6"/><circle cx="15.5" cy="19.5" r="1.6"/></svg></div>
+    <div class="lg-badge">Employee Transport Management System</div>
+    <h1>Imo Chicken &amp; Agro <span>(Pvt) Ltd</span></h1>
+    <div class="lg-rule"></div>
+    <p class="lg-sub">A single point of control for employee transportation — vehicles, seating capacity, allocations and reports, managed with accuracy by the HR Department.</p>
+    <div class="lg-feats">
+      <div class="lg-feat"><svg class="ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5.5"/></svg> Live seat capacity tracking for every vehicle</div>
+      <div class="lg-feat"><svg class="ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5.5"/></svg> Department &amp; section based employee allocation</div>
+      <div class="lg-feat"><svg class="ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5.5"/></svg> Role-based access for HR teams and management</div>
+    </div>
+  </div>
+  <div class="lg-panel">
+    <div class="lg-mstrip">
+      <div class="lg-mark"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="2.5"/><path d="M4 10h16"/><path d="M8 3v7M12 3v7M16 3v7"/><circle cx="8.5" cy="19.5" r="1.6"/><circle cx="15.5" cy="19.5" r="1.6"/></svg></div>
+      <div><b>Imo Chicken &amp; Agro (Pvt) Ltd</b><span>Transport Management</span></div>
+    </div>
+    <div class="lg-box">
+      <h2>Welcome back</h2>
+      <p class="lg-tag">Sign in to the Employee Transport Management System</p>
+      <div class="lg-err" id="lg-err"></div>
+      <form id="login-form" autocomplete="off">
+        <div class="lg-field">
+          <label>Username</label>
+          <div class="lg-in"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 21c.7-3.9 3.8-6 7.5-6s6.8 2.1 7.5 6"/></svg><input id="lg-user" placeholder="Enter your username"></div>
+        </div>
+        <div class="lg-field">
+          <label>Password</label>
+          <div class="lg-in"><svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg><input id="lg-pass" type="password" placeholder="Enter your password"></div>
+        </div>
+        <button type="submit" class="btn btn-primary lg-btn" id="lg-login-btn">Login</button>
+        <button type="button" class="btn btn-plain lg-forgot" id="lg-forgot">Forgot Password?</button>
+      </form>
+      <div class="lg-demo">
+        <b>Demo Accounts — click to fill</b>
+        <div class="lg-demo-row" onclick="fillDemo('admin','admin123')"><code>admin / admin123</code><i>System Administrator</i></div>
+        <div class="lg-demo-row" onclick="fillDemo('hrmanager','manager123')"><code>hrmanager / manager123</code><i>HR Manager</i></div>
+        <div class="lg-demo-row" onclick="fillDemo('hrofficer','officer123')"><code>hrofficer / officer123</code><i>HR Officer</i></div>
+        <div class="lg-demo-row" onclick="fillDemo('viewer','view123')"><code>viewer / view123</code><i>Viewer (read-only)</i></div>
+      </div>
+      <div id="boot-ok">Engine loaded — ready to sign in</div>
+      <div class="lg-foot">© <span id="lg-year"></span> Imo Chicken &amp; Agro (Pvt) Ltd · All rights reserved</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" class="hidden">
+  <aside id="sidebar">
+    <div class="sb-brand">
+      <div class="mark"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="2.5"/><path d="M4 10h16"/><path d="M8 3v7M12 3v7M16 3v7"/><circle cx="8.5" cy="19.5" r="1.6"/><circle cx="15.5" cy="19.5" r="1.6"/></svg></div>
+      <div class="sb-bname"><b>Imo Chicken &amp; Agro</b><span>(Pvt) Ltd</span></div>
+    </div>
+    <nav id="sb-nav"></nav>
+    <div class="sb-foot"><button id="sb-collapse"><span id="sb-col-ic"></span><span>Collapse Menu</span></button></div>
+  </aside>
+  <div id="sb-overlay"></div>
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="iconbtn" id="sb-toggle" title="Menu"></button>
+      <nav class="crumbs" id="crumbs"></nav>
+      <div class="tb-right">
+        <div class="tb-clock"><span id="hd-clock-ic"></span><b id="hd-time"></b><i id="hd-date"></i></div>
+        <div class="bell-wrap" id="bell-wrap">
+          <button class="iconbtn" id="bell-btn" title="Notifications"><span id="bell-ic"></span><span class="bell-badge" id="bell-badge"></span></button>
+          <div class="dd" id="bell-dd" style="min-width:300px"><div class="dd-hd">Recent Activity</div><div id="bell-list"></div></div>
+        </div>
+        <div class="uchip-wrap" id="uchip-wrap">
+          <button class="uchip-btn" id="uchip-btn"></button>
+          <div class="dd" id="uchip-dd"></div>
+        </div>
+      </div>
+    </header>
+    <div class="content">
+      <section class="page" id="page-home"></section>
+      <section class="page" id="page-dashboard"></section>
+      <section class="page" id="page-employees"></section>
+      <section class="page" id="page-empForm"></section>
+      <section class="page" id="page-config"></section>
+      <section class="page" id="page-vehicleForm"></section>
+      <section class="page" id="page-reports"></section>
+      <section class="page" id="page-settings"></section>
+      <section class="page" id="page-users"></section>
+    </div>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+<div id="toast-root"></div>
+<div id="ctip"></div>
+<div id="print-area"></div>
+
+<!-- ============ BOOTSTRAP (plain ES5 — must run even if the main engine fails) ============ -->
+<script>
+(function () {
+  'use strict';
+  function byId(id) { return document.getElementById(id); }
+  function esc5(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function banner(msg) {
+    var el = byId('boot-error');
+    if (!el) return;
+    el.style.display = 'block';
+    el.innerHTML = msg;
+  }
+  window.__imoBootError = '';
+  window.onerror = function (msg, src, line) {
+    window.__imoBootError = String(msg) + (line ? ' (line ' + line + ')' : '');
+    banner('<b>Application error:</b> ' + esc5(window.__imoBootError) +
+      '<br>Please report this exact message. Tip: use Google Chrome, Microsoft Edge or Firefox.');
+    return false;
+  };
+  window.fillDemo = function (u, p) {
+    var a = byId('lg-user'), b = byId('lg-pass'), e = byId('lg-err');
+    if (a) a.value = u;
+    if (b) b.value = p;
+    if (e) e.style.display = 'none';
+    if (b) b.focus();
+  };
+  var y = byId('lg-year'); if (y) y.textContent = String(new Date().getFullYear());
+  window.__imoSubmit = function () {
+    if (window.__imoReady && typeof window.doLogin === 'function') { window.doLogin(); return; }
+    banner('<b>The system is not ready.</b> ' + (window.__imoBootError ? ('Error: ' + esc5(window.__imoBootError)) : '') +
+      '<br>Make sure the complete file was saved (it must end with &lt;/html&gt;) and that you opened it directly in a browser — not inside a chat or preview window.');
+  };
+  var form = byId('login-form');
+  if (form) form.addEventListener('submit', function (e) { e.preventDefault(); e.stopPropagation(); window.__imoSubmit(); });
+  setTimeout(function () {
+    if (!window.__imoReady) {
+      var ua = navigator.userAgent || '';
+      if (ua.length > 90) ua = ua.substring(0, 90);
+      banner('<b>The application engine did not start.</b> ' + (window.__imoBootError ? ('Error: ' + esc5(window.__imoBootError)) : '') +
+        '<br>Re-copy the entire file, save it as .html, and open it directly in Chrome / Edge / Firefox.<br><span style="opacity:.7">Browser: ' + esc5(ua) + '</span>');
+    }
+  }, 2500);
+  var es6 = false;
+  try { es6 = !!new Function('const f=(a,b)=>`x${a+b}y`;return f(1,2)==="x3y"')(); } catch (e) { es6 = false; }
+  if (!es6) {
+    banner('<b>Browser not supported.</b> This system requires a modern browser (Google Chrome, Microsoft Edge, Firefox, or Safari 10+).');
+    var sb = form ? form.querySelector('[type="submit"]') : null;
+    if (sb) sb.disabled = true;
+  }
+})();
+</script>
+
+<!-- Optional Google Drive sync configuration. Keep this file free of secrets. -->
+<script src="drive-config.js"></script>
+
+<!-- ============ MAIN ENGINE ============ -->
+<script>
+'use strict';
+/* Imo Chicken & Agro (Pvt) Ltd — Employee Transport Management System */
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const pad2 = n => { n = String(n); return n.length < 2 ? '0' + n : n; };
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const WEEK = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const opt = (v, l, sel) => '<option value="' + esc(v) + '"' + (sel ? ' selected' : '') + '>' + esc(l) + '</option>';
+const initials = n => String(n || '').trim().split(/\s+/).slice(0, 2).map(w => w.charAt(0).toUpperCase()).join('');
+const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hash(s){let h=5381;for(let i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))>>>0}return 'h'+h.toString(16)}
+
+/* ---------- icons ---------- */
+const ICONS = {
+  menu:'<path d="M3 6h18M3 12h18M3 18h18"/>',
+  x:'<path d="M18 6L6 18M6 6l12 12"/>',
+  home:'<path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>',
+  dashboard:'<rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5"/><path d="M15.5 4.6a3.5 3.5 0 010 6.8"/><path d="M17.5 14.9c2.1.7 3.6 2.5 4 5.1"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4.5 21c.7-3.9 3.8-6 7.5-6s6.8 2.1 7.5 6"/>',
+  userCheck:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5 1.6 0 3 .5 4.2 1.3"/><path d="M15 17l2 2 4-4"/>',
+  bus:'<rect x="4" y="3" width="16" height="14" rx="2.5"/><path d="M4 10h16"/><path d="M8 3v7M12 3v7M16 3v7"/><circle cx="8.5" cy="19.5" r="1.6"/><circle cx="15.5" cy="19.5" r="1.6"/>',
+  sliders:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+  file:'<path d="M14 2.5H7a2 2 0 00-2 2v15a2 2 0 002 2h10a2 2 0 002-2V7.5z"/><path d="M14 2.5v5h5"/><path d="M9 12.5h6M9 16.5h6"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/>',
+  shield:'<path d="M12 22s8-3.6 8-10V5.5L12 2.5 4 5.5V12c0 6.4 8 10 8 10z"/>',
+  chevD:'<path d="M6 9l6 6 6-6"/>',
+  chevL:'<path d="M15 18l-6-6 6-6"/>',
+  chevR:'<path d="M9 18l6-6-6-6"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  edit:'<path d="M17 3.5a2.6 2.6 0 013.7 3.7L8 20l-5 1.2L4.2 16z"/>',
+  trash:'<path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+  check:'<path d="M20 6L9 17l-5-5"/>',
+  checkC:'<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 5-5.5"/>',
+  alertT:'<path d="M10.3 3.8L1.8 18.5a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.8a2 2 0 00-3.4 0z"/><path d="M12 9v4.5"/><path d="M12 17h.01"/>',
+  alertC:'<circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5h.01"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5h.01"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
+  printer:'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/>',
+  download:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/>',
+  grid:'<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M9 9.5V19.5"/>',
+  logout:'<path d="M9 21H6a2 2 0 01-2-2V5a2 2 0 012-2h3"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/>',
+  key:'<circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.8 12.2L21 2"/><path d="M15 4l5 5"/><path d="M18 7l-2.5 2.5"/>',
+  arrowL:'<path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/>',
+  refresh:'<path d="M21 4v6h-6"/><path d="M3 20v-6h6"/><path d="M21 10a9 9 0 00-15-5.5L3 8"/><path d="M3 14a9 9 0 0015 5.5L21 16"/>',
+  mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+  phone:'<path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.13.96.36 1.9.7 2.8a2 2 0 01-.45 2.1L8.1 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.45c.9.34 1.84.57 2.8.7a2 2 0 011.7 2z"/>',
+  building:'<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/><path d="M10 21v-3h4v3"/>',
+  layers:'<path d="M12 2l10 5.5L12 13 2 7.5z"/><path d="M2 12.5L12 18l10-5.5"/><path d="M2 17.5L12 23l10-5.5"/>',
+  bell:'<path d="M18 9a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 20a2 2 0 003.4 0"/>',
+  save:'<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/>',
+  ban:'<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+  activity:'<path d="M22 12h-4l-3 8-6-16-3 8H2"/>',
+  pie:'<path d="M21.2 15.9A10 10 0 118.1 2.8"/><path d="M22 12A10 10 0 0012 2v10z"/>',
+  bars:'<path d="M6 20V10M12 20V4M18 20v-6"/>',
+  list:'<path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/>'
+};
+function icon(n, s, c) {
+  s = s || 18; c = c || '';
+  return '<svg class="ic ' + c + '" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + (ICONS[n] || '') + '</svg>';
+}
+const C = { navy:'#10265e', royal:'#1d3f9e', royal2:'#2a52c0', royal3:'#4a72d4', royalL:'#8aa4e8', royalXL:'#dfe7f8', gold:'#c9a227', goldD:'#a5821f', goldL:'#e6cf7a' };
+const PAL = ['#16337f','#c9a227','#4a72d4','#a5821f','#8aa4e8','#e6cf7a','#2a52c0','#d9b545','#7f9be0','#f0e0ac','#3d63c0','#b8962e'];
+
+/* ---------- adaptive storage: localStorage → sessionStorage → IndexedDB → memory ---------- */
+const DB_KEY = 'imo_tms_db_v1', SES_KEY = 'imo_tms_session_v1';
+let db = null;
+const store = {
+  _b: 'mem', _idbRef: null, _mem: {},
+  name: 'Memory only', persistent: false,
+  get: function (k) {
+    const b = this._b;
+    if (b === 'ls') { try { return localStorage.getItem(k); } catch (e) { return (k in this._mem) ? this._mem[k] : null; } }
+    if (b === 'ss') { try { return sessionStorage.getItem(k); } catch (e) { return (k in this._mem) ? this._mem[k] : null; } }
+    return (k in this._mem) ? this._mem[k] : null;
+  },
+  set: function (k, v) {
+    const b = this._b;
+    if (b === 'ls') { try { localStorage.setItem(k, v); return; } catch (e) {} }
+    else if (b === 'ss') { try { sessionStorage.setItem(k, v); return; } catch (e) {} }
+    else if (b === 'idb') {
+      this._mem[k] = v;
+      try { const tx = this._idbRef.transaction('kv', 'readwrite'); tx.objectStore('kv').put(v, k); } catch (e) {}
+      return;
+    }
+    this._mem[k] = v;
+  },
+  del: function (k) {
+    const b = this._b;
+    if (b === 'ls') { try { localStorage.removeItem(k); return; } catch (e) {} }
+    else if (b === 'ss') { try { sessionStorage.removeItem(k); return; } catch (e) {} }
+    else if (b === 'idb') {
+      delete this._mem[k];
+      try { const tx = this._idbRef.transaction('kv', 'readwrite'); tx.objectStore('kv').delete(k); } catch (e) {}
+      return;
+    }
+    delete this._mem[k];
+  },
+  init: function (done) {
+    const self = this;
+    let finished = false, settled = false;
+    const fin = function () { if (!finished) { finished = true; done(); } };
+    const mode = function (b, name, persistent) {
+      if (settled) return;
+      settled = true;
+      self._b = b; self.name = name; self.persistent = persistent;
+    };
+    try {
+      localStorage.setItem('__imo_probe', '1'); localStorage.removeItem('__imo_probe');
+      mode('ls', 'Browser storage — saving automatically', true);
+      return fin();
+    } catch (e) {}
+    try {
+      sessionStorage.setItem('__imo_probe', '1'); sessionStorage.removeItem('__imo_probe');
+      mode('ss', 'Session storage — saved while this tab is open', false);
+      return fin();
+    } catch (e) {}
+    try {
+      if (!window.indexedDB) throw new Error('unavailable');
+      const req = window.indexedDB.open('imo_tms_kv', 1);
+      req.onupgradeneeded = function () { try { req.result.createObjectStore('kv'); } catch (e) {} };
+      req.onerror = function () { mode('mem', 'Memory only — data will not be saved', false); fin(); };
+      req.onsuccess = function () {
+        try {
+          const idb = req.result;
+          const tx = idb.transaction('kv', 'readonly');
+          const keys = tx.objectStore('kv').getAllKeys();
+          const vals = tx.objectStore('kv').getAll();
+          tx.oncomplete = function () {
+            try { for (let i = 0; i < keys.result.length; i++) self._mem[keys.result[i]] = vals.result[i]; } catch (e) {}
+            self._idbRef = idb;
+            mode('idb', 'IndexedDB — saving automatically', true);
+            fin();
+          };
+          tx.onerror = function () { mode('mem', 'Memory only — data will not be saved', false); fin(); };
+        } catch (e) { mode('mem', 'Memory only — data will not be saved', false); fin(); }
+      };
+      setTimeout(function () { mode('mem', 'Memory only — data will not be saved', false); fin(); }, 1000);
+      return;
+    } catch (e) {}
+    mode('mem', 'Memory only — data will not be saved', false);
+    fin();
+  }
+};
+
+/* ---------- optional Google Drive sync ---------- */
+const driveSync = {
+  pending: null,
+  timer: null,
+  get config() {
+    const c = window.IMO_DRIVE_CONFIG || {};
+    return { url: String(c.url || '').trim(), key: String(c.key || '').trim() };
+  },
+  enabled() { return !!this.config.url; },
+  load() {
+    const c = this.config;
+    if (!c.url) return Promise.resolve(null);
+    const q = '?action=load&key=' + encodeURIComponent(c.key);
+    return fetch(c.url + q, { method: 'GET', cache: 'no-store' })
+      .then(r => { if (!r.ok) throw new Error('Drive API returned HTTP ' + r.status); return r.json(); })
+      .then(result => {
+        if (!result || result.ok !== true) throw new Error(result && result.error ? result.error : 'Drive API returned an invalid response.');
+        return result.data && result.data.users && result.data.vehicles ? result.data : null;
+      });
+  },
+  queueSave(data) {
+    const c = this.config;
+    if (!c.url || !data) return;
+    this.pending = JSON.parse(JSON.stringify(data));
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => this.flush(), 700);
+  },
+  flush() {
+    const c = this.config, data = this.pending;
+    if (!c.url || !data) return;
+    this.pending = null;
+    fetch(c.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'save', key: c.key, data: data })
+    }).then(r => {
+      if (!r.ok) throw new Error('Drive API returned HTTP ' + r.status);
+      return r.json();
+    }).then(result => {
+      if (!result || result.ok !== true) throw new Error(result && result.error ? result.error : 'Drive API rejected the save.');
+    }).catch(err => console.warn('Google Drive sync failed; local data is still available:', err));
+  }
+};
+function save(){ store.set(DB_KEY, JSON.stringify(db)); driveSync.queueSave(db); }
+function nid(k){ db.seq[k] = (db.seq[k] || 0) + 1; return k + '_' + db.seq[k]; }
+
+/* ---------- seed database ---------- */
+function seedDB() {
+  const now = Date.now(), DAY = 864e5;
+  const rng = mulberry32(20240117);
+  const pick = a => a[Math.floor(rng() * a.length)];
+  const d = {
+    seq: {}, users: [], transportTypes: [], departments: [], sections: [],
+    vehicles: [], employees: [], loginLogs: [], auditLogs: [],
+    settings: {
+      companyName: 'Imo Chicken & Agro (Pvt) Ltd',
+      systemName: 'Employee Transport Management System',
+      dateFormat: 'DD/MM/YYYY', timeFormat: '24h',
+      defaultPage: 'home', rowsPerPage: 10,
+      notif: { success: true, warning: true, info: true }
+    }
+  };
+  const nidL = k => { d.seq[k] = (d.seq[k] || 0) + 1; return k + '_' + d.seq[k]; };
+  const U = [
+    ['admin','System Administrator','admin@imochicken.lk','+94 11 234 5678','Administrator','admin123',210],
+    ['hrmanager','Rukmal Perera','rukmal.p@imochicken.lk','+94 77 310 4455','HR Manager','manager123',180],
+    ['hrofficer','Sanduni Fernando','sanduni.f@imochicken.lk','+94 71 855 9021','HR Officer','officer123',150],
+    ['viewer','Kasun Jayasuriya','kasun.j@imochicken.lk','+94 76 220 1188','Viewer','view123',120]
+  ];
+  U.forEach(function (u, i) {
+    d.users.push({ id: 'u' + (i + 1), username: u[0], fullName: u[1], email: u[2], contact: u[3], password: hash(u[5]), role: u[4], status: 'Active', createdAt: now - u[6] * DAY, lastLogin: i === 0 ? now - DAY : null });
+  });
+  ['Bus','Van','Staff Vehicle','Hiace'].forEach(function (n, i) {
+    d.transportTypes.push({ id: 'tt' + (i + 1), name: n, status: 'Active', createdAt: now - 220 * DAY });
+  });
+  const deptDefs = [
+    ['Production', ['Hatchery', 'Broiler Farm', 'Feed Mill']],
+    ['Processing', ['Processing Plant', 'Packing']],
+    ['Logistics', ['Fleet Operations', 'Distribution']],
+    ['Quality Assurance', ['QA Laboratory', 'Compliance']],
+    ['Human Resources', ['HR Administration', 'Recruitment']],
+    ['Finance', ['Accounts', 'Payroll']],
+    ['Sales & Marketing', ['Field Sales', 'Customer Care']],
+    ['Maintenance', ['Electrical', 'Civil Works']]
+  ];
+  deptDefs.forEach(function (dd, i) {
+    const dep = { id: 'dp' + (i + 1), name: dd[0], status: 'Active', createdAt: now - 200 * DAY };
+    d.departments.push(dep);
+    dd[1].forEach(function (sn) { d.sections.push({ id: nidL('sec'), departmentId: dep.id, name: sn, status: 'Active', createdAt: now - 190 * DAY }); });
+  });
+  const vehDefs = [
+    ['tt1','WP NA 5521',54,1.00], ['tt1','WP NA 7382',54,0.93], ['tt1','CP NA 1180',45,1.00],
+    ['tt1','NC NA 3305',45,0.71], ['tt4','WP GK 4410',18,0.89], ['tt4','CP GK 7742',18,0.56],
+    ['tt2','WP NB 4567',15,1.00], ['tt2','WP NB 8123',15,0.80], ['tt2','SP NB 2290',15,0.40],
+    ['tt3','WP CAB 1234',30,0.90], ['tt3','WP CAB 7789',12,0.33], ['tt4','SP GK 9014',18,0.61]
+  ];
+  const FIRST = ['Nimal','Sunil','Kasun','Chamara','Ruwan','Pradeep','Sampath','Ajith','Dilshan','Tharindu','Lasith','Nuwan','Gayan','Suresh','Mahesh','Ishara','Sanduni','Nadeesha','Thilini','Dinuka','Chathura','Hasitha','Manoj','Roshan','Priyantha','Anura','Kapila','Jagath','Rohana','Amaya','Hansika','Niluka','Saman','Upul','Asanka','Chandana','Damith','Gihan','Janaka','Lahiru','Madusha','Nirosh','Pubudu','Rangana','Shameera','Udayanga','Vasantha','Wasana','Yohan','Malsha'];
+  const LAST = ['Perera','Fernando','Silva','Jayasuriya','Wickramasinghe','Bandara','Rathnayake','Gunawardena','Herath','Dias','Weerasinghe','De Silva','Ekanayake','Senanayake','Kodikara','Dissanayake','Hewage','Jayawardena','Kumara','Liyanage','Munasinghe','Nanayakkara','Peiris','Rajapaksha','Samarasinghe','Wijesinghe','Zoysa','Attanayake'];
+  let empSeq = 0;
+  vehDefs.forEach(function (vd) {
+    const v = { id: nidL('veh'), transportTypeId: vd[0], vehicleNumber: vd[1], totalSeats: vd[2], status: 'Active', createdAt: now - 170 * DAY, updatedAt: now - 20 * DAY };
+    d.vehicles.push(v);
+    const occ = Math.round(vd[2] * vd[3]);
+    for (let i = 0; i < occ; i++) {
+      const dep = pick(d.departments);
+      const secs = d.sections.filter(s => s.departmentId === dep.id);
+      empSeq++;
+      const ts = now - Math.floor(rng() * 90) * DAY;
+      d.employees.push({ id: nidL('emp'), empNo: 'IMO-' + (1001 + empSeq), name: pick(FIRST) + ' ' + pick(LAST), departmentId: dep.id, sectionId: pick(secs).id, transportTypeId: vd[0], vehicleId: v.id, createdAt: ts, updatedAt: ts });
+    }
+  });
+  d.auditLogs.push({ id: nidL('aud'), userId: null, username: 'system', action: 'System Initialized', record: 'Database', description: 'Sample transport database created.', ts: now - 5 * DAY });
+  d.loginLogs.push({ id: nidL('log'), userId: 'u1', username: 'admin', loginTime: now - DAY, logoutTime: now - DAY + 36e5, sessionStatus: 'Closed' });
+  return d;
+}
+function loadDB() {
+  const raw = store.get(DB_KEY);
+  if (raw) {
+    try { const parsed = JSON.parse(raw); if (parsed && parsed.users && parsed.vehicles) { db = parsed; return; } } catch (e) { /* reseed */ }
+  }
+  db = seedDB(); save();
+}
+
+/* ---------- lookups & calculations ---------- */
+function deptOf(id){ return db.departments.find(x => x.id === id); }
+function secOf(id){ return db.sections.find(x => x.id === id); }
+function typeOf(id){ return db.transportTypes.find(x => x.id === id); }
+function vehOf(id){ return db.vehicles.find(x => x.id === id); }
+function deptName(id){ const x = deptOf(id); return x ? x.name : ''; }
+function secName(id){ const x = secOf(id); return x ? x.name : ''; }
+function typeName(id){ const x = typeOf(id); return x ? x.name : ''; }
+function vehName(id){ const x = vehOf(id); return x ? x.vehicleNumber : ''; }
+function vstats(v) {
+  const total = +v.totalSeats || 0;
+  const occupied = db.employees.filter(e => e.vehicleId === v.id).length;
+  const available = total - occupied;
+  const util = total ? (occupied / total) * 100 : 0;
+  const status = available <= 0 ? 'Full' : (util >= 85 ? 'Nearly Full' : 'Available');
+  return { total: total, occupied: occupied, available: available, util: util, status: status };
+}
+function totals() {
+  let totalSeats = 0, occupied = 0, full = 0, nearly = 0, availVeh = 0;
+  db.vehicles.forEach(function (v) {
+    const s = vstats(v);
+    totalSeats += s.total; occupied += s.occupied;
+    if (s.status === 'Full') full++; else if (s.status === 'Nearly Full') nearly++; else availVeh++;
+  });
+  const available = totalSeats - occupied;
+  const util = totalSeats ? (occupied / totalSeats) * 100 : 0;
+  return { employees: db.employees.length, vehicles: db.vehicles.length, totalSeats: totalSeats, occupied: occupied, available: available, util: util, full: full, nearly: nearly, availVeh: availVeh };
+}
+function fmtDate(ts) {
+  const d = new Date(ts), f = db.settings.dateFormat;
+  if (f === 'MM/DD/YYYY') return pad2(d.getMonth() + 1) + '/' + pad2(d.getDate()) + '/' + d.getFullYear();
+  if (f === 'YYYY-MM-DD') return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  return pad2(d.getDate()) + '/' + pad2(d.getMonth() + 1) + '/' + d.getFullYear();
+}
+function fmtTime(ts) {
+  const d = new Date(ts), m = pad2(d.getMinutes()), s = pad2(d.getSeconds()), h24 = d.getHours();
+  if (db.settings.timeFormat === '12h') { const h = h24 % 12 || 12; return pad2(h) + ':' + m + ':' + s + ' ' + (h24 < 12 ? 'AM' : 'PM'); }
+  return pad2(h24) + ':' + m + ':' + s;
+}
+function fmtDateTime(ts){ return fmtDate(ts) + ', ' + fmtTime(ts); }
+function fmtDay(ts){ const d = new Date(ts); return d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear(); }
+
+/* ---------- audit ---------- */
+function audit(action, record, description) {
+  db.auditLogs.unshift({
+    id: nid('aud'),
+    userId: state.user ? state.user.id : null,
+    username: state.user ? state.user.username : 'system',
+    action: action, record: record, description: description, ts: Date.now()
+  });
+  if (db.auditLogs.length > 600) db.auditLogs.length = 600;
+}
+function audCat(a) {
+  if (/Login|Logout/.test(a)) return 'session';
+  if (/Employee/.test(a)) return 'employee';
+  if (/Vehicle/.test(a)) return 'vehicle';
+  if (/Department|Section|Transport Type/.test(a)) return 'config';
+  if (/User|Password|Profile/.test(a)) return 'user';
+  return 'system';
+}
+
+/* ---------- roles ---------- */
+const ROLE_LIST = ['Administrator', 'HR Manager', 'HR Officer', 'Viewer'];
+const PERMS = {
+  'Administrator': ['*'],
+  'HR Manager': ['home','dashboard','employees.view','employees.manage','config.view','config.manage','reports.view','settings.profile'],
+  'HR Officer': ['home','dashboard','employees.view','employees.manage','reports.view','settings.profile'],
+  'Viewer': ['home','dashboard','reports.view','settings.profile']
+};
+function can(p) {
+  const role = state.user ? state.user.role : 'Viewer';
+  const list = PERMS[role] || [];
+  return list.indexOf('*') !== -1 || list.indexOf(p) !== -1;
+}
+function isAdmin(){ return !!(state.user && state.user.role === 'Administrator'); }
+
+/* ---------- notifications & dialogs ---------- */
+function notify(type, title, msg) {
+  if (type !== 'error') {
+    const n = db.settings.notif || {};
+    if (n[type] === false) return;
+  }
+  const cfgs = { success:{ic:'checkC',cls:''}, error:{ic:'alertC',cls:'error'}, warning:{ic:'alertT',cls:'warning'}, info:{ic:'info',cls:'info'} };
+  const cfg = cfgs[type] || cfgs.info;
+  const t = document.createElement('div');
+  t.className = 'toast ' + cfg.cls;
+  t.innerHTML = '<span class="t-ic">' + icon(cfg.ic, 18) + '</span><div class="t-b"><b>' + esc(title) + '</b>' + (msg ? '<p>' + esc(msg) + '</p>' : '') + '</div><button class="t-x">' + icon('x', 14) + '</button>';
+  t.querySelector('.t-x').onclick = () => t.remove();
+  $('#toast-root').appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 260); }, 4600);
+}
+function openModal(o) {
+  closeModal();
+  const ov = document.createElement('div');
+  ov.className = 'modal-overlay'; ov.id = 'modal-ov';
+  ov.innerHTML = '<div class="modal" style="max-width:' + (o.width || 560) + 'px">' +
+    '<div class="modal-hd">' + icon(o.ic || 'info', 18) + '<h3>' + o.title + '</h3><button class="iconbtn" onclick="closeModal()">' + icon('x', 15) + '</button></div>' +
+    '<div class="modal-bd">' + o.body + '</div>' + (o.footer ? '<div class="modal-ft">' + o.footer + '</div>' : '') + '</div>';
+  ov.addEventListener('mousedown', e => { if (e.target === ov) closeModal(); });
+  $('#modal-root').appendChild(ov);
+}
+function closeModal(){ const m = $('#modal-ov'); if (m) m.remove(); }
+function confirmDialog(o) {
+  openModal({
+    title: o.title, ic: 'alertT', width: 450,
+    body: '<p class="cf-msg">' + o.msg + '</p>',
+    footer: '<button class="btn btn-plain" onclick="closeModal()">Cancel</button>' +
+            '<button class="btn ' + (o.tone === 'danger' ? 'btn-danger' : 'btn-primary') + '" id="cf-ok">' + esc(o.ok || 'Confirm') + '</button>'
+  });
+  $('#cf-ok').onclick = () => { closeModal(); if (o.onOk) o.onOk(); };
+}
+function pill(status) {
+  const map = { 'Available':'p-ok', 'Nearly Full':'p-warn', 'Full':'p-full', 'Active':'p-ok', 'Inactive':'p-inact' };
+  return '<span class="pill ' + (map[status] || 'p-out') + '"><span class="dot"></span>' + esc(status) + '</span>';
+}
+function mErr(msg){ const e = $('#m-err'); if (e) e.textContent = msg; }
+function fErr(fid, msg){ const f = $('#' + fid); if (f) f.classList.add('inv'); const e = $('#e-' + fid); if (e) e.textContent = msg; }
+function clearErrs(ids){ ids.forEach(i => { const f = $('#' + i); if (f) f.classList.remove('inv'); const e = $('#e-' + i); if (e) e.textContent = ''; }); }
+
+/* ---------- charts (SVG/CSS, blue & gold only) ---------- */
+function arcPath(cx, cy, R, r, a0, a1) {
+  const large = (a1 - a0) > Math.PI ? 1 : 0;
+  const f = n => n.toFixed(2);
+  const x0 = cx + R * Math.cos(a0), y0 = cy + R * Math.sin(a0);
+  const x1 = cx + R * Math.cos(a1), y1 = cy + R * Math.sin(a1);
+  const x2 = cx + r * Math.cos(a1), y2 = cy + r * Math.sin(a1);
+  const x3 = cx + r * Math.cos(a0), y3 = cy + r * Math.sin(a0);
+  return 'M' + f(x0) + ' ' + f(y0) + ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + f(x1) + ' ' + f(y1) + ' L' + f(x2) + ' ' + f(y2) + ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + f(x3) + ' ' + f(y3) + ' Z';
+}
+function donutChart(data, o) {
+  o = o || {};
+  const size = o.size || 200, th = o.thick || 28, c = size / 2, r = c - 5;
+  const total = data.reduce((a, x) => a + x.value, 0);
+  if (!total) return { svg: '<div class="empty">' + icon('pie', 30) + '<b>No data available</b>Nothing to chart yet.</div>', legend: '' };
+  let a0 = -Math.PI / 2, paths = '';
+  data.forEach(d => {
+    const frac = d.value / total;
+    const tip = esc(d.label) + ': ' + d.value + ' (' + Math.round(frac * 100) + '%)';
+    if (frac >= 0.9999) {
+      paths += '<circle class="cb" cx="' + c + '" cy="' + c + '" r="' + (r - th / 2) + '" fill="none" stroke="' + d.color + '" stroke-width="' + th + '" data-tipc="' + tip + '"/>';
+    } else {
+      const a1 = a0 + frac * Math.PI * 2 - 0.0004;
+      paths += '<path class="cb" d="' + arcPath(c, c, r, r - th, a0, a1) + '" fill="' + d.color + '" data-tipc="' + tip + '"/>';
+    }
+    a0 += frac * Math.PI * 2;
+  });
+  const center = o.center ? '<div class="dn-c"><b>' + o.center.big + '</b><span>' + o.center.small + '</span></div>' : '';
+  const legend = '<div class="legend">' + data.map(d => '<div class="lg-row"><span class="lg-sw" style="background:' + d.color + '"></span>' + esc(d.label) + '<b>' + d.value + '</b></div>').join('') + '</div>';
+  return { svg: '<div class="dn-wrap" style="width:' + size + 'px;height:' + size + 'px"><svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' + paths + '</svg>' + center + '</div>', legend: legend };
+}
+function groupedBars(labels, series) {
+  if (!labels.length) return { svg: '<div class="empty">' + icon('bus', 30) + '<b>No vehicles configured</b>Add vehicles to see capacity charts.</div>', legend: '' };
+  const gw = 66, padL = 46, padB = 68, padT = 14, H = 285;
+  const W = padL + labels.length * gw + 14;
+  let allVals = [];
+  series.forEach(s => { allVals = allVals.concat(s.values); });
+  const max = Math.max.apply(null, [1].concat(allVals));
+  const top = Math.ceil(max / 10) * 10;
+  const ih = H - padT - padB;
+  const yOf = v => padT + ih - (v / top) * ih;
+  let grid = '';
+  for (let i = 0; i <= 5; i++) {
+    const v = top / 5 * i, yy = yOf(v).toFixed(1);
+    grid += '<line x1="' + padL + '" x2="' + (W - 6) + '" y1="' + yy + '" y2="' + yy + '" stroke="#e4eaf6"/><text class="ax" x="' + (padL - 7) + '" y="' + (+yy + 4) + '" text-anchor="end">' + v + '</text>';
+  }
+  let bars = '', lbls = '';
+  labels.forEach((lb, i) => {
+    const gx = padL + i * gw + (gw - 56) / 2;
+    series.forEach((s, si) => {
+      const v = s.values[i], bx = gx + si * 19, bh = Math.max(padT + ih - yOf(v), v > 0 ? 2 : 0);
+      bars += '<rect class="cb" x="' + bx + '" y="' + (padT + ih - bh).toFixed(1) + '" width="15" height="' + bh.toFixed(1) + '" rx="3" fill="' + s.color + '"' + (s.stroke ? ' stroke="' + s.stroke + '" stroke-width="1.4"' : '') + ' data-tipc="' + esc(lb) + ' — ' + esc(s.name) + ': ' + v + '"/>';
+    });
+    const tx = padL + i * gw + gw / 2;
+    lbls += '<text class="axl" transform="rotate(-38 ' + tx + ' ' + (H - padB + 16) + ')" x="' + tx + '" y="' + (H - padB + 16) + '" text-anchor="end">' + esc(lb) + '</text>';
+  });
+  const legend = '<div class="ch-legend">' + series.map(s => '<span><span class="lg-sw" style="background:' + s.color + (s.stroke ? ';border:1.4px solid ' + s.stroke : '') + '"></span>' + esc(s.name) + '</span>').join('') + '</div>';
+  return { svg: '<div class="scroll-x"><svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' + grid + bars + lbls + '</svg></div>', legend: legend };
+}
+function hbars(items) {
+  if (!items.length) return '<div class="empty">' + icon('bars', 30) + '<b>No data available</b>Nothing to chart yet.</div>';
+  const max = Math.max.apply(null, [1].concat(items.map(i => i.value)));
+  return '<div class="hbars">' + items.map((it, ix) =>
+    '<div class="hb"><div class="hb-l" title="' + esc(it.label) + (it.sub ? ' — ' + esc(it.sub) : '') + '">' + esc(it.label) + (it.sub ? '<i>' + esc(it.sub) + '</i>' : '') + '</div>' +
+    '<div class="hb-t"><span class="hb-f" style="width:' + (it.value / max * 100).toFixed(1) + '%;background:' + (ix === 0 ? C.gold : C.royal) + '" data-tipc="' + esc(it.label) + ': ' + it.value + ' employee(s)"></span></div>' +
+    '<div class="hb-v">' + it.value + '</div></div>').join('') + '</div>';
+}
+function capBar(st) {
+  const pct = st.total ? (st.occupied / st.total) * 100 : 0;
+  return '<div class="capbar" data-tipc="' + st.occupied + ' occupied · ' + st.available + ' available" style="min-width:90px"><span style="width:' + pct.toFixed(1) + '%"></span></div>';
+}
+
+/* ---------- trend data & line chart ---------- */
+const PERIOD_NAMES = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly', yearly: 'Yearly' };
+function endOfDayTs(d) { const x = new Date(d); x.setHours(23, 59, 59, 999); return x.getTime(); }
+function dateInputVal(ts) { const d = new Date(ts); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+function parseDateInput(v, isEnd) {
+  if (!v) return 0;
+  const p = String(v).split('-');
+  if (p.length !== 3) return 0;
+  const d = new Date(+p[0], +p[1] - 1, +p[2]);
+  return isEnd ? endOfDayTs(d) : d.getTime();
+}
+function niceTop(m) {
+  const c = [10,20,30,40,50,60,80,100,120,150,200,250,300,400,500,600,800,1000,1500,2000,3000,5000,10000];
+  for (let i = 0; i < c.length; i++) { if (m <= c[i]) return c[i]; }
+  return Math.ceil(m / 1000) * 1000;
+}
+/* Buckets for the trend line. When a custom date range is given, "period"
+   acts as the granularity (point size) within that range. Otherwise the
+   automatic rolling windows are used. */
+function trendBuckets(period, rng) {
+  const now = new Date();
+  const out = [];
+  if (rng && rng.custom) {
+    const from = new Date(rng.from), to = new Date(rng.to);
+    if (period === 'daily') {
+      const d = new Date(from);
+      while (d <= to) {
+        const cur = new Date(d);
+        out.push({ label: cur.getDate() + ' ' + MON[cur.getMonth()], endTs: Math.min(endOfDayTs(cur), rng.to) });
+        d.setDate(d.getDate() + 1);
+      }
+    } else if (period === 'weekly') {
+      const d = new Date(from);
+      while (d <= to) {
+        const cur = new Date(d);
+        const e = new Date(d); e.setDate(e.getDate() + 7); e.setMilliseconds(-1);
+        out.push({ label: cur.getDate() + ' ' + MON[cur.getMonth()], endTs: Math.min(e.getTime(), rng.to) });
+        d.setDate(d.getDate() + 7);
+      }
+    } else if (period === 'monthly') {
+      let y = from.getFullYear(), m = from.getMonth();
+      const ey = to.getFullYear(), em = to.getMonth();
+      while (y < ey || (y === ey && m <= em)) {
+        const last = new Date(y, m + 1, 0);
+        out.push({ label: MON[m] + ' ' + y, endTs: Math.min(endOfDayTs(last), rng.to) });
+        m++; if (m > 11) { m = 0; y++; }
+      }
+    } else {
+      let y = from.getFullYear();
+      const ey = to.getFullYear();
+      while (y <= ey) {
+        out.push({ label: String(y), endTs: Math.min(endOfDayTs(new Date(y, 11, 31)), rng.to) });
+        y++;
+      }
+    }
+    return out;
+  }
+  if (period === 'daily') {
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+      out.push({ label: d.getDate() + ' ' + MON[d.getMonth()], endTs: endOfDayTs(d) });
+    }
+  } else if (period === 'weekly') {
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i * 7);
+      out.push({ label: d.getDate() + ' ' + MON[d.getMonth()], endTs: endOfDayTs(d) });
+    }
+  } else if (period === 'monthly') {
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+      out.push({ label: MON[d.getMonth()] + ' ' + d.getFullYear(), endTs: endOfDayTs(d) });
+    }
+  } else {
+    let earliest = now.getTime();
+    db.employees.forEach(e => { if (e.createdAt < earliest) earliest = e.createdAt; });
+    const curY = now.getFullYear();
+    const minY = Math.min(new Date(earliest).getFullYear(), curY - 4);
+    for (let y = minY; y <= curY; y++) {
+      const d = new Date(y, 11, 31);
+      out.push({ label: String(y), endTs: d > now ? now.getTime() : endOfDayTs(d) });
+    }
+  }
+  return out;
+}
+function occupiedAsOf(ts, sec, veh) {
+  return db.employees.filter(e =>
+    e.createdAt <= ts &&
+    (!veh || e.vehicleId === veh) &&
+    (!sec || e.sectionId === sec)
+  ).length;
+}
+function capacityInScope(veh) {
+  const list = veh ? db.vehicles.filter(v => v.id === veh) : db.vehicles;
+  return list.reduce((a, v) => a + (+v.totalSeats || 0), 0);
+}
+/* Resolves the From/To strings into a range object.
+   One-sided ranges are allowed: missing To = today, missing From = earliest record. */
+function trendRange(fromStr, toStr) {
+  let from = parseDateInput(fromStr, false);
+  let to = parseDateInput(toStr, true);
+  const custom = !!(from || to);
+  if (custom) {
+    if (!to) to = endOfDayTs(new Date());
+    if (!from) {
+      let earliest = Date.now();
+      db.employees.forEach(e => { if (e.createdAt < earliest) earliest = e.createdAt; });
+      const d = new Date(earliest); d.setHours(0, 0, 0, 0);
+      from = d.getTime();
+    }
+    if (from > to) return { from: from, to: to, custom: true, invalid: true };
+  }
+  return { from: from, to: to, custom: custom, invalid: false };
+}
+function trendData(period, sec, veh, fromStr, toStr, maxP) {
+  maxP = maxP || 200;
+  const rng = trendRange(fromStr, toStr);
+  const all = rng.invalid ? [] : trendBuckets(period, rng);
+  const capped = all.length > maxP;
+  const pts = all.slice(0, maxP).map(b => ({ label: b.label, endTs: b.endTs, value: occupiedAsOf(b.endTs, sec, veh) }));
+  return { pts: pts, cap: capacityInScope(veh), rng: rng, capped: capped, totalCount: all.length };
+}
+function lineChart(points, cap) {
+  if (!points.length) return '<div class="empty">' + icon('activity', 30) + '<b>No data</b>No periods to display.</div>';
+  const H = 280, padL = 46, padB = 58, padT = 14;
+  const step = points.length > 60 ? 44 : (points.length > 24 ? 58 : 74);
+  const W = Math.max(560, padL + points.length * step + 18);
+  const vals = points.map(p => p.value);
+  if (cap) vals.push(cap);
+  const top = niceTop(Math.max.apply(null, [1].concat(vals)));
+  const ih = H - padT - padB;
+  const xOf = i => padL + i * step + step / 2;
+  const yOf = v => padT + ih - (v / top) * ih;
+  let g = '';
+  for (let i = 0; i <= 5; i++) {
+    const v = top / 5 * i, yy = yOf(v).toFixed(1);
+    g += '<line x1="' + padL + '" x2="' + (W - 8) + '" y1="' + yy + '" y2="' + yy + '" stroke="#e4eaf6"/>' +
+         '<text class="ax" x="' + (padL - 7) + '" y="' + (+yy + 4) + '" text-anchor="end">' + Math.round(v) + '</text>';
+  }
+  if (cap) {
+    const cy = yOf(cap).toFixed(1);
+    g += '<line x1="' + padL + '" x2="' + (W - 8) + '" y1="' + cy + '" y2="' + cy + '" stroke="' + C.gold + '" stroke-width="2" stroke-dasharray="7 5"/>' +
+         '<text class="ax" x="' + (W - 12) + '" y="' + (+cy - 5) + '" text-anchor="end" fill="' + C.goldD + '" font-weight="600">Capacity: ' + cap + '</text>';
+  }
+  let body = '';
+  if (points.length >= 2) {
+    let dLine = '';
+    points.forEach((p, i) => { dLine += (i ? ' L' : 'M') + xOf(i).toFixed(1) + ',' + yOf(p.value).toFixed(1); });
+    const base = (padT + ih).toFixed(1);
+    const dArea = dLine + ' L' + xOf(points.length - 1).toFixed(1) + ',' + base + ' L' + xOf(0).toFixed(1) + ',' + base + ' Z';
+    body += '<path d="' + dArea + '" fill="' + C.royalXL + '" opacity="0.75"/>';
+    body += '<path d="' + dLine + '" fill="none" stroke="' + C.royal + '" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>';
+  }
+  points.forEach((p, i) => {
+    const cx = xOf(i).toFixed(1), cy = yOf(p.value).toFixed(1);
+    body += '<circle class="cb" cx="' + cx + '" cy="' + cy + '" r="4.5" fill="' + C.gold + '" stroke="' + C.navy + '" stroke-width="1.6" data-tipc="' + esc(p.label) + ': ' + p.value + ' occupied seat(s)"/>';
+  });
+  const lblEvery = points.length <= 14 ? 1 : Math.ceil(points.length / 12);
+  let lbls = '';
+  points.forEach((p, i) => {
+    if (i % lblEvery !== 0 && i !== points.length - 1) return;
+    const tx = xOf(i).toFixed(1), ty = H - padB + 18;
+    lbls += '<text class="axl" transform="rotate(-38 ' + tx + ' ' + ty + ')" x="' + tx + '" y="' + ty + '" text-anchor="end">' + esc(p.label) + '</text>';
+  });
+  return '<div class="scroll-x"><svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">' + g + body + lbls + '</svg></div>';
+}
+
+/* ---------- session / login / logout ---------- */
+const state = { user: null, session: null, page: null, params: {}, lastSeenAudit: 0 };
+let currentReport = null;
+let loggingIn = false;
+function showLgErr(m) { const e = $('#lg-err'); e.textContent = m; e.style.display = 'block'; }
+
+function enterApp(session) {
+  const u = session && db.users.find(x => x.id === session.userId);
+  if (!u || u.status !== 'Active') { store.del(SES_KEY); return false; }
+  try {
+    state.session = session;
+    state.user = u;
+    state.lastSeenAudit = Date.now();
+    store.set(SES_KEY, JSON.stringify(session));
+    $('#login-screen').classList.add('hidden');
+    $('#app').classList.remove('hidden');
+    buildChrome();
+    updateBell();
+    const start = db.settings.defaultPage === 'dashboard' ? 'dashboard' : 'home';
+    nav(can(start) ? start : 'home');
+    return true;
+  } catch (err) {
+    console.error('Startup error:', err);
+    bannerBoot('Startup error: ' + (err && err.message ? err.message : err));
+    return true;
+  }
+}
+function bannerBoot(msg) {
+  const el = document.getElementById('boot-error');
+  if (el) { el.style.display = 'block'; el.innerHTML = '<b>Error:</b> ' + esc(msg); }
+}
+function doLogin() {
+  if (loggingIn) return;
+  loggingIn = true;
+  try {
+    if (!db) { try { loadDB(); } catch (e) { /* handled below */ } }
+    if (!db) { showLgErr('System data could not be initialized. Please refresh the page.'); return; }
+    const un = $('#lg-user').value.trim(), pw = $('#lg-pass').value;
+    $('#lg-err').style.display = 'none';
+    if (!un || !pw) { showLgErr('Please enter both username and password.'); return; }
+    const u = db.users.find(x => x.username.toLowerCase() === un.toLowerCase());
+    if (!u || u.password !== hash(pw)) { showLgErr('Invalid username or password.'); return; }
+    if (u.status !== 'Active') { showLgErr('This account is inactive. Please contact the administrator.'); return; }
+    const now = Date.now();
+    const log = { id: nid('log'), userId: u.id, username: u.username, loginTime: now, logoutTime: null, sessionStatus: 'Active' };
+    db.loginLogs.unshift(log);
+    const session = { userId: u.id, loginAt: now, prevLogin: u.lastLogin || null, logId: log.id };
+    u.lastLogin = now;
+    audit('Login', u.username, u.fullName + ' logged in (' + u.role + ')');
+    save();
+    const ok = enterApp(session);
+    if (ok) notify('success', 'Login Successful', 'Welcome back, ' + u.fullName + '.');
+    else showLgErr('Login could not be completed. Please try again.');
+  } catch (err) {
+    console.error('Login error:', err);
+    showLgErr('Unexpected error: ' + (err && err.message ? err.message : err));
+  } finally {
+    loggingIn = false;
+  }
+}
+window.doLogin = doLogin;
+function doLogout() {
+  try {
+    const log = db.loginLogs.find(l => l.id === state.session.logId);
+    if (log) { log.logoutTime = Date.now(); log.sessionStatus = 'Closed'; }
+    audit('Logout', state.user.username, state.user.fullName + ' logged out');
+    save();
+  } catch (e) { /* noop */ }
+  store.del(SES_KEY);
+  state.user = null; state.session = null;
+  $('#app').classList.add('hidden');
+  $('#login-screen').classList.remove('hidden');
+  $('#lg-pass').value = ''; $('#lg-user').value = '';
+  notify('info', 'Logged Out', 'You have been securely logged out.');
+}
+
+/* ---------- router & chrome ---------- */
+const NAVDEFS = {
+  home:        { label:'Home',                    ic:'home',      perm:'home' },
+  dashboard:   { label:'Dashboard',               ic:'dashboard', perm:'dashboard' },
+  employees:   { label:'Employees',               ic:'users',     perm:'employees.view' },
+  empForm:     { label:'Employee Entry',          ic:'user',      perm:'employees.manage', sb:'employees', parent:'employees' },
+  config:      { label:'Transport Configuration', ic:'sliders',   perm:'config.view' },
+  vehicleForm: { label:'Vehicle Entry',           ic:'bus',       perm:'config.manage',    sb:'config',    parent:'config' },
+  reports:     { label:'Reports',                 ic:'file',      perm:'reports.view' },
+  settings:    { label:'Settings',                ic:'gear',      perm:'settings.profile' },
+  users:       { label:'User Management',         ic:'shield',    perm:'users.manage' }
+};
+function navTitle(def) {
+  if (state.page === 'empForm' && state.params && state.params.id) return 'Edit Employee';
+  if (state.page === 'vehicleForm' && state.params && state.params.id) return 'Edit Vehicle';
+  return def.label;
+}
+function nav(page, params) {
+  if (!NAVDEFS[page]) page = 'home';
+  const def = NAVDEFS[page];
+  if (!can(def.perm)) {
+    notify('error', 'Access Denied', 'Your role does not permit access to this module.');
+    page = 'home';
+  }
+  const d = NAVDEFS[page];
+  state.page = page; state.params = params || {};
+  document.body.classList.remove('sb-open');
+  $$('.sb-item').forEach(b => b.classList.remove('on'));
+  const sb = $('#sb-' + (d.sb || page));
+  if (sb) sb.classList.add('on');
+  let html = '<button class="crumb" onclick="nav(\'home\')">' + icon('home', 13) + ' Home</button>';
+  if (page !== 'home') {
+    if (d.parent) {
+      html += '<span class="crumb-sep">' + icon('chevR', 13) + '</span>' +
+              '<button class="crumb" onclick="nav(\'' + d.parent + '\')">' + esc(NAVDEFS[d.parent].label) + '</button>';
+    }
+    html += '<span class="crumb-sep">' + icon('chevR', 13) + '</span><span class="crumb-cur">' + esc(navTitle(d)) + '</span>';
+  }
+  $('#crumbs').innerHTML = html;
+  $$('.page').forEach(p => p.classList.remove('active'));
+  const target = $('#page-' + page);
+  if (target) target.classList.add('active');
+  window.scrollTo(0, 0);
+  try { RENDER[page](state.params); }
+  catch (err) {
+    console.error('Render error on "' + page + '":', err);
+    if (target) target.innerHTML = '<div class="card pad"><div class="empty">' + icon('alertC', 30) + '<b>Something went wrong</b>' + esc(String(err && err.message ? err.message : err)) + '</div></div>';
+    notify('error', 'Display Error', 'The page could not be rendered.');
+  }
+}
+function refresh(){ nav(state.page, state.params); }
+window.nav = nav;
+window.refresh = refresh;
+
+function buildChrome() {
+  const groups = [
+    { label:'Overview', items:['home','dashboard'] },
+    { label:'Management', items:['employees','config','reports'] },
+    { label:'Administration', items:['settings','users'] }
+  ];
+  $('#sb-nav').innerHTML = groups.map(g => {
+    const items = g.items.filter(id => can(NAVDEFS[id].perm));
+    if (!items.length) return '';
+    return '<div class="sb-grp">' + g.label + '</div>' + items.map(id => {
+      const d = NAVDEFS[id];
+      return '<button class="sb-item" id="sb-' + id + '" data-tip="' + esc(d.label) + '" onclick="nav(\'' + id + '\')">' + icon(d.ic, 19) + '<span class="sb-lb">' + esc(d.label) + '</span></button>';
+    }).join('');
+  }).join('');
+  const u = state.user;
+  $('#uchip-btn').innerHTML = '<span class="avatar">' + esc(initials(u.fullName)) + '</span>' +
+    '<span class="uinfo"><b>' + esc(u.fullName) + '</b><i>' + esc(u.role) + '</i></span>' + icon('chevD', 15);
+  $('#uchip-dd').innerHTML =
+    '<div class="dd-hd">' + esc(u.fullName) + ' · ' + esc(u.role) + '</div>' +
+    '<div style="padding:8px 15px;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--royal6)">' + icon('save', 13) + ' Storage: ' + esc(store.name) + '</div>' +
+    '<button class="dd-item" onclick="gotoSettings(\'profile\')">' + icon('user', 16) + ' My Profile</button>' +
+    '<button class="dd-item" onclick="gotoSettings(\'password\')">' + icon('key', 16) + ' Change Password</button>' +
+    '<button class="dd-item" onclick="gotoSettings(\'backup\')">' + icon('save', 16) + ' Backup &amp; Restore</button>' +
+    (isAdmin() ? '<button class="dd-item" onclick="gotoSettings(\'audit\')">' + icon('list', 16) + ' Audit Log</button>' : '') +
+    '<button class="dd-item danger" onclick="closeDds();doLogout()">' + icon('logout', 16) + ' Logout</button>';
+  $('#bell-ic').innerHTML = icon('bell', 18);
+  $('#hd-clock-ic').innerHTML = icon('clock', 15);
+  $('#sb-toggle').innerHTML = icon('menu', 19);
+  $('#sb-col-ic').innerHTML = icon('chevL', 16);
+}
+function gotoSettings(tab) {
+  closeDds(); setTab = tab;
+  if (state.page === 'settings') renderSettings(); else nav('settings');
+}
+function updateBell() {
+  const n = db.auditLogs.filter(a => a.ts > (state.lastSeenAudit || 0)).length;
+  const b = $('#bell-badge');
+  b.style.display = n ? 'flex' : 'none';
+  b.textContent = n > 99 ? '99+' : n;
+}
+function renderBell() {
+  const items = db.auditLogs.slice(0, 8);
+  $('#bell-list').innerHTML = items.length ? items.map(a =>
+    '<button class="dd-item">' + icon(audCat(a.action) === 'session' ? 'key' : audCat(a.action) === 'employee' ? 'user' : audCat(a.action) === 'vehicle' ? 'bus' : 'list', 15) +
+    '<span><b style="font-size:13px;color:var(--navy)">' + esc(a.action) + '</b> — ' + esc(a.record) +
+    '<small>' + esc(a.username) + ' · ' + fmtDateTime(a.ts) + '</small></span></button>').join('')
+    : '<div class="empty" style="padding:22px">No activity yet.</div>';
+}
+function closeDds(){ $('#bell-dd').classList.remove('open'); $('#uchip-dd').classList.remove('open'); }
+
+/* ---------- HOME ---------- */
+function analogSVG() {
+  let ticks = '';
+  for (let i = 0; i < 12; i++) {
+    const a = i * Math.PI / 6, big = i % 3 === 0;
+    const x1 = 50 + 39 * Math.sin(a), y1 = 50 - 39 * Math.cos(a);
+    const x2 = 50 + (big ? 33 : 36) * Math.sin(a), y2 = 50 - (big ? 33 : 36) * Math.cos(a);
+    ticks += '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="' + (big ? '#c9a227' : '#8aa4e8') + '" stroke-width="' + (big ? 2.4 : 1.3) + '" stroke-linecap="round"/>';
+  }
+  return '<svg class="ana" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="#fff" stroke="#c9a227" stroke-width="2.5"/>' + ticks +
+    '<line id="ah" x1="50" y1="50" x2="50" y2="29" stroke="#10265e" stroke-width="3.6" stroke-linecap="round"/>' +
+    '<line id="am" x1="50" y1="50" x2="50" y2="20" stroke="#10265e" stroke-width="2.4" stroke-linecap="round"/>' +
+    '<line id="as" x1="50" y1="55" x2="50" y2="15" stroke="#c9a227" stroke-width="1.3" stroke-linecap="round"/>' +
+    '<circle cx="50" cy="50" r="2.8" fill="#10265e"/></svg>';
+}
+function renderHome() {
+  const u = state.user, s = state.session, t = totals();
+  const lastLogin = s.prevLogin ? fmtDateTime(s.prevLogin) : 'First session';
+  const acts = [
+    { l:'Add Employee', d:'Register & assign transport', ic:'userCheck', r:'empForm', perm:'employees.manage' },
+    { l:'Add Vehicle',  d:'Add fleet with seat capacity', ic:'bus', r:'vehicleForm', perm:'config.manage' },
+    { l:'Transport Configuration', d:'Types, departments, sections', ic:'sliders', r:'config', perm:'config.view' },
+    { l:'View Reports', d:'Generate & export reports', ic:'file', r:'reports', perm:'reports.view' }
+  ].filter(a => can(a.perm));
+  const cards = [
+    { l:'Total Employees', v:t.employees, ic:'users', alt:0 },
+    { l:'Employees Using Transport', v:t.occupied, ic:'userCheck', alt:0 },
+    { l:'Total Vehicles', v:t.vehicles, ic:'bus', alt:0 },
+    { l:'Total Available Seats (Capacity)', v:t.totalSeats, ic:'layers', alt:1 },
+    { l:'Total Occupied Seats', v:t.occupied, ic:'pie', alt:1 },
+    { l:'Available Seats Remaining', v:t.available, ic:'checkC', alt:1 },
+    { l:'Fully Occupied Vehicles', v:t.full, ic:'alertT', alt:0 },
+    { l:'Vehicles With Available Capacity', v:t.availVeh, ic:'checkC', alt:0 }
+  ];
+  const occPct = t.totalSeats ? (t.occupied / t.totalSeats * 100).toFixed(1) : '0';
+  $('#page-home').innerHTML =
+    '<div class="hero"><div>' +
+      '<div class="w-tag">' + esc(db.settings.systemName) + '</div>' +
+      '<h1>Welcome, ' + esc(u.fullName) + '</h1>' +
+      '<div class="w-co">' + esc(db.settings.companyName) + '</div>' +
+      '<span class="pill p-out w-role"><span class="dot"></span>' + esc(u.role) + ' &nbsp;·&nbsp; ' + esc(u.username) + '</span>' +
+    '</div><div class="clockbox">' + analogSVG() +
+      '<div class="dig"><span class="day" id="clock-day"></span><div class="time" id="clock-time"></div><div class="date" id="clock-date"></div></div>' +
+    '</div></div>' +
+    '<div class="home-g">' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">User Login Details</span>' + icon('shield', 17) + '</div><div class="pad" style="padding-top:8px">' +
+        '<div class="dl-row"><span class="k">Logged-in User Name</span><span class="v">' + esc(u.fullName) + '</span></div>' +
+        '<div class="dl-row"><span class="k">User Role</span><span class="v">' + esc(u.role) + '</span></div>' +
+        '<div class="dl-row"><span class="k">Login Date</span><span class="v">' + fmtDate(s.loginAt) + '</span></div>' +
+        '<div class="dl-row"><span class="k">Login Time</span><span class="v">' + fmtTime(s.loginAt) + '</span></div>' +
+        '<div class="dl-row"><span class="k">Last Login</span><span class="v">' + lastLogin + '</span></div>' +
+        '<div class="dl-row"><span class="k">Current Session Status</span><span class="v">' + pill('Active') + '</span></div>' +
+      '</div></div>' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">Quick Actions</span>' + icon('activity', 17) + '</div><div class="pad"><div class="qa-grid">' +
+        (acts.map(a => '<button class="qa" onclick="nav(\'' + a.r + '\')"><span class="qa-ic">' + icon(a.ic, 17) + '</span><b>' + a.l + '</b><span>' + a.d + '</span></button>').join('') || '<div class="empty">No quick actions for your role.</div>') +
+      '</div></div></div>' +
+    '</div>' +
+    '<div class="card" style="margin-bottom:16px"><div class="card-hd"><span class="tick-h">Fleet Capacity at a Glance <small>updated live from assignments</small></span><span class="pill p-out">' + occPct + '% utilized</span></div>' +
+      '<div class="pad"><div class="stackbar" style="margin-bottom:12px">' +
+        '<span style="width:' + occPct + '%;background:' + C.royal + '" data-tipc="Occupied: ' + t.occupied + ' seats"></span>' +
+        '<span style="width:' + (100 - occPct).toFixed(1) + '%;background:' + C.gold + '" data-tipc="Available: ' + t.available + ' seats"></span>' +
+      '</div><div style="display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--muted)">' +
+        '<span>' + icon('pie', 15) + ' Occupied <b style="color:var(--navy)">' + t.occupied + '</b> of <b style="color:var(--navy)">' + t.totalSeats + '</b> seats</span>' +
+        '<span>' + icon('checkC', 15) + ' Available <b style="color:var(--gold3)">' + t.available + '</b> seats</span>' +
+        '<span>' + icon('bus', 15) + ' ' + t.full + ' full · ' + t.nearly + ' nearly full · ' + t.availVeh + ' with capacity</span>' +
+      '</div></div></div>' +
+    '<div class="page-hd" style="margin-top:4px"><div><h1 style="font-size:21px">Transport Summary</h1><p class="sub">Live statistics computed from employee & vehicle records</p></div></div>' +
+    '<div class="sum-grid">' + cards.map(c =>
+      '<div class="sumcard ' + (c.alt ? 'alt' : '') + '"><span class="kic">' + icon(c.ic, 20) + '</span><div><div class="v">' + c.v + '</div><div class="l">' + c.l + '</div></div></div>').join('') + '</div>';
+}
+
+/* ---------- DASHBOARD ---------- */
+let trendF = { period: 'monthly', sec: '', veh: '', from: '', to: '' };
+function renderDashboard() {
+  const t = totals(), util = t.util;
+  const kpis = [
+    { l:'Total Employees', v:t.employees, s:'registered staff', ic:'users', g:0 },
+    { l:'Transport Employees', v:t.occupied, s:(t.employees ? Math.round(t.occupied / t.employees * 100) : 0) + '% of workforce', ic:'userCheck', g:0 },
+    { l:'Total Vehicles', v:t.vehicles, s:t.availVeh + ' with capacity', ic:'bus', g:0 },
+    { l:'Total Seats', v:t.totalSeats, s:'fleet capacity', ic:'layers', g:0 },
+    { l:'Occupied Seats', v:t.occupied, s:t.full + ' vehicle(s) full', ic:'pie', g:1 },
+    { l:'Available Seats', v:t.available, s:'open capacity', ic:'checkC', g:1 },
+    { l:'Seat Utilization', v:util.toFixed(1) + '%', s:'occupied ÷ total seats', ic:'activity', g:1 },
+    { l:'Fully Occupied Vehicles', v:t.full, s:t.nearly + ' nearly full', ic:'alertT', g:0 }
+  ];
+  const typeData = [];
+  db.transportTypes.forEach(tt => {
+    const n = db.employees.filter(e => e.transportTypeId === tt.id).length;
+    if (n > 0) typeData.push({ label: tt.name, value: n, color: PAL[typeData.length % PAL.length] });
+  });
+  const dn = donutChart(typeData, { size: 195, thick: 30, center: { big: t.employees, small: 'Employees' } });
+  const vs = db.vehicles.slice().sort((a, b) => a.vehicleNumber.localeCompare(b.vehicleNumber));
+  const gb = groupedBars(vs.map(v => v.vehicleNumber), [
+    { name:'Total Seats', color:C.royalXL, stroke:C.royal4, values:vs.map(v => vstats(v).total) },
+    { name:'Occupied',    color:C.royal,   values:vs.map(v => vstats(v).occupied) },
+    { name:'Available',   color:C.gold,    values:vs.map(v => vstats(v).available) }
+  ]);
+  const deptItems = db.departments.map(d => ({ label: d.name, value: db.employees.filter(e => e.departmentId === d.id).length })).sort((a, b) => b.value - a.value);
+  const secItems = db.sections.map(sc => ({ label: sc.name, sub: deptName(sc.departmentId), value: db.employees.filter(e => e.sectionId === sc.id).length })).sort((a, b) => b.value - a.value);
+  const capRows = vs.map(v => {
+    const st = vstats(v);
+    return '<tr><td><b>' + esc(v.vehicleNumber) + '</b></td><td>' + esc(typeName(v.transportTypeId) || '—') + '</td>' +
+      '<td class="num">' + st.total + '</td><td class="num">' + st.occupied + '</td>' +
+      '<td class="num gold-t"><b>' + st.available + '</b></td><td>' + capBar(st) + '</td>' +
+      '<td class="num mono">' + st.util.toFixed(1) + '%</td><td>' + pill(st.status) + '</td></tr>';
+  }).join('');
+  const statusRows = [
+    { l:'Available', n:t.availVeh, c:C.royal4, p:'p-ok' },
+    { l:'Nearly Full', n:t.nearly, c:C.gold, p:'p-warn' },
+    { l:'Full', n:t.full, c:C.royal, p:'p-full' }
+  ];
+  const dnU = donutChart([
+    { label:'Occupied Seats', value:t.occupied, color:C.royal },
+    { label:'Available Seats', value:t.available, color:C.gold }
+  ], { size: 175, thick: 26, center: { big: util.toFixed(1) + '%', small: 'Utilization' } });
+  $('#page-dashboard').innerHTML =
+    '<div class="page-hd"><div><h1>Management Dashboard</h1><p class="sub">' + esc(db.settings.companyName) + ' — live transport statistics & capacity status</p></div>' +
+    '<button class="btn btn-outline" onclick="refresh()">' + icon('refresh', 15) + ' Refresh</button></div>' +
+    '<div class="kpis" style="margin-bottom:16px">' + kpis.map(k =>
+      '<div class="kpi ' + (k.g ? 'gold' : '') + '"><div class="top"><span class="l">' + k.l + '</span><span class="kic">' + icon(k.ic, 17) + '</span></div><div class="v">' + k.v + '</div><div class="s">' + k.s + '</div></div>').join('') + '</div>' +
+    /* ---- trend card ---- */
+    '<div class="card" style="margin-bottom:16px">' +
+      '<div class="card-hd"><span class="tick-h">Seat Occupancy Trend <small>occupied seats over time — hover points for details</small></span>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+        '<select class="fsel" id="tr-period" title="Granularity — point size on the chart">' +
+          opt('daily','Daily',trendF.period==='daily') + opt('weekly','Weekly',trendF.period==='weekly') +
+          opt('monthly','Monthly',trendF.period==='monthly') + opt('yearly','Yearly',trendF.period==='yearly') +
+        '</select>' +
+        '<select class="fsel" id="tr-sec" title="Filter by section"><option value="">All Sections</option>' +
+          db.sections.map(s => opt(s.id, (deptName(s.departmentId) ? deptName(s.departmentId) + ' — ' : '') + s.name, trendF.sec === s.id)).join('') +
+        '</select>' +
+        '<select class="fsel" id="tr-veh" title="Filter by vehicle"><option value="">All Vehicles</option>' +
+          db.vehicles.map(v => opt(v.id, v.vehicleNumber, trendF.veh === v.id)).join('') +
+        '</select>' +
+        '<input type="date" class="fsel" id="tr-from" value="' + esc(trendF.from) + '" title="From date" style="max-width:150px">' +
+        '<input type="date" class="fsel" id="tr-to" value="' + esc(trendF.to) + '" title="To date" style="max-width:150px">' +
+        '<button class="btn btn-plain" onclick="clearTrendRange()" title="Clear the date range and return to automatic windows">' + icon('x', 14) + ' Clear Dates</button>' +
+      '</div></div>' +
+      '<div id="trend-body"></div>' +
+    '</div>' +
+    '<div class="dash-hero">' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">Seat Utilization</span><span class="pill p-out">Occupied ÷ Total × 100</span></div><div class="hero-util">' + dnU.svg +
+        '<div style="flex:1;min-width:170px">' + dnU.legend + '<div class="stat-div"></div>' +
+        '<div style="font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--royal);font-weight:700;margin-bottom:10px">Capacity Status</div>' +
+        statusRows.map(r => '<div class="cst-row"><span class="pill ' + r.p + '" style="min-width:96px;justify-content:center">' + r.l + '</span><span class="bar"><span style="width:' + (t.vehicles ? (r.n / t.vehicles * 100).toFixed(1) : 0) + '%;background:' + r.c + '"></span></span><b>' + r.n + '</b></div>').join('') +
+        '</div></div></div>' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">Employee Transport Types <small>donut distribution</small></span></div><div class="hero-util" style="padding:18px 20px">' + dn.svg + dn.legend + '</div></div>' +
+    '</div>' +
+    '<div class="dash-g2">' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">Department-wise Transport Usage</span></div>' + hbars(deptItems) + '</div>' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">Vehicle Capacity <small>total vs occupied vs available</small></span></div>' + gb.svg + gb.legend + '</div>' +
+    '</div>' +
+    '<div class="dash-g3">' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">Section-wise Transport Usage</span></div>' + hbars(secItems) + '</div>' +
+      '<div class="card"><div class="card-hd"><span class="tick-h">Vehicle Occupancy Status</span><span class="pill p-out">' + t.vehicles + ' vehicle(s)</span></div>' +
+      '<div class="tbl-wrap"><table class="tbl" style="min-width:640px"><thead><tr><th>Vehicle Number</th><th>Type</th><th class="num">Capacity</th><th class="num">Current</th><th class="num">Available</th><th>Occupancy</th><th class="num">Util %</th><th>Status</th></tr></thead><tbody>' +
+      (capRows || '<tr><td colspan="8"><div class="empty">No vehicles configured.</div></td></tr>') +
+      '</tbody></table></div></div></div>';
+  $('#tr-period').onchange = e => { trendF.period = e.target.value; renderTrend(); };
+  $('#tr-sec').onchange = e => { trendF.sec = e.target.value; renderTrend(); };
+  $('#tr-veh').onchange = e => { trendF.veh = e.target.value; renderTrend(); };
+  $('#tr-from').onchange = e => { trendF.from = e.target.value; renderTrend(); };
+  $('#tr-to').onchange = e => { trendF.to = e.target.value; renderTrend(); };
+  renderTrend();
+}
+function clearTrendRange() {
+  trendF.from = ''; trendF.to = '';
+  const a = $('#tr-from'), b = $('#tr-to');
+  if (a) a.value = '';
+  if (b) b.value = '';
+  renderTrend();
+}
+window.clearTrendRange = clearTrendRange;
+function renderTrend() {
+  const el = $('#trend-body');
+  if (!el) return;
+  const td = trendData(trendF.period, trendF.sec, trendF.veh, trendF.from, trendF.to, 200);
+  const cur = td.pts.length ? td.pts[td.pts.length - 1].value : 0;
+  const utilTxt = td.cap ? (cur / td.cap * 100).toFixed(1) + '%' : '—';
+  const scope = (trendF.veh ? 'Vehicle ' + vehName(trendF.veh) : 'All vehicles') + ' · ' + (trendF.sec ? 'Section ' + secName(trendF.sec) : 'All sections');
+  const rangeTxt = td.rng.invalid ? 'Invalid (From after To)'
+    : td.rng.custom ? fmtDay(td.rng.from) + ' – ' + fmtDay(td.rng.to)
+    : 'Automatic (last 14 days / 12 weeks / 12 months / all years)';
+  let chart;
+  if (td.rng.invalid) {
+    chart = '<div class="empty">' + icon('alertT', 30) + '<b>Invalid date range</b>The From date is after the To date. Please correct the dates above.</div>';
+  } else if (!td.pts.length) {
+    chart = '<div class="empty">' + icon('activity', 30) + '<b>No data</b>No periods fall within the selected range.</div>';
+  } else {
+    chart = lineChart(td.pts, td.cap);
+  }
+  let notes = '';
+  if (td.capped) {
+    notes = '<div class="hint warn" style="margin:10px 18px 0">' + icon('alertT', 15) + ' Showing the first 200 of ' + td.totalCount + ' periods. Narrow the date range or choose a coarser granularity (Weekly / Monthly / Yearly) to see the full period.</div>';
+  }
+  el.innerHTML = chart + notes +
+    '<div style="display:flex;gap:18px;flex-wrap:wrap;padding:0 18px 6px;font-size:13px;color:var(--muted)">' +
+      '<span>' + icon('activity', 15) + ' Granularity: <b style="color:var(--navy)">' + PERIOD_NAMES[trendF.period] + '</b></span>' +
+      '<span>' + icon('cal', 15) + ' Range: <b style="color:var(--navy)">' + esc(rangeTxt) + '</b></span>' +
+      '<span>' + icon('bus', 15) + ' Scope: <b style="color:var(--navy)">' + esc(scope) + '</b></span>' +
+      '<span>' + icon('pie', 15) + ' Occupied (end of range): <b style="color:var(--navy)">' + cur + '</b></span>' +
+      '<span>' + icon('layers', 15) + ' Capacity: <b style="color:var(--navy)">' + td.cap + '</b> seats</span>' +
+      '<span>' + icon('checkC', 15) + ' Utilization: <b style="color:var(--gold3)">' + utilTxt + '</b></span>' +
+    '</div>' +
+    '<div style="padding:0 18px 16px"><div class="hint">' + icon('info', 15) + ' The trend is calculated from each employee\'s transport assignment date. Deleting an employee removes their contribution from past periods. Export this trend from Reports → Seat Occupancy Trend Report.</div></div>';
+}
+
+/* ---------- EMPLOYEES ---------- */
+let empF = { q:'', dept:'', sec:'', type:'', veh:'', page:1 };
+function renderEmployees() {
+  const addBtn = can('employees.manage') ? '<button class="btn btn-gold" onclick="nav(\'empForm\')">' + icon('plus', 16) + ' Add Employee</button>' : '';
+  $('#page-employees').innerHTML =
+    '<div class="page-hd"><div><h1>Employees</h1><p class="sub">Employee transport allocations, vehicle occupancy and seat availability</p></div>' + addBtn + '</div>' +
+    '<div class="card"><div class="tbl-bar">' +
+      '<div class="search">' + icon('search', 15) + '<input id="emp-q" placeholder="Search by EMP No or name…" value="' + esc(empF.q) + '"></div>' +
+      '<select class="fsel" id="emp-fd"></select><select class="fsel" id="emp-fs"></select><select class="fsel" id="emp-ft"></select><select class="fsel" id="emp-fv"></select>' +
+      '<button class="btn btn-plain" onclick="resetEmpFilters()" title="Clear filters">' + icon('x', 14) + ' Clear</button>' +
+    '</div><div id="emp-list"></div></div>';
+  const fd = $('#emp-fd');
+  fd.innerHTML = '<option value="">All Departments</option>' + db.departments.map(d => opt(d.id, d.name, empF.dept === d.id)).join('');
+  fd.onchange = () => { empF.dept = fd.value; empF.sec = ''; empF.page = 1; fillEmpSecFilter(); renderEmpTable(); };
+  fillEmpSecFilter();
+  const ft = $('#emp-ft');
+  ft.innerHTML = '<option value="">All Transport Types</option>' + db.transportTypes.map(t => opt(t.id, t.name, empF.type === t.id)).join('');
+  ft.onchange = () => { empF.type = ft.value; empF.page = 1; renderEmpTable(); };
+  const fv = $('#emp-fv');
+  fv.innerHTML = '<option value="">All Vehicles</option>' + db.vehicles.map(v => opt(v.id, v.vehicleNumber, empF.veh === v.id)).join('');
+  fv.onchange = () => { empF.veh = fv.value; empF.page = 1; renderEmpTable(); };
+  $('#emp-q').oninput = e => { empF.q = e.target.value; empF.page = 1; renderEmpTable(); };
+  renderEmpTable();
+}
+function fillEmpSecFilter() {
+  const fs = $('#emp-fs');
+  const secs = empF.dept ? db.sections.filter(s => s.departmentId === empF.dept) : db.sections;
+  fs.innerHTML = '<option value="">All Sections</option>' + secs.map(s => opt(s.id, s.name, empF.sec === s.id)).join('');
+  fs.disabled = !empF.dept;
+  fs.onchange = () => { empF.sec = fs.value; empF.page = 1; renderEmpTable(); };
+}
+function resetEmpFilters(){ empF = { q:'', dept:'', sec:'', type:'', veh:'', page:1 }; renderEmployees(); }
+function pager(list, per, page, fn) {
+  const pages = Math.max(1, Math.ceil(list.length / per));
+  if (page > pages) page = pages;
+  const from = list.length ? (page - 1) * per + 1 : 0;
+  const to = Math.min(page * per, list.length);
+  let btns = '<button class="pgbtn"' + (page <= 1 ? ' disabled' : '') + ' onclick="' + fn + '(' + (page - 1) + ')">' + icon('chevL', 14) + '</button>';
+  const win = [];
+  for (let i = 1; i <= pages; i++) {
+    if (i === 1 || i === pages || Math.abs(i - page) <= 1) win.push(i);
+    else if (win[win.length - 1] !== '…') win.push('…');
+  }
+  win.forEach(w => {
+    btns += (w === '…') ? '<span class="pgbtn" style="border:none;background:none">…</span>'
+      : '<button class="pgbtn ' + (w === page ? 'on' : '') + '" onclick="' + fn + '(' + w + ')">' + w + '</button>';
+  });
+  btns += '<button class="pgbtn"' + (page >= pages ? ' disabled' : '') + ' onclick="' + fn + '(' + (page + 1) + ')">' + icon('chevR', 14) + '</button>';
+  return { page: page, pages: pages, bar: '<div class="pgn"><span class="pgn-info">Showing ' + from + '–' + to + ' of ' + list.length + ' record(s)</span><div class="pgbtns">' + btns + '</div></div>' };
+}
+function empPage(p){ empF.page = p; renderEmpTable(); }
+function renderEmpTable() {
+  const f = empF;
+  let list = db.employees.slice();
+  if (f.q) { const q = f.q.toLowerCase(); list = list.filter(e => e.empNo.toLowerCase().includes(q) || e.name.toLowerCase().includes(q)); }
+  if (f.dept) list = list.filter(e => e.departmentId === f.dept);
+  if (f.sec) list = list.filter(e => e.sectionId === f.sec);
+  if (f.type) list = list.filter(e => e.transportTypeId === f.type);
+  if (f.veh) list = list.filter(e => e.vehicleId === f.veh);
+  list.sort((a, b) => a.empNo.localeCompare(b.empNo));
+  const per = db.settings.rowsPerPage || 10;
+  const pg = pager(list, per, f.page, 'empPage');
+  f.page = pg.page;
+  const rows = list.slice((f.page - 1) * per, f.page * per).map(e => {
+    const v = vehOf(e.vehicleId), st = vstats(v);
+    return '<tr><td class="mono">' + esc(e.empNo) + '</td><td><b>' + esc(e.name) + '</b></td>' +
+      '<td>' + esc(deptName(e.departmentId) || '—') + '</td><td>' + esc(secName(e.sectionId) || '—') + '</td>' +
+      '<td>' + esc(typeName(e.transportTypeId) || '—') + '</td><td><b>' + esc(v.vehicleNumber) + '</b></td>' +
+      '<td class="num">' + st.total + '</td><td class="num">' + st.occupied + '</td>' +
+      '<td class="num ' + (st.available === 0 ? '' : 'gold-t') + '"><b>' + st.available + '</b></td><td>' + pill(st.status) + '</td>' +
+      '<td class="acts"><button class="rowbtn" title="View employee" onclick="viewEmp(\'' + e.id + '\')">' + icon('eye', 15) + '</button>' +
+      (can('employees.manage') ? '<button class="rowbtn gold" title="Edit employee" onclick="nav(\'empForm\',{id:\'' + e.id + '\'})">' + icon('edit', 14) + '</button>' +
+      '<button class="rowbtn dark" title="Delete employee" onclick="delEmp(\'' + e.id + '\')">' + icon('trash', 14) + '</button>' : '') +
+      '</td></tr>';
+  }).join('');
+  const filtered = f.q || f.dept || f.sec || f.type || f.veh;
+  const emptyMsg = filtered ? 'No records match the current filters.' : 'Use "Add Employee" to register the first employee.';
+  $('#emp-list').innerHTML =
+    '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>EMP No</th><th>Employee Name</th><th>Department</th><th>Section</th><th>Transport Type</th><th>Vehicle Number</th><th class="num">Vehicle Capacity</th><th class="num">Occupied Seats</th><th class="num">Available Seats</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>' +
+    (rows || '<tr><td colspan="11"><div class="empty">' + icon('users', 30) + '<b>No employees found</b>' + emptyMsg + '</div></td></tr>') +
+    '</tbody></table></div>' + pg.bar;
+}
+function viewEmp(id) {
+  const e = db.employees.find(x => x.id === id); if (!e) return;
+  const v = vehOf(e.vehicleId), st = vstats(v);
+  openModal({
+    title: 'Employee Profile', ic: 'user', width: 540,
+    body: '<div class="pv-head"><span class="avatar" style="width:48px;height:48px;font-size:18px">' + esc(initials(e.name)) + '</span>' +
+      '<div><h3 style="font-size:19px">' + esc(e.name) + '</h3><span class="mono" style="font-size:13px">' + esc(e.empNo) + '</span></div>' +
+      '<span style="margin-left:auto">' + pill(st.status) + '</span></div>' +
+      '<div class="pv-row"><span class="k">Department</span><span class="v">' + esc(deptName(e.departmentId) || '—') + '</span></div>' +
+      '<div class="pv-row"><span class="k">Section</span><span class="v">' + esc(secName(e.sectionId) || '—') + '</span></div>' +
+      '<div class="pv-row"><span class="k">Transport Type</span><span class="v">' + esc(typeName(e.transportTypeId) || '—') + '</span></div>' +
+      '<div class="pv-row"><span class="k">Vehicle Number</span><span class="v">' + esc(v.vehicleNumber) + '</span></div>' +
+      '<div class="pv-row"><span class="k">Vehicle Capacity (Total Seats)</span><span class="v">' + st.total + '</span></div>' +
+      '<div class="pv-row"><span class="k">Occupied Seats</span><span class="v">' + st.occupied + '</span></div>' +
+      '<div class="pv-row"><span class="k">Available Seats</span><span class="v gold-t">' + st.available + '</span></div>' +
+      '<div style="margin:14px 0 4px">' + capBar(st) + '</div>' +
+      '<div class="pv-row" style="border:none"><span class="k">Registered On</span><span class="v">' + fmtDay(e.createdAt) + '</span></div>' +
+      '<div class="pv-row" style="border:none"><span class="k">Last Updated</span><span class="v">' + fmtDay(e.updatedAt) + '</span></div>',
+    footer: (can('employees.manage') ? '<button class="btn btn-gold" onclick="closeModal();nav(\'empForm\',{id:\'' + e.id + '\'})">' + icon('edit', 14) + ' Edit Employee</button>' : '') +
+            '<button class="btn btn-plain" onclick="closeModal()">Close</button>'
+  });
+}
+function delEmp(id) {
+  const e = db.employees.find(x => x.id === id); if (!e) return;
+  const v = vehOf(e.vehicleId);
+  confirmDialog({
+    title: 'Delete Employee',
+    msg: 'Are you sure you want to delete <b>' + esc(e.empNo) + ' — ' + esc(e.name) + '</b>?<br><br>This will free one seat in vehicle <b>' + esc(v.vehicleNumber) + '</b> and update all statistics and reports.',
+    ok: 'Delete', tone: 'danger',
+    onOk() {
+      db.employees = db.employees.filter(x => x.id !== id);
+      audit('Employee Deleted', e.empNo, e.name + ' removed; seat freed in ' + v.vehicleNumber);
+      save();
+      notify('success', 'Employee Deleted', e.name + ' was removed and the seat in ' + v.vehicleNumber + ' is available again.');
+      refresh();
+    }
+  });
+}
+
+/* ---------- EMPLOYEE ENTRY / EDIT ---------- */
+function renderEmployeeForm(p) {
+  const isEdit = !!(p && p.id);
+  const emp = isEdit ? db.employees.find(e => e.id === p.id) : null;
+  if (isEdit && !emp) { notify('error', 'Not Found', 'Employee record could not be found.'); return nav('employees'); }
+  const depts = db.departments.filter(d => d.status === 'Active' || (emp && emp.departmentId === d.id));
+  const types = db.transportTypes.filter(t => t.status === 'Active' || (emp && emp.transportTypeId === t.id));
+  $('#page-empForm').innerHTML =
+    '<div class="page-hd"><div><h1>' + (isEdit ? 'Edit Employee' : 'Employee Entry') + '</h1>' +
+    '<p class="sub">' + (isEdit ? 'Modify transport allocation for ' + esc(emp.empNo) : 'Register a new employee and assign a transport seat') + '</p></div>' +
+    '<button class="btn btn-plain" onclick="nav(\'employees\')">' + icon('arrowL', 15) + ' Back to Employees</button></div>' +
+    '<div class="card frm-card"><div class="frm-sec"><h3>' + icon('user', 18) + ' Employee Information</h3>' +
+    '<p>All fields marked <span class="req">*</span> are mandatory. Seats are validated against vehicle capacity.</p></div>' +
+    '<div class="frm-body"><form id="emp-form" novalidate><div class="fgrid">' +
+      '<div class="field"><label>EMP No <span class="req">*</span></label><input id="f-empno" value="' + esc(emp ? emp.empNo : '') + '" placeholder="e.g. IMO-1001" maxlength="20"><div class="f-err" id="e-f-empno"></div></div>' +
+      '<div class="field"><label>Employee Name <span class="req">*</span></label><input id="f-name" value="' + esc(emp ? emp.name : '') + '" placeholder="Full name"><div class="f-err" id="e-f-name"></div></div>' +
+      '<div class="field"><label>Department <span class="req">*</span></label><select id="f-dept"><option value="">Select Department</option></select><div class="f-err" id="e-f-dept"></div></div>' +
+      '<div class="field"><label>Section <span class="req">*</span></label><select id="f-sec" disabled><option value="">Select Department first</option></select><div class="f-err" id="e-f-sec"></div></div>' +
+      '<div class="field"><label>Transport Type <span class="req">*</span></label><select id="f-type"><option value="">Select Transport Type</option></select><div class="f-err" id="e-f-type"></div></div>' +
+      '<div class="field"><label>Vehicle <span class="req">*</span></label><select id="f-vehicle" disabled><option value="">Select Transport Type first</option></select><div class="f-err" id="e-f-vehicle"></div></div>' +
+    '</div><div id="f-veh-hint"></div>' +
+    '<div class="frm-actions"><button type="submit" class="btn btn-primary">' + icon('check', 15) + ' Submit</button>' +
+    '<button type="button" class="btn btn-plain" onclick="nav(\'employees\')">Cancel</button></div></form></div></div>';
+  const dSel = $('#f-dept'), tSel = $('#f-type');
+  dSel.innerHTML = '<option value="">Select Department</option>' + depts.map(d => opt(d.id, d.name, emp && emp.departmentId === d.id)).join('');
+  tSel.innerHTML = '<option value="">Select Transport Type</option>' + types.map(t => opt(t.id, t.name, emp && emp.transportTypeId === t.id)).join('');
+  const updVehHint = () => {
+    const hint = $('#f-veh-hint'), vid = $('#f-vehicle').value;
+    if (!vid) { hint.innerHTML = ''; return; }
+    const v = vehOf(vid), st = vstats(v);
+    const current = isEdit && emp.vehicleId === vid;
+    if (!current && st.available <= 0) {
+      hint.innerHTML = '<div class="hint err">' + icon('alertC', 15) + ' <b>' + esc(v.vehicleNumber) + '</b> is full — no additional seats are available.</div>';
+      return;
+    }
+    let cls = 'hint', extra = '';
+    if (current) extra = ' · currently assigned to this employee';
+    else if (st.available === 1) { cls = 'hint warn'; extra = ' · last remaining seat'; }
+    else if (st.util >= 85) { cls = 'hint warn'; extra = ' · nearly full'; }
+    hint.innerHTML = '<div class="' + cls + '">' + icon(cls === 'hint warn' ? 'alertT' : 'info', 15) + ' <b>' + esc(v.vehicleNumber) + '</b> — ' + st.occupied + ' of ' + st.total + ' seats occupied · <b>' + st.available + '</b> available' + extra + '</div>';
+  };
+  const updSec = () => {
+    const dv = dSel.value, sSel = $('#f-sec');
+    const secs = dv ? db.sections.filter(s => s.departmentId === dv && (s.status === 'Active' || (emp && emp.sectionId === s.id))) : [];
+    sSel.innerHTML = '<option value="">' + (dv ? 'Select Section' : 'Select Department first') + '</option>' + secs.map(s => opt(s.id, s.name, emp && emp.sectionId === s.id)).join('');
+    sSel.disabled = !dv;
+  };
+  const updVeh = () => {
+    const tv = tSel.value, vSel = $('#f-vehicle');
+    if (!tv) { vSel.innerHTML = '<option value="">Select Transport Type first</option>'; vSel.disabled = true; updVehHint(); return; }
+    let opts = '';
+    db.vehicles.filter(v => v.transportTypeId === tv).forEach(v => {
+      const st = vstats(v);
+      const current = isEdit && emp.vehicleId === v.id;
+      const full = st.available <= 0 && !current;
+      opts += '<option value="' + v.id + '"' + (current ? ' selected' : '') + (full ? ' disabled' : '') + '>' + esc(v.vehicleNumber) + ' — ' + st.available + ' seat' + (st.available === 1 ? '' : 's') + ' available' + (full ? ' (Full)' : '') + '</option>';
+    });
+    vSel.innerHTML = '<option value="">Select Vehicle</option>' + opts;
+    vSel.disabled = false;
+    updVehHint();
+  };
+  dSel.onchange = () => { clearErrs(['f-dept', 'f-sec']); updSec(); };
+  tSel.onchange = () => { clearErrs(['f-type', 'f-vehicle']); updVeh(); };
+  $('#f-vehicle').onchange = () => { clearErrs(['f-vehicle']); updVehHint(); };
+  if (isEdit) { updSec(); updVeh(); }
+  $('#emp-form').onsubmit = ev => {
+    ev.preventDefault();
+    const ids = ['f-empno', 'f-name', 'f-dept', 'f-sec', 'f-type', 'f-vehicle'];
+    clearErrs(ids);
+    const empNo = $('#f-empno').value.trim(), name = $('#f-name').value.trim();
+    const dv = dSel.value, sv = $('#f-sec').value, tv = tSel.value, vv = $('#f-vehicle').value;
+    let bad = false;
+    if (!empNo) { fErr('f-empno', 'EMP No is required.'); bad = true; }
+    else if (db.employees.some(e => e.empNo.toLowerCase() === empNo.toLowerCase() && (!isEdit || e.id !== emp.id))) { fErr('f-empno', 'This EMP No already exists.'); bad = true; }
+    if (!name) { fErr('f-name', 'Employee Name is required.'); bad = true; }
+    if (!dv) { fErr('f-dept', 'Department is required.'); bad = true; }
+    if (!sv) { fErr('f-sec', 'Section is required.'); bad = true; }
+    else { const s = secOf(sv); if (!s || s.departmentId !== dv) { fErr('f-sec', 'Selected section does not belong to the department.'); bad = true; } }
+    if (!tv) { fErr('f-type', 'Transport Type is required.'); bad = true; }
+    if (!vv) { fErr('f-vehicle', 'Vehicle is required.'); bad = true; }
+    if (bad) { notify('error', 'Validation Failed', 'Please correct the highlighted fields.'); return; }
+    const v = vehOf(vv), st = vstats(v);
+    const stays = isEdit && emp.vehicleId === vv;
+    if (!stays && st.available <= 0) {
+      fErr('f-vehicle', 'Vehicle is full. No additional seats are available.');
+      notify('error', 'Vehicle Full', v.vehicleNumber + ' is full. No additional seats are available.');
+      return;
+    }
+    const ts = Date.now();
+    if (isEdit) {
+      const oldV = vehOf(emp.vehicleId);
+      emp.empNo = empNo; emp.name = name; emp.departmentId = dv; emp.sectionId = sv; emp.transportTypeId = tv; emp.vehicleId = vv; emp.updatedAt = ts;
+      audit('Employee Edited', empNo, name + ': ' + (oldV ? oldV.vehicleNumber : '—') + ' → ' + v.vehicleNumber);
+      save();
+      notify('success', 'Employee Updated', name + ' successfully updated and assigned to ' + v.vehicleNumber + '.');
+    } else {
+      db.employees.push({ id: nid('emp'), empNo: empNo, name: name, departmentId: dv, sectionId: sv, transportTypeId: tv, vehicleId: vv, createdAt: ts, updatedAt: ts });
+      audit('Employee Added', empNo, name + ' assigned to ' + v.vehicleNumber);
+      save();
+      notify('success', 'Employee Added', name + ' successfully added and assigned to ' + v.vehicleNumber + '.');
+    }
+    const st2 = vstats(v);
+    if (st2.status === 'Nearly Full') notify('warning', 'Vehicle Nearly Full', v.vehicleNumber + ' is nearly full — only ' + st2.available + ' seat(s) remaining.');
+    else if (st2.status === 'Full') notify('warning', 'Vehicle Full', v.vehicleNumber + ' is now fully occupied (0 seats available).');
+    nav('employees');
+  };
+}
+
+/* ---------- TRANSPORT CONFIGURATION ---------- */
+let cfgTab = 'types', cfgQ = '';
+function renderConfig() {
+  const cards = [
+    { k:'types',       l:'Transport Types',    d:'Bus, Van and custom types', ic:'layers',   n:db.transportTypes.length },
+    { k:'vehicles',    l:'Transport Vehicles', d:'Fleet & seat capacity',     ic:'bus',      n:db.vehicles.length },
+    { k:'departments', l:'Departments',        d:'Organizational units',      ic:'building', n:db.departments.length },
+    { k:'sections',    l:'Sections',           d:'Sections under departments',ic:'list',     n:db.sections.length }
+  ];
+  const canManage = can('config.manage');
+  const addLbl = { types:'Add Transport Type', vehicles:'Add Vehicle', departments:'Add Department', sections:'Add Section' };
+  const addFn = { types:'openTypeModal()', vehicles:"nav('vehicleForm')", departments:'openDeptModal()', sections:'openSecModal()' };
+  $('#page-config').innerHTML =
+    '<div class="page-hd"><div><h1>Transport Configuration</h1><p class="sub">Configure transport types, the vehicle fleet, departments and sections</p></div>' +
+    (canManage ? '<button class="btn btn-gold" onclick="' + addFn[cfgTab] + '">' + icon('plus', 16) + ' ' + addLbl[cfgTab] + '</button>' : '') + '</div>' +
+    '<div class="cfg-cards">' + cards.map(c =>
+      '<button class="cfg-card ' + (cfgTab === c.k ? 'on' : '') + '" onclick="cfgTab=\'' + c.k + '\';cfgQ=\'\';renderConfig()"><span class="cfg-ic">' + icon(c.ic, 21) + '</span><span><b>' + c.l + '</b><span class="n">' + c.n + ' configured · ' + c.d + '</span></span></button>').join('') + '</div>' +
+    '<div class="card"><div class="tabs" style="padding:0 10px">' + cards.map(c =>
+      '<button class="tab ' + (cfgTab === c.k ? 'on' : '') + '" onclick="cfgTab=\'' + c.k + '\';cfgQ=\'\';renderConfig()">' + c.l + '</button>').join('') + '</div>' +
+    '<div class="tbl-bar"><div class="search">' + icon('search', 15) + '<input id="cfg-q" placeholder="Search…" value="' + esc(cfgQ) + '"></div></div>' +
+    '<div id="cfg-list"></div></div>';
+  $('#cfg-q').oninput = e => { cfgQ = e.target.value; renderCfgList(); };
+  renderCfgList();
+}
+function renderCfgList() {
+  const q = cfgQ.toLowerCase();
+  const canManage = can('config.manage');
+  if (cfgTab === 'types') {
+    const list = db.transportTypes.filter(t => !q || t.name.toLowerCase().includes(q));
+    const rows = list.map(t => {
+      const vs = db.vehicles.filter(v => v.transportTypeId === t.id).length;
+      const es = db.employees.filter(e => e.transportTypeId === t.id).length;
+      return '<tr><td><b>' + esc(t.name) + '</b></td><td>' + pill(t.status) + '</td><td class="num">' + vs + '</td><td class="num">' + es + '</td><td>' + fmtDay(t.createdAt) + '</td>' +
+        '<td class="acts">' + (canManage
+          ? '<button class="rowbtn gold" title="Edit" onclick="openTypeModal(\'' + t.id + '\')">' + icon('edit', 14) + '</button><button class="rowbtn dark" title="Delete" onclick="delType(\'' + t.id + '\')">' + icon('trash', 14) + '</button>'
+          : '<button class="rowbtn" title="View" onclick="openTypeModal(\'' + t.id + '\')">' + icon('eye', 15) + '</button>') + '</td></tr>';
+    }).join('');
+    $('#cfg-list').innerHTML = '<div class="tbl-wrap"><table class="tbl" style="min-width:600px"><thead><tr><th>Transport Type</th><th>Status</th><th class="num">Vehicles</th><th class="num">Employees</th><th>Created</th><th style="text-align:right">Actions</th></tr></thead><tbody>' +
+      (rows || '<tr><td colspan="6"><div class="empty">No transport types found.</div></td></tr>') + '</tbody></table></div>';
+  } else if (cfgTab === 'vehicles') {
+    const list = db.vehicles.filter(v => {
+      if (!q) return true;
+      const t = typeOf(v.transportTypeId);
+      return v.vehicleNumber.toLowerCase().includes(q) || (t && t.name.toLowerCase().includes(q));
+    }).sort((a, b) => a.vehicleNumber.localeCompare(b.vehicleNumber));
+    const rows = list.map(v => {
+      const st = vstats(v), t = typeOf(v.transportTypeId);
+      return '<tr><td>' + esc(t ? t.name : '—') + '</td><td><b>' + esc(v.vehicleNumber) + '</b></td>' +
+        '<td class="num">' + st.total + '</td><td class="num">' + st.occupied + '</td>' +
+        '<td class="num ' + (st.available === 0 ? '' : 'gold-t') + '"><b>' + st.available + '</b></td>' +
+        '<td style="min-width:130px"><div style="display:flex;align-items:center;gap:9px">' + capBar(st) + '<span class="mono" style="font-size:12.5px">' + st.util.toFixed(0) + '%</span></div></td>' +
+        '<td>' + pill(st.status) + '</td>' +
+        '<td class="acts"><button class="rowbtn" title="View" onclick="viewVehicle(\'' + v.id + '\')">' + icon('eye', 15) + '</button>' +
+        (canManage ? '<button class="rowbtn gold" title="Edit" onclick="nav(\'vehicleForm\',{id:\'' + v.id + '\'})">' + icon('edit', 14) + '</button><button class="rowbtn dark" title="Delete" onclick="delVehicle(\'' + v.id + '\')">' + icon('trash', 14) + '</button>' : '') +
+        '</td></tr>';
+    }).join('');
+    $('#cfg-list').innerHTML = '<div class="tbl-wrap"><table class="tbl" style="min-width:820px"><thead><tr><th>Vehicle Type</th><th>Vehicle Number</th><th class="num">Total Seats</th><th class="num">Occupied Seats</th><th class="num">Available Seats</th><th>Utilization %</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead><tbody>' +
+      (rows || '<tr><td colspan="8"><div class="empty">No vehicles found.</div></td></tr>') + '</tbody></table></div>';
+  } else if (cfgTab === 'departments') {
+    const list = db.departments.filter(d => !q || d.name.toLowerCase().includes(q));
+    const rows = list.map(d => {
+      const sc = db.sections.filter(s => s.departmentId === d.id).length;
+      const es = db.employees.filter(e => e.departmentId === d.id).length;
+      return '<tr><td><b>' + esc(d.name) + '</b></td><td>' + pill(d.status) + '</td><td class="num">' + sc + '</td><td class="num">' + es + '</td><td>' + fmtDay(d.createdAt) + '</td>' +
+        '<td class="acts">' + (canManage
+          ? '<button class="rowbtn gold" title="Edit" onclick="openDeptModal(\'' + d.id + '\')">' + icon('edit', 14) + '</button><button class="rowbtn dark" title="Delete" onclick="delDept(\'' + d.id + '\')">' + icon('trash', 14) + '</button>'
+          : '<button class="rowbtn" title="View" onclick="openDeptModal(\'' + d.id + '\')">' + icon('eye', 15) + '</button>') + '</td></tr>';
+    }).join('');
+    $('#cfg-list').innerHTML = '<div class="tbl-wrap"><table class="tbl" style="min-width:620px"><thead><tr><th>Department</th><th>Status</th><th class="num">Sections</th><th class="num">Employees</th><th>Created</th><th style="text-align:right">Actions</th></tr></thead><tbody>' +
+      (rows || '<tr><td colspan="6"><div class="empty">No departments found.</div></td></tr>') + '</tbody></table></div>';
+  } else {
+    const list = db.sections.filter(s => {
+      if (!q) return true;
+      const d = deptOf(s.departmentId);
+      return s.name.toLowerCase().includes(q) || (d && d.name.toLowerCase().includes(q));
+    });
+    const rows = list.map(s => {
+      const es = db.employees.filter(e => e.sectionId === s.id).length;
+      const d = deptOf(s.departmentId);
+      return '<tr><td><b>' + esc(s.name) + '</b></td><td>' + esc(d ? d.name : '—') + '</td><td>' + pill(s.status) + '</td><td class="num">' + es + '</td>' +
+        '<td class="acts">' + (canManage
+          ? '<button class="rowbtn gold" title="Edit" onclick="openSecModal(\'' + s.id + '\')">' + icon('edit', 14) + '</button><button class="rowbtn dark" title="Delete" onclick="delSec(\'' + s.id + '\')">' + icon('trash', 14) + '</button>'
+          : '<button class="rowbtn" title="View" onclick="openSecModal(\'' + s.id + '\')">' + icon('eye', 15) + '</button>') + '</td></tr>';
+    }).join('');
+    $('#cfg-list').innerHTML = '<div class="tbl-wrap"><table class="tbl" style="min-width:560px"><thead><tr><th>Section</th><th>Department</th><th>Status</th><th class="num">Employees</th><th style="text-align:right">Actions</th></tr></thead><tbody>' +
+      (rows || '<tr><td colspan="5"><div class="empty">No sections found.</div></td></tr>') + '</tbody></table></div>';
+  }
+}
+function openTypeModal(id) {
+  const t = id ? typeOf(id) : null;
+  openModal({
+    title: t ? 'Edit Transport Type' : 'Add Transport Type', ic: 'layers', width: 430,
+    body: '<div class="field"><label>Transport Type Name <span class="req">*</span></label><input id="m-name" value="' + esc(t ? t.name : '') + '" placeholder="e.g. Bus, Van, Staff Vehicle, Other"></div>' +
+      '<div class="field"><label>Status</label><select id="m-status">' + opt('Active', 'Active', !t || t.status === 'Active') + opt('Inactive', 'Inactive', !!t && t.status === 'Inactive') + '</select></div>' +
+      '<div class="f-err" id="m-err"></div>',
+    footer: '<button class="btn btn-plain" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveType(\'' + (id || '') + '\')">' + icon('save', 15) + ' Save</button>'
+  });
+  setTimeout(() => { if ($('#m-name')) $('#m-name').focus(); }, 60);
+}
+function saveType(id) {
+  const name = $('#m-name').value.trim(), status = $('#m-status').value;
+  if (!name) return mErr('Transport type name is required.');
+  if (db.transportTypes.some(x => x.name.toLowerCase() === name.toLowerCase() && x.id !== id)) return mErr('This transport type already exists.');
+  if (id) { const t = typeOf(id); t.name = name; t.status = status; audit('Transport Type Edited', name, 'Details updated'); }
+  else { db.transportTypes.push({ id: nid('tt'), name: name, status: status, createdAt: Date.now() }); audit('Transport Type Added', name, 'New transport type created'); }
+  save(); closeModal();
+  notify('success', id ? 'Transport Type Updated' : 'Transport Type Added', '"' + name + '" has been saved.');
+  if (state.page === 'config') renderCfgList();
+}
+function delType(id) {
+  const t = typeOf(id); if (!t) return;
+  const vs = db.vehicles.filter(v => v.transportTypeId === id).length;
+  const es = db.employees.filter(e => e.transportTypeId === id).length;
+  if (vs || es) {
+    openModal({ title:'Cannot Delete Transport Type', ic:'alertT', width:460,
+      body:'<p class="cf-msg"><b>' + esc(t.name) + '</b> cannot be deleted because it is still in use.<br><br>' +
+        (vs ? '• ' + vs + ' vehicle(s) are assigned to this type.<br>' : '') + (es ? '• ' + es + ' employee(s) are registered under this type.' : '') +
+        '<br><br>Please reassign or remove the related records first.</p>',
+      footer:'<button class="btn btn-primary" onclick="closeModal()">Understood</button>' });
+    return;
+  }
+  confirmDialog({ title:'Delete Transport Type', msg:'Are you sure you want to delete "<b>' + esc(t.name) + '</b>"?', ok:'Delete', tone:'danger',
+    onOk(){ db.transportTypes = db.transportTypes.filter(x => x.id !== id); audit('Transport Type Deleted', t.name, 'Type removed'); save(); notify('success','Transport Type Deleted','"' + t.name + '" was removed.'); renderCfgList(); } });
+}
+function openDeptModal(id) {
+  const d = id ? deptOf(id) : null;
+  openModal({
+    title: d ? 'Edit Department' : 'Add Department', ic: 'building', width: 430,
+    body: '<div class="field"><label>Department Name <span class="req">*</span></label><input id="m-name" value="' + esc(d ? d.name : '') + '" placeholder="e.g. Production"></div>' +
+      '<div class="field"><label>Status</label><select id="m-status">' + opt('Active', 'Active', !d || d.status === 'Active') + opt('Inactive', 'Inactive', !!d && d.status === 'Inactive') + '</select></div>' +
+      '<div class="f-err" id="m-err"></div>',
+    footer: '<button class="btn btn-plain" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveDept(\'' + (id || '') + '\')">' + icon('save', 15) + ' Save</button>'
+  });
+  setTimeout(() => { if ($('#m-name')) $('#m-name').focus(); }, 60);
+}
+function saveDept(id) {
+  const name = $('#m-name').value.trim(), status = $('#m-status').value;
+  if (!name) return mErr('Department name is required.');
+  if (db.departments.some(x => x.name.toLowerCase() === name.toLowerCase() && x.id !== id)) return mErr('This department already exists.');
+  if (id) { const d = deptOf(id); d.name = name; d.status = status; audit('Department Edited', name, 'Details updated'); }
+  else { db.departments.push({ id: nid('dp'), name: name, status: status, createdAt: Date.now() }); audit('Department Added', name, 'New department created'); }
+  save(); closeModal();
+  notify('success', id ? 'Department Updated' : 'Department Added', '"' + name + '" has been saved.');
+  if (state.page === 'config') renderCfgList();
+}
+function delDept(id) {
+  const d = deptOf(id); if (!d) return;
+  const sc = db.sections.filter(s => s.departmentId === id).length;
+  const es = db.employees.filter(e => e.departmentId === id).length;
+  if (sc || es) {
+    openModal({ title:'Cannot Delete Department', ic:'alertT', width:460,
+      body:'<p class="cf-msg"><b>' + esc(d.name) + '</b> cannot be deleted because it is still in use.<br><br>' +
+        (sc ? '• ' + sc + ' section(s) belong to this department.<br>' : '') + (es ? '• ' + es + ' employee(s) are assigned to it.' : '') +
+        '<br><br>Delete or reassign the related sections and employees first.</p>',
+      footer:'<button class="btn btn-primary" onclick="closeModal()">Understood</button>' });
+    return;
+  }
+  confirmDialog({ title:'Delete Department', msg:'Are you sure you want to delete "<b>' + esc(d.name) + '</b>"?', ok:'Delete', tone:'danger',
+    onOk(){ db.departments = db.departments.filter(x => x.id !== id); audit('Department Deleted', d.name, 'Department removed'); save(); notify('success','Department Deleted','"' + d.name + '" was removed.'); renderCfgList(); } });
+}
+function openSecModal(id) {
+  const s = id ? secOf(id) : null;
+  openModal({
+    title: s ? 'Edit Section' : 'Add Section', ic: 'list', width: 440,
+    body: '<div class="field"><label>Department <span class="req">*</span></label><select id="m-dept">' + db.departments.map(d => opt(d.id, d.name, s && s.departmentId === d.id)).join('') + '</select></div>' +
+      '<div class="field"><label>Section Name <span class="req">*</span></label><input id="m-name" value="' + esc(s ? s.name : '') + '" placeholder="e.g. Hatchery"></div>' +
+      '<div class="field"><label>Status</label><select id="m-status">' + opt('Active', 'Active', !s || s.status === 'Active') + opt('Inactive', 'Inactive', !!s && s.status === 'Inactive') + '</select></div>' +
+      '<div class="f-err" id="m-err"></div>',
+    footer: '<button class="btn btn-plain" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveSec(\'' + (id || '') + '\')">' + icon('save', 15) + ' Save</button>'
+  });
+}
+function saveSec(id) {
+  const dv = $('#m-dept').value, name = $('#m-name').value.trim(), status = $('#m-status').value;
+  if (!dv) return mErr('Please select a department.');
+  if (!name) return mErr('Section name is required.');
+  if (db.sections.some(x => x.departmentId === dv && x.name.toLowerCase() === name.toLowerCase() && x.id !== id)) return mErr('This section already exists under the selected department.');
+  const dn = deptName(dv);
+  if (id) { const s = secOf(id); s.departmentId = dv; s.name = name; s.status = status; audit('Section Edited', name, 'Under ' + dn); }
+  else { db.sections.push({ id: nid('sec'), departmentId: dv, name: name, status: status, createdAt: Date.now() }); audit('Section Added', name, 'Under ' + dn); }
+  save(); closeModal();
+  notify('success', id ? 'Section Updated' : 'Section Added', '"' + name + '" has been saved under ' + dn + '.');
+  if (state.page === 'config') renderCfgList();
+}
+function delSec(id) {
+  const s = secOf(id); if (!s) return;
+  const es = db.employees.filter(e => e.sectionId === id).length;
+  if (es) {
+    openModal({ title:'Cannot Delete Section', ic:'alertT', width:460,
+      body:'<p class="cf-msg"><b>' + esc(s.name) + '</b> cannot be deleted because <b>' + es + ' employee(s)</b> are currently assigned to it. Please reassign these employees first.</p>',
+      footer:'<button class="btn btn-primary" onclick="closeModal()">Understood</button>' });
+    return;
+  }
+  confirmDialog({ title:'Delete Section', msg:'Are you sure you want to delete "<b>' + esc(s.name) + '</b>" (' + esc(deptName(s.departmentId)) + ')?', ok:'Delete', tone:'danger',
+    onOk(){ db.sections = db.sections.filter(x => x.id !== id); audit('Section Deleted', s.name, 'Section removed'); save(); notify('success','Section Deleted','"' + s.name + '" was removed.'); renderCfgList(); } });
+}
+
+/* ---------- VEHICLE ENTRY / EDIT ---------- */
+function renderVehicleForm(p) {
+  const isEdit = !!(p && p.id);
+  const v = isEdit ? vehOf(p.id) : null;
+  if (isEdit && !v) { notify('error', 'Not Found', 'Vehicle record could not be found.'); return nav('config'); }
+  const st = isEdit ? vstats(v) : null;
+  const types = db.transportTypes.filter(t => t.status === 'Active');
+  $('#page-vehicleForm').innerHTML =
+    '<div class="page-hd"><div><h1>' + (isEdit ? 'Edit Vehicle' : 'Vehicle Entry') + '</h1>' +
+    '<p class="sub">' + (isEdit ? 'Modify vehicle record & seat capacity' : 'Register a new transport vehicle') + '</p></div>' +
+    '<button class="btn btn-plain" onclick="nav(\'config\')">' + icon('arrowL', 15) + ' Back to Configuration</button></div>' +
+    '<div class="card frm-card"><div class="frm-sec"><h3>' + icon('bus', 18) + ' Vehicle Information</h3>' +
+    '<p>Available seats and utilization are calculated automatically from employee assignments.</p></div>' +
+    '<div class="frm-body">' +
+    (isEdit ? '<div class="hint" style="margin-bottom:16px">' + icon('info', 15) + ' This vehicle currently has <b>&nbsp;' + st.occupied + '&nbsp;</b> occupied seat(s) — total seats cannot be set below this number.</div>' : '') +
+    '<div class="fgrid">' +
+      '<div class="field"><label>Vehicle Type <span class="req">*</span></label><select id="v-type"><option value="">Select Vehicle Type</option>' + types.map(t => opt(t.id, t.name, v && v.transportTypeId === t.id)).join('') + '</select><div class="f-err" id="e-v-type"></div></div>' +
+      '<div class="field"><label>Vehicle Number <span class="req">*</span></label><input id="v-number" value="' + esc(v ? v.vehicleNumber : '') + '" placeholder="e.g. WP CAB 1234" style="text-transform:uppercase"><div class="f-err" id="e-v-number"></div></div>' +
+      '<div class="field"><label>No. of Seats <span class="req">*</span></label><input id="v-seats" type="number" min="1" step="1" value="' + (v ? v.totalSeats : '') + '" placeholder="e.g. 30"><div class="f-err" id="e-v-seats"></div></div>' +
+    '</div><div class="frm-actions">' +
+    '<button type="button" class="btn btn-primary" onclick="submitVehicle(' + (isEdit ? "'" + v.id + "'" : 'null') + ')">' + icon('check', 15) + ' Submit</button>' +
+    '<button type="button" class="btn btn-plain" onclick="nav(\'config\')">Cancel</button></div></div></div>';
+}
+function submitVehicle(id) {
+  clearErrs(['v-type', 'v-number', 'v-seats']);
+  const tv = $('#v-type').value, num = $('#v-number').value.trim().replace(/\s+/g, ' ').toUpperCase();
+  const seats = parseInt($('#v-seats').value, 10);
+  let bad = false;
+  if (!tv) { fErr('v-type', 'Vehicle Type is required.'); bad = true; }
+  if (!num) { fErr('v-number', 'Vehicle Number is required.'); bad = true; }
+  else if (db.vehicles.some(v => v.vehicleNumber.toUpperCase() === num && v.id !== id)) { fErr('v-number', 'This vehicle number already exists.'); bad = true; }
+  if (!seats || isNaN(seats) || seats <= 0) { fErr('v-seats', 'Number of seats must be a valid positive number.'); bad = true; }
+  if (bad) { notify('error', 'Validation Failed', 'Please correct the highlighted fields.'); return; }
+  const tn = typeOf(tv);
+  if (id) {
+    const v = vehOf(id), st = vstats(v);
+    if (seats < st.occupied) {
+      fErr('v-seats', 'Occupied seats (' + st.occupied + ') exceed the new total. Minimum allowed is ' + st.occupied + '.');
+      notify('error', 'Invalid Capacity', v.vehicleNumber + ' currently has ' + st.occupied + ' occupied seats.');
+      return;
+    }
+    const before = st.status;
+    v.transportTypeId = tv; v.vehicleNumber = num; v.totalSeats = seats; v.updatedAt = Date.now();
+    audit('Vehicle Edited', num, 'Capacity ' + st.total + ' → ' + seats);
+    save();
+    const after = vstats(v);
+    notify('success', 'Vehicle Updated', num + ' successfully updated (' + after.available + ' seats available).');
+    if (after.status !== before && after.status !== 'Available') notify('warning', 'Capacity Status Changed', num + ' is now ' + after.status + '.');
+    cfgTab = 'vehicles'; nav('config');
+  } else {
+    db.vehicles.push({ id: nid('veh'), transportTypeId: tv, vehicleNumber: num, totalSeats: seats, status: 'Active', createdAt: Date.now(), updatedAt: Date.now() });
+    audit('Vehicle Added', num, seats + ' seats, type: ' + (tn ? tn.name : ''));
+    save();
+    notify('success', 'Vehicle Added', num + ' successfully added with ' + seats + ' seats (all available).');
+    cfgTab = 'vehicles'; nav('config');
+  }
+}
+function viewVehicle(id) {
+  const v = vehOf(id); if (!v) return;
+  const st = vstats(v);
+  const sample = db.employees.filter(e => e.vehicleId === id).slice(0, 5);
+  openModal({
+    title: 'Vehicle Details', ic: 'bus', width: 540,
+    body: '<div class="pv-head"><span class="cfg-ic" style="border-radius:11px">' + icon('bus', 21) + '</span>' +
+      '<div><h3 style="font-size:19px">' + esc(v.vehicleNumber) + '</h3><span style="color:var(--muted);font-size:13px">' + esc(typeName(v.transportTypeId) || '—') + '</span></div>' +
+      '<span style="margin-left:auto">' + pill(st.status) + '</span></div>' +
+      '<div class="pv-row"><span class="k">Total Seats (Capacity)</span><span class="v">' + st.total + '</span></div>' +
+      '<div class="pv-row"><span class="k">Occupied Seats</span><span class="v">' + st.occupied + '</span></div>' +
+      '<div class="pv-row"><span class="k">Available Seats</span><span class="v gold-t">' + st.available + '</span></div>' +
+      '<div class="pv-row"><span class="k">Seat Utilization</span><span class="v">' + st.util.toFixed(1) + '%</span></div>' +
+      '<div style="margin:14px 0 6px">' + capBar(st) + '</div>' +
+      '<div class="pv-row"><span class="k">Registered On</span><span class="v">' + fmtDay(v.createdAt) + '</span></div>' +
+      '<div class="pv-row" style="border:none"><span class="k">Assigned Employees</span><span class="v">' + st.occupied +
+      (sample.length ? '<br><small style="font-weight:400;color:var(--muted)">' + esc(sample.map(e => e.empNo).join(', ')) + (st.occupied > 5 ? ' …' : '') + '</small>' : '') + '</span></div>',
+    footer: (can('config.manage') ? '<button class="btn btn-gold" onclick="closeModal();nav(\'vehicleForm\',{id:\'' + v.id + '\'})">' + icon('edit', 14) + ' Edit Vehicle</button>' : '') +
+            '<button class="btn btn-plain" onclick="closeModal()">Close</button>'
+  });
+}
+function delVehicle(id) {
+  const v = vehOf(id); if (!v) return;
+  const st = vstats(v);
+  if (st.occupied > 0) {
+    openModal({ title:'Vehicle Cannot Be Deleted', ic:'alertT', width:480,
+      body:'<p class="cf-msg"><b>' + esc(v.vehicleNumber) + '</b> currently has <b>' + st.occupied + ' employee(s)</b> assigned to it (' + st.available + ' seat(s) available of ' + st.total + ').<br><br>Vehicles with assigned employees cannot be deleted directly. Please reassign these employees to another vehicle first.</p>',
+      footer:(can('employees.manage') ? '<button class="btn btn-gold" onclick="closeModal();nav(\'employees\')">' + icon('users', 15) + ' Open Employees</button>' : '') +
+        '<button class="btn btn-primary" onclick="closeModal()">Understood</button>' });
+    return;
+  }
+  confirmDialog({ title:'Delete Vehicle', msg:'Are you sure you want to delete vehicle <b>' + esc(v.vehicleNumber) + '</b> (' + st.total + ' seats)? This action cannot be undone.', ok:'Delete', tone:'danger',
+    onOk(){ db.vehicles = db.vehicles.filter(x => x.id !== id); audit('Vehicle Deleted', v.vehicleNumber, 'Vehicle removed (no assignments)'); save(); notify('success','Vehicle Deleted', v.vehicleNumber + ' was removed.'); refresh(); } });
+}
+
+/* ---------- REPORTS ---------- */
+let repState = { type:'employee', dept:'', sec:'', typeF:'', veh:'', status:'', period:'monthly', from:'', to:'', q:'' };
+const REPDEFS = [
+  { k:'employee',  l:'Employee Transport Report',   d:'All employees with assignments', ic:'users' },
+  { k:'vcapacity', l:'Vehicle Capacity Report',     d:'Seats & utilization per vehicle', ic:'bus' },
+  { k:'dept',      l:'Department-wise Report',      d:'Transport usage by department',  ic:'building' },
+  { k:'section',   l:'Section-wise Report',         d:'Transport usage by section',     ic:'list' },
+  { k:'ttype',     l:'Transport Type Report',       d:'Employees per transport type',   ic:'layers' },
+  { k:'occupancy', l:'Vehicle Occupancy Report',    d:'Capacity, occupied & available', ic:'activity' },
+  { k:'trend',     l:'Seat Occupancy Trend Report', d:'Occupied seats by day / week / month / year', ic:'activity' },
+  { k:'available', l:'Available Seat Report',       d:'Vehicles with open seats',       ic:'checkC' },
+  { k:'full',      l:'Full Vehicle Report',         d:'Vehicles with 0 available seats',ic:'alertT' }
+];
+function renderReports() {
+  $('#page-reports').innerHTML =
+    '<div class="page-hd"><div><h1>Reports</h1><p class="sub">Generate branded transport reports with filters and export options</p></div></div>' +
+    '<div class="rep-wrap"><div class="card"><div class="dd-hd" style="border-radius:12px 12px 0 0">Report Catalogue</div>' +
+    REPDEFS.map(r => '<button class="rep-item ' + (repState.type === r.k ? 'on' : '') + '" onclick="repState.type=\'' + r.k + '\';renderReports()">' + icon(r.ic, 17) + '<span><b>' + r.l + '</b><span>' + r.d + '</span></span></button>').join('') +
+    '<div class="rep-filters">' +
+      '<div class="field"><label>Department</label><select id="rf-dept"><option value="">All Departments</option>' + db.departments.map(d => opt(d.id, d.name, repState.dept === d.id)).join('') + '</select></div>' +
+      '<div class="field"><label>Section</label><select id="rf-sec"><option value="">All Sections</option>' + db.sections.map(s => opt(s.id, (deptName(s.departmentId) ? deptName(s.departmentId) + ' — ' : '') + s.name, repState.sec === s.id)).join('') + '</select></div>' +
+      '<div class="field"><label>Time Period / Granularity (trend report)</label><select id="rf-period">' + opt('daily','Daily',repState.period==='daily') + opt('weekly','Weekly',repState.period==='weekly') + opt('monthly','Monthly',repState.period==='monthly') + opt('yearly','Yearly',repState.period==='yearly') + '</select></div>' +
+      '<div class="field"><label>From Date (trend report)</label><input type="date" id="rf-from" value="' + esc(repState.from) + '"></div>' +
+      '<div class="field"><label>To Date (trend report)</label><input type="date" id="rf-to" value="' + esc(repState.to) + '"></div>' +
+      '<div class="field"><label>Transport Type</label><select id="rf-type"><option value="">All Types</option>' + db.transportTypes.map(t => opt(t.id, t.name, repState.typeF === t.id)).join('') + '</select></div>' +
+      '<div class="field"><label>Vehicle</label><select id="rf-veh"><option value="">All Vehicles</option>' + db.vehicles.map(v => opt(v.id, v.vehicleNumber, repState.veh === v.id)).join('') + '</select></div>' +
+      '<div class="field"><label>Capacity Status</label><select id="rf-status">' + opt('', 'All', repState.status === '') + opt('Available', 'Available', repState.status === 'Available') + opt('Nearly Full', 'Nearly Full', repState.status === 'Nearly Full') + opt('Full', 'Full', repState.status === 'Full') + '</select></div>' +
+      '<div class="field"><label>Search (employee report)</label><div class="search" style="max-width:none">' + icon('search', 14) + '<input id="rf-q" placeholder="EMP No / name" value="' + esc(repState.q) + '"></div></div>' +
+      '<button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:4px" onclick="generateReport()">' + icon('file', 15) + ' Generate Report</button>' +
+    '</div></div><div class="card" id="rep-out"></div></div>';
+  const bind = (id, key) => { const e = $('#' + id); e.onchange = () => { repState[key] = e.value; }; };
+  bind('rf-dept', 'dept'); bind('rf-sec', 'sec'); bind('rf-period', 'period'); bind('rf-from', 'from'); bind('rf-to', 'to'); bind('rf-type', 'typeF'); bind('rf-veh', 'veh'); bind('rf-status', 'status');
+  $('#rf-q').oninput = e => { repState.q = e.target.value; };
+  generateReport();
+}
+function buildReport() {
+  const t = totals();
+  const f = repState;
+  const fs = [];
+  if (f.dept) fs.push('Department: ' + deptName(f.dept));
+  if (f.sec) fs.push('Section: ' + secName(f.sec));
+  if (f.typeF) fs.push('Type: ' + typeName(f.typeF));
+  if (f.veh) fs.push('Vehicle: ' + vehName(f.veh));
+  if (f.status) fs.push('Status: ' + f.status);
+  if (f.type === 'trend') {
+    fs.push('Period: ' + (PERIOD_NAMES[f.period] || f.period));
+    if (f.from || f.to) fs.push('Range: ' + (f.from || 'beginning') + ' to ' + (f.to || fmtDay(Date.now())));
+  }
+  if (f.q) fs.push('Search: "' + f.q + '"');
+  const filters = fs.join(' · ');
+  const empFilter = e => {
+    if (f.dept && e.departmentId !== f.dept) return false;
+    if (f.sec && e.sectionId !== f.sec) return false;
+    if (f.typeF && e.transportTypeId !== f.typeF) return false;
+    if (f.veh && e.vehicleId !== f.veh) return false;
+    if (f.q) { const q = f.q.toLowerCase(); if (!(e.empNo.toLowerCase().includes(q) || e.name.toLowerCase().includes(q))) return false; }
+    return true;
+  };
+  let r;
+  if (f.type === 'employee') {
+    const list = db.employees.filter(empFilter).sort((a, b) => a.empNo.localeCompare(b.empNo));
+    r = { title:'Employee Transport Report', columns:['EMP No','Employee Name','Department','Section','Transport Type','Vehicle Number'],
+      rows:list.map(e => [e.empNo, e.name, deptName(e.departmentId) || '—', secName(e.sectionId) || '—', typeName(e.transportTypeId) || '—', vehName(e.vehicleId) || '—']),
+      summary:'Total Employees: ' + list.length };
+  } else if (f.type === 'vcapacity') {
+    let list = db.vehicles.slice().sort((a, b) => a.vehicleNumber.localeCompare(b.vehicleNumber));
+    if (f.typeF) list = list.filter(v => v.transportTypeId === f.typeF);
+    if (f.status) list = list.filter(v => vstats(v).status === f.status);
+    r = { title:'Vehicle Capacity Report', columns:['Vehicle Type','Vehicle Number','Total Seats','Occupied Seats','Available Seats','Utilization %'],
+      rows:list.map(v => { const s = vstats(v); return [typeName(v.transportTypeId) || '—', v.vehicleNumber, s.total, s.occupied, s.available, s.util.toFixed(1) + '%']; }),
+      summary:'Vehicles: ' + list.length + ' · Total Seats: ' + list.reduce((a, v) => a + vstats(v).total, 0) + ' · Occupied: ' + list.reduce((a, v) => a + vstats(v).occupied, 0) + ' · Available: ' + list.reduce((a, v) => a + vstats(v).available, 0) };
+  } else if (f.type === 'dept') {
+    const rows = db.departments.map(d => {
+      const emps = db.employees.filter(e => e.departmentId === d.id && (!f.typeF || e.transportTypeId === f.typeF));
+      const usedVeh = [];
+      emps.forEach(e => { if (usedVeh.indexOf(e.vehicleId) === -1) usedVeh.push(e.vehicleId); });
+      return [d.name, db.sections.filter(s => s.departmentId === d.id).length, emps.length, usedVeh.length, t.occupied ? (emps.length / t.occupied * 100).toFixed(1) + '%' : '0%'];
+    });
+    r = { title:'Department-wise Transport Report', columns:['Department','Sections','Employees Using Transport','Vehicles Used','Share of Transport Staff'],
+      rows: rows, summary:'Total Transport Employees: ' + rows.reduce((a, x) => a + x[2], 0) };
+  } else if (f.type === 'section') {
+    const rows = db.sections.map(s => [deptName(s.departmentId) || '—', s.name, db.employees.filter(e => e.sectionId === s.id && (!f.typeF || e.transportTypeId === f.typeF)).length]).sort((a, b) => b[2] - a[2]);
+    r = { title:'Section-wise Transport Report', columns:['Department','Section','Employees Using Transport'],
+      rows: rows, summary:'Total Transport Employees: ' + rows.reduce((a, x) => a + x[2], 0) + ' across ' + rows.length + ' section(s)' };
+  } else if (f.type === 'ttype') {
+    const rows = db.transportTypes.map(tt => {
+      const vs = db.vehicles.filter(v => v.transportTypeId === tt.id);
+      const seats = vs.reduce((a, v) => a + vstats(v).total, 0);
+      const emps = db.employees.filter(e => e.transportTypeId === tt.id).length;
+      return [tt.name, vs.length, seats, emps, seats ? (emps / seats * 100).toFixed(1) + '%' : '—'];
+    });
+    r = { title:'Transport Type Report', columns:['Transport Type','Vehicles','Total Seats','Employees Assigned','Utilization %'],
+      rows: rows, summary:'Total Employees: ' + rows.reduce((a, x) => a + x[3], 0) + ' · Total Seats: ' + rows.reduce((a, x) => a + x[2], 0) };
+  } else if (f.type === 'occupancy') {
+    let list = db.vehicles.slice();
+    if (f.typeF) list = list.filter(v => v.transportTypeId === f.typeF);
+    if (f.status) list = list.filter(v => vstats(v).status === f.status);
+    list.sort((a, b) => vstats(b).util - vstats(a).util);
+    r = { title:'Vehicle Occupancy Report', columns:['Vehicle Number','Vehicle Type','Total Capacity','Occupied','Available','Utilization %','Status'],
+      rows:list.map(v => { const s = vstats(v); return [v.vehicleNumber, typeName(v.transportTypeId) || '—', s.total, s.occupied, s.available, s.util.toFixed(1) + '%', s.status]; }),
+      summary:'Vehicles: ' + list.length + ' · Fleet Utilization: ' + t.util.toFixed(1) + '%' };
+  } else if (f.type === 'trend') {
+    const period = f.period || 'monthly';
+    const td = trendData(period, f.sec, f.veh, f.from, f.to, 100000);
+    let rows, summary;
+    if (td.rng.invalid) {
+      rows = [];
+      summary = 'Invalid date range — the From date is after the To date.';
+    } else {
+      rows = td.pts.map(p => [p.label, p.value, td.cap, td.cap ? (p.value / td.cap * 100).toFixed(1) + '%' : '—']);
+      const cur = td.pts.length ? td.pts[td.pts.length - 1].value : 0;
+      summary = 'Occupied at end of range: ' + cur + ' of ' + td.cap + ' seats' + (td.cap ? ' (' + (cur / td.cap * 100).toFixed(1) + '%)' : '');
+    }
+    r = { title:'Seat Occupancy Trend Report — ' + (PERIOD_NAMES[period] || period),
+      columns:['Period','Occupied Seats','Capacity (Current)','Utilization %'],
+      rows: rows, summary: summary };
+  } else if (f.type === 'available') {
+    let list = db.vehicles.filter(v => vstats(v).available > 0);
+    if (f.typeF) list = list.filter(v => v.transportTypeId === f.typeF);
+    list.sort((a, b) => vstats(b).available - vstats(a).available);
+    r = { title:'Available Seat Report', columns:['Vehicle Number','Vehicle Type','Total Seats','Occupied','Available Seats','Utilization %'],
+      rows:list.map(v => { const s = vstats(v); return [v.vehicleNumber, typeName(v.transportTypeId) || '—', s.total, s.occupied, s.available, s.util.toFixed(1) + '%']; }),
+      summary: list.length + ' vehicle(s) with ' + list.reduce((a, v) => a + vstats(v).available, 0) + ' seat(s) available' };
+  } else {
+    let list = db.vehicles.filter(v => vstats(v).available === 0);
+    if (f.typeF) list = list.filter(v => v.transportTypeId === f.typeF);
+    r = { title:'Full Vehicle Report', columns:['Vehicle Number','Vehicle Type','Total Seats','Occupied Employees','Status'],
+      rows:list.map(v => { const s = vstats(v); return [v.vehicleNumber, typeName(v.transportTypeId) || '—', s.total, s.occupied, 'Full']; }),
+      summary: list.length ? list.length + ' vehicle(s) are fully occupied (0 available seats)' : 'No vehicles are currently full' };
+  }
+  r.filters = filters;
+  return r;
+}
+function generateReport() {
+  currentReport = buildReport();
+  const r = currentReport;
+  $('#rep-out').innerHTML =
+    '<div class="rep-hd"><div class="rep-co">' + esc(db.settings.companyName) + '</div><div class="rep-sys">' + esc(db.settings.systemName) + '</div>' +
+    '<div class="rep-title">' + esc(r.title) + '</div>' +
+    '<div class="rep-meta">Generated by ' + esc(state.user.fullName) + ' &nbsp;|&nbsp; ' + fmtDateTime(Date.now()) + (r.filters ? ' &nbsp;|&nbsp; Filters: ' + esc(r.filters) : '') + '</div></div>' +
+    '<div class="rep-actions">' +
+      '<button class="btn btn-outline" onclick="printReport(false)">' + icon('printer', 15) + ' Print</button>' +
+      '<button class="btn btn-outline" onclick="printReport(true)">' + icon('file', 15) + ' Export PDF</button>' +
+      '<button class="btn btn-outline" onclick="exportExcel()">' + icon('grid', 15) + ' Export Excel</button>' +
+      '<button class="btn btn-outline" onclick="exportCSV()">' + icon('download', 15) + ' Export CSV</button></div>' +
+    '<div class="tbl-wrap"><table class="tbl" style="min-width:560px"><thead><tr>' + r.columns.map(c => '<th>' + esc(c) + '</th>').join('') + '</tr></thead><tbody>' +
+    (r.rows.length ? r.rows.map(row => '<tr>' + row.map(c => '<td>' + esc(c) + '</td>').join('') + '</tr>').join('')
+      : '<tr><td colspan="' + r.columns.length + '"><div class="empty">' + icon('file', 28) + '<b>No records</b>No data matches the selected filters.</div></td></tr>') +
+    '</tbody></table></div>' + (r.summary ? '<div class="rep-sum">' + esc(r.summary) + '</div>' : '');
+}
+function printReport(asPdf) {
+  if (!currentReport) return;
+  const r = currentReport;
+  $('#print-area').innerHTML =
+    '<div class="pr-brand"><div class="pr-co">' + esc(db.settings.companyName) + '</div><div class="pr-sys">' + esc(db.settings.systemName) + '</div></div>' +
+    '<div class="pr-title">' + esc(r.title) + '</div>' +
+    '<div class="pr-meta">Generated by ' + esc(state.user.fullName) + ' &nbsp;|&nbsp; ' + fmtDateTime(Date.now()) + (r.filters ? ' &nbsp;|&nbsp; Filters: ' + esc(r.filters) : '') + '</div>' +
+    '<table class="pr-tbl"><thead><tr>' + r.columns.map(c => '<th>' + esc(c) + '</th>').join('') + '</tr></thead><tbody>' +
+    (r.rows.length ? r.rows.map(row => '<tr>' + row.map(c => '<td>' + esc(c) + '</td>').join('') + '</tr>').join('') : '<tr><td colspan="' + r.columns.length + '">No records found.</td></tr>') +
+    '</tbody></table>' + (r.summary ? '<div class="pr-sum">' + esc(r.summary) + '</div>' : '') +
+    '<div class="pr-foot">' + esc(db.settings.companyName) + ' — ' + esc(db.settings.systemName) + '</div>';
+  if (asPdf) { notify('info', 'Export PDF', "In the print dialog, choose 'Save as PDF' as the destination."); setTimeout(() => window.print(), 380); }
+  else window.print();
+}
+function download(name, content, mime) {
+  const a = document.createElement('a');
+  const b = new Blob(['\uFEFF' + content], { type: mime + ';charset=UTF-8' });
+  a.href = URL.createObjectURL(b); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2500);
+}
+function exportExcel() {
+  if (!currentReport) return;
+  const r = currentReport, n = r.columns.length;
+  const th = r.columns.map(c => '<th style="border:1px solid #10265e;background:#1d3f9e;color:#ffffff;font-weight:bold;padding:6px 10px;">' + esc(c) + '</th>').join('');
+  const tr = r.rows.map(row => '<tr>' + row.map(c => '<td style="border:1px solid #9fb1d8;padding:5px 10px;">' + esc(c) + '</td>').join('') + '</tr>').join('');
+  const html = '<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body><table>' +
+    '<tr><td colspan="' + n + '" style="font-size:18px;font-weight:bold;color:#10265e;">' + esc(db.settings.companyName) + '</td></tr>' +
+    '<tr><td colspan="' + n + '" style="color:#4c5f8a;">' + esc(db.settings.systemName) + '</td></tr>' +
+    '<tr><td colspan="' + n + '" style="font-size:14px;font-weight:bold;color:#1d3f9e;">' + esc(r.title) + '</td></tr>' +
+    '<tr><td colspan="' + n + '" style="color:#4c5f8a;">Generated by ' + esc(state.user.fullName) + ' on ' + fmtDateTime(Date.now()) + (r.filters ? ' | Filters: ' + esc(r.filters) : '') + '</td></tr>' +
+    '<tr><td colspan="' + n + '"></td></tr><tr>' + th + '</tr>' + tr +
+    '<tr><td colspan="' + n + '" style="font-weight:bold;padding-top:8px;">' + esc(r.summary || '') + '</td></tr></table></body></html>';
+  download(slug(r.title) + '-' + fmtDate(Date.now()).replace(/\//g, '') + '.xls', html, 'application/vnd.ms-excel');
+  notify('success', 'Export Complete', 'Excel file has been downloaded.');
+}
+function exportCSV() {
+  if (!currentReport) return;
+  const r = currentReport;
+  const cell = v => { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  const csv = [];
+  csv.push([db.settings.companyName].map(cell).join(','));
+  csv.push([db.settings.systemName].map(cell).join(','));
+  csv.push([r.title].map(cell).join(','));
+  csv.push('');
+  csv.push(r.columns.map(cell).join(','));
+  r.rows.forEach(row => csv.push(row.map(cell).join(',')));
+  if (r.summary) { csv.push(''); csv.push([r.summary].map(cell).join(',')); }
+  download(slug(r.title) + '-' + fmtDate(Date.now()).replace(/\//g, '') + '.csv', csv.join('\r\n'), 'text/csv');
+  notify('success', 'Export Complete', 'CSV file has been downloaded.');
+}
+
+/* ---------- SETTINGS ---------- */
+let setTab = 'system';
+function renderSettings() {
+  const tabs = [];
+  if (isAdmin()) tabs.push({ k:'system', l:'System Settings', ic:'sliders' });
+  tabs.push({ k:'profile', l:'Profile', ic:'user' }, { k:'password', l:'Password', ic:'key' }, { k:'notif', l:'Notifications', ic:'bell' }, { k:'backup', l:'Backup & Restore', ic:'save' });
+  if (isAdmin()) tabs.push({ k:'audit', l:'Audit Log', ic:'list' });
+  let found = false;
+  tabs.forEach(t => { if (t.k === setTab) found = true; });
+  if (!found) setTab = tabs[0].k;
+  $('#page-settings').innerHTML =
+    '<div class="page-hd"><div><h1>Settings</h1><p class="sub">System preferences, personal profile, backup and audit trail</p></div></div>' +
+    '<div class="card"><div class="tabs" style="padding:0 12px">' + tabs.map(t =>
+      '<button class="tab ' + (setTab === t.k ? 'on' : '') + '" onclick="setTab=\'' + t.k + '\';renderSettings()">' + icon(t.ic, 15) + ' &nbsp;' + t.l + '</button>').join('') + '</div>' +
+    '<div id="set-body" class="pad"></div></div>';
+  renderSetBody();
+}
+function renderSetBody() {
+  const b = $('#set-body');
+  if (setTab === 'system') {
+    const s = db.settings;
+    b.innerHTML = '<div style="max-width:640px"><div class="fgrid">' +
+      '<div class="field"><label>Company Name</label><input id="st-company" value="' + esc(s.companyName) + '"></div>' +
+      '<div class="field"><label>System Name</label><input id="st-sysname" value="' + esc(s.systemName) + '"></div>' +
+      '<div class="field"><label>Date Format</label><select id="st-datef">' + opt('DD/MM/YYYY','DD/MM/YYYY',s.dateFormat==='DD/MM/YYYY') + opt('MM/DD/YYYY','MM/DD/YYYY',s.dateFormat==='MM/DD/YYYY') + opt('YYYY-MM-DD','YYYY-MM-DD',s.dateFormat==='YYYY-MM-DD') + '</select></div>' +
+      '<div class="field"><label>Time Format</label><select id="st-timef">' + opt('24h','24 Hour',s.timeFormat==='24h') + opt('12h','12 Hour (AM/PM)',s.timeFormat==='12h') + '</select></div>' +
+      '<div class="field"><label>Default Page After Login</label><select id="st-landing">' + opt('home','Home',s.defaultPage!=='dashboard') + opt('dashboard','Dashboard',s.defaultPage==='dashboard') + '</select></div>' +
+      '<div class="field"><label>Rows Per Page (tables)</label><select id="st-rows">' + [10,15,25,50].map(n => opt(n, n + ' rows', s.rowsPerPage === n)).join('') + '</select></div>' +
+      '</div><div class="frm-actions" style="border:none;padding-top:14px"><button class="btn btn-primary" onclick="saveSystem()">' + icon('save', 15) + ' Save System Settings</button></div>' +
+      '<div class="danger-zone"><b>Danger Zone</b><p style="font-size:13px;color:var(--muted);margin:5px 0 10px">Reset the database to the original sample data. All changes will be lost.</p>' +
+      '<button class="btn btn-danger" onclick="resetData()">' + icon('refresh', 15) + ' Reset Demo Data</button></div></div>';
+  } else if (setTab === 'profile') {
+    const u = state.user;
+    b.innerHTML = '<div style="max-width:560px"><div class="pv-head" style="margin-bottom:18px">' +
+      '<span class="avatar" style="width:52px;height:52px;font-size:19px">' + esc(initials(u.fullName)) + '</span>' +
+      '<div><h3 style="font-size:19px">' + esc(u.fullName) + '</h3><span class="pill p-out" style="margin-top:4px"><span class="dot"></span>' + esc(u.role) + '</span></div></div>' +
+      '<div class="field" style="margin-bottom:14px"><label>Full Name <span class="req">*</span></label><input id="pf-name" value="' + esc(u.fullName) + '"></div>' +
+      '<div class="field" style="margin-bottom:14px"><label>Email</label><input id="pf-email" type="email" value="' + esc(u.email) + '"></div>' +
+      '<div class="field" style="margin-bottom:14px"><label>Contact Number</label><input id="pf-contact" value="' + esc(u.contact) + '"></div>' +
+      '<div class="field" style="margin-bottom:14px"><label>Username (read-only)</label><input value="' + esc(u.username) + '" disabled style="background:var(--royal6)"></div>' +
+      '<button class="btn btn-primary" onclick="saveProfile()">' + icon('save', 15) + ' Save Profile</button></div>';
+  } else if (setTab === 'password') {
+    b.innerHTML = '<div style="max-width:460px">' +
+      '<div class="field" style="margin-bottom:14px"><label>Current Password <span class="req">*</span></label><input id="pw-cur" type="password"></div>' +
+      '<div class="field" style="margin-bottom:14px"><label>New Password <span class="req">*</span> <small style="text-transform:none;letter-spacing:0;color:var(--muted)">(min 6 characters)</small></label><input id="pw-new" type="password"></div>' +
+      '<div class="field" style="margin-bottom:14px"><label>Confirm New Password <span class="req">*</span></label><input id="pw-conf" type="password"></div>' +
+      '<div class="f-err" id="pw-err"></div>' +
+      '<button class="btn btn-primary" onclick="changePassword()">' + icon('key', 15) + ' Update Password</button></div>';
+  } else if (setTab === 'backup') {
+    b.innerHTML = '<div style="max-width:640px">' +
+      '<p style="margin-bottom:12px;color:var(--muted);font-size:13.5px">Save a complete copy of the database (employees, vehicles, transport types, departments, sections, users and settings) as a file on your computer, and restore it at any time.</p>' +
+      (store.persistent
+        ? '<div class="hint" style="margin-bottom:12px">' + icon('checkC', 15) + ' Automatic saving is <b>active</b> — current storage: <b>' + esc(store.name) + '</b>. Backups are still recommended as a safety copy.</div>'
+        : '<div class="hint warn" style="margin-bottom:12px">' + icon('alertT', 15) + ' <b>Automatic saving is unavailable in this environment.</b> Download a backup before closing the page and restore it after reopening. For automatic saving, open this HTML file directly in Chrome, Edge or Firefox.</div>') +
+      '<div class="frm-actions" style="border:none;padding-top:6px">' +
+      '<button class="btn btn-primary" onclick="exportBackup()">' + icon('download', 15) + ' Download Backup (.json)</button>' +
+      '<label class="btn btn-gold" style="cursor:pointer">' + icon('save', 15) + ' Restore Backup<input type="file" accept=".json,application/json" style="display:none" onchange="importBackup(this)"></label>' +
+      '</div><div class="hint" style="margin-top:12px">' + icon('info', 15) + ' Restoring replaces <b>all current data</b> with the contents of the backup file. Backup files contain your records — store them safely.</div></div>';
+  } else if (setTab === 'notif') {
+    const n = db.settings.notif;
+    b.innerHTML = '<div style="max-width:560px">' +
+      '<div class="sw-row"><div><b>Success notifications</b><span>Confirmations for adds, edits and deletes</span></div><span class="sw ' + (n.success !== false ? 'on' : '') + '" onclick="togNotif(\'success\')"></span></div>' +
+      '<div class="sw-row"><div><b>Warning alerts</b><span>Vehicle nearly full / capacity warnings</span></div><span class="sw ' + (n.warning !== false ? 'on' : '') + '" onclick="togNotif(\'warning\')"></span></div>' +
+      '<div class="sw-row"><div><b>Informational messages</b><span>Export confirmations and general info</span></div><span class="sw ' + (n.info !== false ? 'on' : '') + '" onclick="togNotif(\'info\')"></span></div>' +
+      '<div class="sw-row"><div><b>Error alerts</b><span>Critical validation and system errors (always active)</span></div><span class="sw on" style="opacity:.55;cursor:default"></span></div></div>';
+  } else if (setTab === 'audit') {
+    b.innerHTML = '<div class="tbl-bar" style="border-top:1px solid var(--line);border-radius:8px;margin:-18px -18px 14px">' +
+      '<div class="search">' + icon('search', 15) + '<input id="aud-q" placeholder="Search user, record, description…" value="' + esc(audF.q) + '"></div>' +
+      '<select class="fsel" id="aud-cat">' + opt('','All Actions',audF.cat==='') + opt('session','Login & Session',audF.cat==='session') + opt('employee','Employees',audF.cat==='employee') + opt('vehicle','Vehicles',audF.cat==='vehicle') + opt('config','Configuration',audF.cat==='config') + opt('user','Users',audF.cat==='user') + opt('system','System',audF.cat==='system') + '</select></div>' +
+      '<div id="aud-list"></div>';
+    $('#aud-q').oninput = e => { audF.q = e.target.value; audF.page = 1; renderAuditTable(); };
+    $('#aud-cat').onchange = e => { audF.cat = e.target.value; audF.page = 1; renderAuditTable(); };
+    renderAuditTable();
+  }
+}
+function saveSystem() {
+  const cn = $('#st-company').value.trim();
+  if (!cn) { notify('error', 'Validation Failed', 'Company name cannot be empty.'); return; }
+  db.settings.companyName = cn;
+  db.settings.systemName = $('#st-sysname').value.trim() || db.settings.systemName;
+  db.settings.dateFormat = $('#st-datef').value;
+  db.settings.timeFormat = $('#st-timef').value;
+  db.settings.defaultPage = $('#st-landing').value;
+  db.settings.rowsPerPage = parseInt($('#st-rows').value, 10);
+  audit('Settings Updated', 'System', 'System settings saved');
+  save(); buildChrome();
+  notify('success', 'Settings Saved', 'System settings updated successfully.');
+  renderSetBody();
+}
+function resetData() {
+  confirmDialog({ title:'Reset Demo Data', msg:'This will <b>erase all current data</b> and restore the original sample database. Are you sure you want to continue?', ok:'Reset Data', tone:'danger',
+    onOk(){
+      clearTimeout(driveSync.timer);
+      driveSync.pending = null;
+      db = seedDB();
+      store.set(DB_KEY, JSON.stringify(db));
+      driveSync.queueSave(db);
+      store.del(SES_KEY);
+      setTimeout(function () { try { location.reload(); } catch (e) { renderSettings(); } }, driveSync.enabled() ? 1400 : 0);
+    } });
+}
+function saveProfile() {
+  const name = $('#pf-name').value.trim(), email = $('#pf-email').value.trim(), contact = $('#pf-contact').value.trim();
+  if (!name) { notify('error', 'Validation Failed', 'Full name is required.'); return; }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { notify('error', 'Validation Failed', 'Please enter a valid email address.'); return; }
+  state.user.fullName = name; state.user.email = email; state.user.contact = contact;
+  audit('Profile Updated', state.user.username, 'Own profile updated');
+  save(); buildChrome();
+  notify('success', 'Profile Saved', 'Your profile has been updated.');
+}
+function changePassword() {
+  const cur = $('#pw-cur').value, nw = $('#pw-new').value, cf = $('#pw-conf').value;
+  const e = $('#pw-err');
+  e.textContent = '';
+  if (hash(cur) !== state.user.password) { e.textContent = 'Current password is incorrect.'; return; }
+  if (!nw || nw.length < 6) { e.textContent = 'New password must be at least 6 characters.'; return; }
+  if (nw !== cf) { e.textContent = 'New password and confirmation do not match.'; return; }
+  state.user.password = hash(nw);
+  audit('Password Changed', state.user.username, 'Own password changed');
+  save();
+  $('#pw-cur').value = ''; $('#pw-new').value = ''; $('#pw-conf').value = '';
+  notify('success', 'Password Changed', 'Your password has been updated successfully.');
+}
+function togNotif(k) {
+  db.settings.notif[k] = db.settings.notif[k] === false ? true : false;
+  save(); renderSetBody();
+}
+let audF = { q:'', cat:'', page:1 };
+function audPage(p){ audF.page = p; renderAuditTable(); }
+function renderAuditTable() {
+  let list = db.auditLogs.slice();
+  if (audF.cat) list = list.filter(a => audCat(a.action) === audF.cat);
+  if (audF.q) { const q = audF.q.toLowerCase(); list = list.filter(a => a.username.toLowerCase().includes(q) || a.action.toLowerCase().includes(q) || (a.record || '').toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q)); }
+  const per = 12;
+  const pg = pager(list, per, audF.page, 'audPage');
+  audF.page = pg.page;
+  const cls = a => { const c = audCat(a.action); return c === 'session' ? 'p-out' : /Added|Created|Initialized/.test(a.action) ? 'p-ok' : /Deleted/.test(a.action) ? 'p-full' : 'p-warn'; };
+  $('#aud-list').innerHTML = '<div class="tbl-wrap"><table class="tbl" style="min-width:760px"><thead><tr><th>Date</th><th>Time</th><th>User</th><th>Action</th><th>Related Record</th><th>Description</th></tr></thead><tbody>' +
+    (list.slice((audF.page - 1) * per, audF.page * per).map(a => '<tr><td>' + fmtDate(a.ts) + '</td><td>' + fmtTime(a.ts) + '</td><td><b>' + esc(a.username) + '</b></td><td><span class="pill ' + cls(a) + '">' + esc(a.action) + '</span></td><td>' + esc(a.record || '—') + '</td><td>' + esc(a.description || '') + '</td></tr>').join('')
+    || '<tr><td colspan="6"><div class="empty">' + icon('list', 28) + '<b>No audit entries</b>No records match the current filter.</div></td></tr>') +
+    '</tbody></table></div>' + pg.bar;
+}
+
+/* ---------- USER MANAGEMENT ---------- */
+let usrF = { q:'', role:'', status:'', page:1 };
+function renderUsers() {
+  if (!can('users.manage')) return nav('home');
+  $('#page-users').innerHTML =
+    '<div class="page-hd"><div><h1>User Management</h1><p class="sub">Manage system users, roles and access — role-based access control</p></div>' +
+    '<button class="btn btn-gold" onclick="openUserModal()">' + icon('plus', 16) + ' Add User</button></div>' +
+    '<div class="card"><div class="tbl-bar">' +
+    '<div class="search">' + icon('search', 15) + '<input id="usr-q" placeholder="Search username, name or email…" value="' + esc(usrF.q) + '"></div>' +
+    '<select class="fsel" id="usr-role"><option value="">All Roles</option>' + ROLE_LIST.map(r => opt(r, r, usrF.role === r)).join('') + '</select>' +
+    '<select class="fsel" id="usr-status">' + opt('','All Status',usrF.status==='') + opt('Active','Active',usrF.status==='Active') + opt('Inactive','Inactive',usrF.status==='Inactive') + '</select>' +
+    '</div><div id="usr-list"></div></div>';
+  $('#usr-q').oninput = e => { usrF.q = e.target.value; usrF.page = 1; renderUsrTable(); };
+  $('#usr-role').onchange = e => { usrF.role = e.target.value; usrF.page = 1; renderUsrTable(); };
+  $('#usr-status').onchange = e => { usrF.status = e.target.value; usrF.page = 1; renderUsrTable(); };
+  renderUsrTable();
+}
+function usrPage(p){ usrF.page = p; renderUsrTable(); }
+function renderUsrTable() {
+  let list = db.users.slice();
+  if (usrF.q) { const q = usrF.q.toLowerCase(); list = list.filter(u => u.username.toLowerCase().includes(q) || u.fullName.toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q)); }
+  if (usrF.role) list = list.filter(u => u.role === usrF.role);
+  if (usrF.status) list = list.filter(u => u.status === usrF.status);
+  const per = db.settings.rowsPerPage || 10;
+  const pg = pager(list, per, usrF.page, 'usrPage');
+  usrF.page = pg.page;
+  const roleCls = { 'Administrator':'p-navy', 'HR Manager':'p-out', 'HR Officer':'p-warn', 'Viewer':'p-ok' };
+  const rows = list.slice((usrF.page - 1) * per, usrF.page * per).map(u =>
+    '<tr><td><b>' + esc(u.username) + '</b>' + (u.id === state.user.id ? ' <span class="pill p-ok" style="margin-left:6px">You</span>' : '') + '</td>' +
+    '<td>' + esc(u.fullName) + '</td><td>' + esc(u.email || '—') + '</td><td>' + esc(u.contact || '—') + '</td>' +
+    '<td><span class="pill ' + (roleCls[u.role] || 'p-out') + '">' + esc(u.role) + '</span></td><td>' + pill(u.status) + '</td>' +
+    '<td>' + fmtDay(u.createdAt) + '</td><td>' + (u.lastLogin ? fmtDateTime(u.lastLogin) : '—') + '</td>' +
+    '<td class="acts"><button class="rowbtn" title="View user" onclick="viewUser(\'' + u.id + '\')">' + icon('eye', 15) + '</button>' +
+    '<button class="rowbtn gold" title="Edit user" onclick="openUserModal(\'' + u.id + '\')">' + icon('edit', 14) + '</button>' +
+    '<button class="rowbtn gold" title="Reset password" onclick="openResetPw(\'' + u.id + '\')">' + icon('key', 14) + '</button>' +
+    (u.id !== state.user.id
+      ? '<button class="rowbtn ' + (u.status === 'Active' ? 'dark' : '') + '" title="' + (u.status === 'Active' ? 'Deactivate' : 'Activate') + ' user" onclick="toggleUser(\'' + u.id + '\')">' + icon(u.status === 'Active' ? 'ban' : 'userCheck', 14) + '</button>' +
+        '<button class="rowbtn dark" title="Delete user" onclick="delUser(\'' + u.id + '\')">' + icon('trash', 14) + '</button>'
+      : '') +
+    '</td></tr>').join('');
+  $('#usr-list').innerHTML = '<div class="tbl-wrap"><table class="tbl" style="min-width:980px"><thead><tr><th>User Name</th><th>Full Name</th><th>Email</th><th>Contact Number</th><th>Role</th><th>Status</th><th>Created Date</th><th>Last Login</th><th style="text-align:right">Actions</th></tr></thead><tbody>' +
+    (rows || '<tr><td colspan="9"><div class="empty">' + icon('shield', 30) + '<b>No users found</b>No records match the current filters.</div></td></tr>') +
+    '</tbody></table></div>' + pg.bar;
+}
+function openUserModal(id) {
+  const u = id ? db.users.find(x => x.id === id) : null;
+  openModal({
+    title: u ? 'Edit User' : 'Add User', ic: 'shield', width: 520,
+    body: '<div class="fgrid">' +
+      '<div class="field"><label>User Name <span class="req">*</span></label><input id="m-username" value="' + esc(u ? u.username : '') + '"' + (u ? ' disabled style="background:var(--royal6)"' : ' placeholder="Login username"') + '><div class="f-err" id="e-m-username"></div></div>' +
+      '<div class="field"><label>Full Name <span class="req">*</span></label><input id="m-fullname" value="' + esc(u ? u.fullName : '') + '" placeholder="Full name"><div class="f-err" id="e-m-fullname"></div></div>' +
+      '<div class="field"><label>Email <span class="req">*</span></label><input id="m-email" type="email" value="' + esc(u ? u.email : '') + '" placeholder="name@imochicken.lk"><div class="f-err" id="e-m-email"></div></div>' +
+      '<div class="field"><label>Contact Number</label><input id="m-contact" value="' + esc(u ? u.contact : '') + '" placeholder="+94 …"></div>' +
+      '<div class="field"><label>Role <span class="req">*</span></label><select id="m-role">' + ROLE_LIST.map(r => opt(r, r, u && u.role === r)).join('') + '</select></div>' +
+      (u ? '' : '<div class="field"><label>Password <span class="req">*</span></label><input id="m-password" type="password" placeholder="Min 6 characters"><div class="f-err" id="e-m-password"></div></div>') +
+      '<div class="field"><label>Status</label><select id="m-status">' + opt('Active','Active',!u||u.status==='Active') + opt('Inactive','Inactive',u&&u.status==='Inactive') + '</select></div>' +
+      '</div><div class="f-err" id="m-err"></div>',
+    footer: '<button class="btn btn-plain" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveUser(\'' + (id || '') + '\')">' + icon('save', 15) + ' Save User</button>'
+  });
+}
+function saveUser(id) {
+  clearErrs(['m-username', 'm-fullname', 'm-email', 'm-password']);
+  const username = id ? null : $('#m-username').value.trim();
+  const fullName = $('#m-fullname').value.trim();
+  const email = $('#m-email').value.trim();
+  const contact = $('#m-contact').value.trim();
+  const role = $('#m-role').value, status = $('#m-status').value;
+  const password = id ? null : $('#m-password').value;
+  let bad = false;
+  if (!id) {
+    if (!username) { fErr('m-username', 'User name is required.'); bad = true; }
+    else if (db.users.some(u => u.username.toLowerCase() === username.toLowerCase())) { fErr('m-username', 'This user name already exists.'); bad = true; }
+  }
+  if (!fullName) { fErr('m-fullname', 'Full name is required.'); bad = true; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { fErr('m-email', 'A valid email is required.'); bad = true; }
+  if (!id && (!password || password.length < 6)) { fErr('m-password', 'Password must be at least 6 characters.'); bad = true; }
+  if (bad) { notify('error', 'Validation Failed', 'Please correct the highlighted fields.'); return; }
+  const activeAdmins = db.users.filter(u => u.role === 'Administrator' && u.status === 'Active' && u.id !== id).length;
+  if (id) {
+    const u = db.users.find(x => x.id === id);
+    if (u.role === 'Administrator' && u.status === 'Active' && (role !== 'Administrator' || status !== 'Active') && activeAdmins === 0) {
+      $('#m-err').textContent = 'At least one active Administrator must remain.';
+      return;
+    }
+    const oldRole = u.role;
+    u.fullName = fullName; u.email = email; u.contact = contact; u.role = role; u.status = status;
+    audit('User Updated', u.username, 'Role: ' + oldRole + ' → ' + role + ', Status: ' + status);
+    save(); closeModal();
+    notify('success', 'User Updated', '"' + u.username + '" has been updated.');
+    if (u.id === state.user.id) buildChrome();
+  } else {
+    const u = { id: nid('usr'), username: username, fullName: fullName, email: email, contact: contact, password: hash(password), role: role, status: status, createdAt: Date.now(), lastLogin: null };
+    db.users.push(u);
+    audit('User Created', u.username, fullName + ' created with role ' + role);
+    save(); closeModal();
+    notify('success', 'User Created', '"' + username + '" has been created with role ' + role + '.');
+  }
+  if (state.page === 'users') renderUsrTable();
+}
+function viewUser(id) {
+  const u = db.users.find(x => x.id === id); if (!u) return;
+  openModal({
+    title: 'User Details', ic: 'shield', width: 470,
+    body: '<div class="pv-head"><span class="avatar" style="width:48px;height:48px;font-size:18px">' + esc(initials(u.fullName)) + '</span>' +
+      '<div><h3 style="font-size:19px">' + esc(u.fullName) + '</h3><span class="mono" style="font-size:13px">' + esc(u.username) + '</span></div>' +
+      '<span style="margin-left:auto">' + pill(u.status) + '</span></div>' +
+      '<div class="pv-row"><span class="k">Role</span><span class="v">' + esc(u.role) + '</span></div>' +
+      '<div class="pv-row"><span class="k">Email</span><span class="v">' + esc(u.email || '—') + '</span></div>' +
+      '<div class="pv-row"><span class="k">Contact Number</span><span class="v">' + esc(u.contact || '—') + '</span></div>' +
+      '<div class="pv-row"><span class="k">Created Date</span><span class="v">' + fmtDay(u.createdAt) + '</span></div>' +
+      '<div class="pv-row" style="border:none"><span class="k">Last Login</span><span class="v">' + (u.lastLogin ? fmtDateTime(u.lastLogin) : 'Never logged in') + '</span></div>',
+    footer: '<button class="btn btn-plain" onclick="closeModal()">Close</button>'
+  });
+}
+function openResetPw(id) {
+  const u = db.users.find(x => x.id === id); if (!u) return;
+  openModal({
+    title: 'Reset Password', ic: 'key', width: 430,
+    body: '<p class="cf-msg" style="margin-bottom:14px">Set a new password for <b>' + esc(u.fullName) + '</b> (' + esc(u.username) + ').</p>' +
+      '<div class="field" style="margin-bottom:14px"><label>New Password <span class="req">*</span></label><input id="m-pw1" type="password"></div>' +
+      '<div class="field"><label>Confirm New Password <span class="req">*</span></label><input id="m-pw2" type="password"></div>' +
+      '<div class="f-err" id="m-err"></div>',
+    footer: '<button class="btn btn-plain" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="doResetPw(\'' + u.id + '\')">' + icon('key', 15) + ' Reset Password</button>'
+  });
+}
+function doResetPw(id) {
+  const u = db.users.find(x => x.id === id); if (!u) return;
+  const p1 = $('#m-pw1').value, p2 = $('#m-pw2').value;
+  if (!p1 || p1.length < 6) return mErr('Password must be at least 6 characters.');
+  if (p1 !== p2) return mErr('Passwords do not match.');
+  u.password = hash(p1);
+  audit('Password Reset', u.username, 'Password reset by ' + state.user.username);
+  save(); closeModal();
+  notify('success', 'Password Reset', 'Password for "' + u.username + '" has been reset.');
+}
+function toggleUser(id) {
+  const u = db.users.find(x => x.id === id); if (!u) return;
+  if (u.status === 'Active') {
+    const activeAdmins = db.users.filter(x => x.role === 'Administrator' && x.status === 'Active' && x.id !== id).length;
+    if (u.role === 'Administrator' && activeAdmins === 0) { notify('error', 'Not Allowed', 'At least one active Administrator must remain.'); return; }
+    confirmDialog({ title:'Deactivate User', msg:'Deactivate <b>' + esc(u.fullName) + '</b> (' + esc(u.username) + ')? They will no longer be able to log in.', ok:'Deactivate', tone:'danger',
+      onOk(){ u.status = 'Inactive'; audit('User Updated', u.username, 'User deactivated'); save(); notify('success','User Deactivated','"' + u.username + '" has been deactivated.'); renderUsrTable(); } });
+  } else {
+    u.status = 'Active';
+    audit('User Updated', u.username, 'User activated');
+    save(); notify('success', 'User Activated', '"' + u.username + '" is now active.');
+    renderUsrTable();
+  }
+}
+function delUser(id) {
+  const u = db.users.find(x => x.id === id); if (!u) return;
+  if (u.id === state.user.id) { notify('error', 'Not Allowed', 'You cannot delete your own account.'); return; }
+  if (u.role === 'Administrator' && u.status === 'Active' && db.users.filter(x => x.role === 'Administrator' && x.status === 'Active').length === 1) {
+    notify('error', 'Not Allowed', 'At least one active Administrator must remain.');
+    return;
+  }
+  confirmDialog({ title:'Delete User', msg:'Are you sure you want to delete user <b>' + esc(u.fullName) + '</b> (' + esc(u.username) + ')?', ok:'Delete', tone:'danger',
+    onOk(){ db.users = db.users.filter(x => x.id !== id); audit('User Deleted', u.username, 'User removed'); save(); notify('success','User Deleted','"' + u.username + '" was removed.'); renderUsrTable(); } });
+}
+
+/* ---------- backup & restore ---------- */
+function exportBackup() {
+  const payload = {
+    system: 'Imo Chicken & Agro (Pvt) Ltd — Employee Transport Management System',
+    exportedBy: state.user.fullName,
+    exportedAt: new Date().toISOString(),
+    version: 1,
+    data: db
+  };
+  const a = document.createElement('a');
+  const blob = new Blob([JSON.stringify(payload, null, 1)], { type: 'application/json' });
+  a.href = URL.createObjectURL(blob);
+  a.download = 'imo-transport-backup-' + fmtDate(Date.now()).replace(/\//g, '-') + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2500);
+  audit('Backup Exported', 'Database', 'Full backup downloaded');
+  save();
+  notify('success', 'Backup Downloaded', 'Keep this file safe — it can be restored from Settings → Backup & Restore.');
+}
+function importBackup(input) {
+  const file = input && input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function () {
+    try {
+      const parsed = JSON.parse(reader.result);
+      const d = parsed && parsed.data ? parsed.data : parsed;
+      if (!d || !d.users || !d.vehicles || !d.employees || !d.departments) {
+        notify('error', 'Invalid Backup', 'This file is not a valid backup of the Employee Transport Management System.');
+        input.value = '';
+        return;
+      }
+      confirmDialog({
+        title: 'Restore Backup',
+        msg: 'Replace <b>all current data</b> with the backup from <b>' + esc(file.name) + '</b>?<br><br>Current records will be overwritten. This cannot be undone.',
+        ok: 'Restore Data', tone: 'danger',
+        onOk() {
+          db = d;
+          if (!db.settings) db.settings = { companyName: 'Imo Chicken & Agro (Pvt) Ltd', systemName: 'Employee Transport Management System', dateFormat: 'DD/MM/YYYY', timeFormat: '24h', defaultPage: 'home', rowsPerPage: 10, notif: { success: true, warning: true, info: true } };
+          if (!db.seq) db.seq = {};
+          if (!db.loginLogs) db.loginLogs = [];
+          if (!db.auditLogs) db.auditLogs = [];
+          audit('Backup Restored', 'Database', 'Data restored from ' + file.name);
+          save();
+          state.user = db.users.find(u => u.id === state.user.id) || null;
+          if (!state.user) { doLogout(); return; }
+          state.session.userId = state.user.id;
+          notify('success', 'Backup Restored', 'All data has been restored from ' + file.name + '.');
+          buildChrome(); refresh();
+        }
+      });
+    } catch (e) {
+      notify('error', 'Invalid Backup', 'The file could not be read: ' + (e && e.message ? e.message : e));
+    }
+    input.value = '';
+  };
+  reader.onerror = function () { notify('error', 'Read Failed', 'The backup file could not be read.'); };
+  reader.readAsText(file);
+}
+
+/* ---------- page registry (defined after all renderers) ---------- */
+const RENDER = {
+  home: renderHome, dashboard: renderDashboard, employees: renderEmployees,
+  empForm: renderEmployeeForm, config: renderConfig, vehicleForm: renderVehicleForm,
+  reports: renderReports, settings: renderSettings, users: renderUsers
+};
+
+/* ---------- global events ---------- */
+document.addEventListener('click', e => {
+  if (!e.target.closest('#bell-wrap') && $('#bell-dd')) $('#bell-dd').classList.remove('open');
+  if (!e.target.closest('#uchip-wrap') && $('#uchip-dd')) $('#uchip-dd').classList.remove('open');
+});
+document.addEventListener('mousemove', e => {
+  const t = e.target.closest ? e.target.closest('[data-tipc]') : null;
+  const tip = $('#ctip');
+  if (t) {
+    tip.style.display = 'block';
+    tip.textContent = t.getAttribute('data-tipc');
+    const x = Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 10);
+    tip.style.left = Math.max(8, x) + 'px';
+    tip.style.top = Math.max(8, e.clientY - 36) + 'px';
+  } else tip.style.display = 'none';
+});
+ $('#sb-toggle').onclick = () => document.body.classList.toggle('sb-open');
+ $('#sb-overlay').onclick = () => document.body.classList.remove('sb-open');
+ $('#sb-collapse').onclick = () => {
+  document.body.classList.toggle('sb-collapsed');
+  $('#sb-col-ic').innerHTML = icon(document.body.classList.contains('sb-collapsed') ? 'chevR' : 'chevL', 16);
+};
+ $('#bell-btn').onclick = () => {
+  const dd = $('#bell-dd'), open = !dd.classList.contains('open');
+  closeDds();
+  if (open) { dd.classList.add('open'); renderBell(); state.lastSeenAudit = Date.now(); updateBell(); }
+};
+ $('#uchip-btn').onclick = () => { const dd = $('#uchip-dd'), open = !dd.classList.contains('open'); closeDds(); if (open) dd.classList.add('open'); };
+ $('#lg-forgot').onclick = () => {
+  openModal({ title:'Forgot Password', ic:'key', width:440,
+    body:'<p class="cf-msg">For security reasons, passwords can only be reset by the System Administrator.<br><br>Please contact:<br><b>System Administrator</b><br>' +
+      icon('mail', 14) + ' admin@imochicken.lk &nbsp; ' + icon('phone', 14) + ' +94 11 234 5678</p>',
+    footer:'<button class="btn btn-primary" onclick="closeModal()">OK</button>' });
+};
+
+/* ---------- live clock ---------- */
+function tick() {
+  if (!db) return;
+  const now = new Date();
+  const ht = $('#hd-time');
+  if (ht) { ht.textContent = fmtTime(now); $('#hd-date').textContent = fmtDate(now); }
+  const ct = $('#clock-time');
+  if (ct) {
+    ct.textContent = fmtTime(now);
+    $('#clock-date').textContent = now.getDate() + ' ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear();
+    $('#clock-day').textContent = WEEK[now.getDay()];
+    const s = now.getSeconds(), m = now.getMinutes() + s / 60, h = now.getHours() % 12 + m / 60;
+    const hand = (id, deg) => { const el = $('#' + id); if (el) el.setAttribute('transform', 'rotate(' + deg + ' 50 50)'); };
+    hand('as', s * 6); hand('am', m * 6); hand('ah', h * 30);
+  }
+}
+setInterval(tick, 1000);
+
+/* ---------- boot (after the best available storage engine is chosen) ---------- */
+function finishBoot() {
+  try { loadDB(); } catch (e) { window.__imoBootError = 'Database init: ' + (e && e.message ? e.message : e); }
+  try {
+    const raw = store.get(SES_KEY);
+    if (raw) {
+      const ses = JSON.parse(raw);
+      if (!enterApp(ses)) store.del(SES_KEY);
+    }
+  } catch (e) {
+    console.warn('Session restore skipped:', e);
+    store.del(SES_KEY);
+  }
+  window.__imoReady = true;
+  const okEl = $('#boot-ok');
+  if (okEl) { okEl.textContent = 'Engine loaded — Storage: ' + store.name; okEl.style.display = 'block'; }
+  tick();
+  if (!store.persistent) {
+    setTimeout(function () {
+      notify('warning', 'Storage Unavailable', 'This page cannot save data between sessions here. Use Settings → Backup & Restore to save your data as a file — or open this HTML file directly in Chrome / Edge / Firefox, where saving works automatically.');
+    }, 900);
+  }
+}
+store.init(function () {
+  if (!driveSync.enabled()) { finishBoot(); return; }
+  driveSync.load().then(function (remote) {
+    if (remote) store.set(DB_KEY, JSON.stringify(remote));
+  }).catch(function (err) {
+    console.warn('Google Drive load failed; using local data:', err);
+    setTimeout(function () {
+    notify('warning', 'Drive Sync Unavailable', 'Google Drive could not be reached. Local browser data is being used.');
+    }, 900);
+  }).then(finishBoot);
+});
+</script>
+<!-- ===== END OF FILE: if this line is missing when you open the file in a text editor, your copy was truncated ===== -->
+</html>
