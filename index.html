@@ -451,13 +451,6 @@ body.sb-collapsed .main-wrap{margin-left:72px}
         <button type="submit" class="btn btn-primary lg-btn" id="lg-login-btn">Login</button>
         <button type="button" class="btn btn-plain lg-forgot" id="lg-forgot">Forgot Password?</button>
       </form>
-      <div class="lg-demo">
-        <b>Demo Accounts — click to fill</b>
-        <div class="lg-demo-row" onclick="fillDemo('admin','admin123')"><code>admin / admin123</code><i>System Administrator</i></div>
-        <div class="lg-demo-row" onclick="fillDemo('hrmanager','manager123')"><code>hrmanager / manager123</code><i>HR Manager</i></div>
-        <div class="lg-demo-row" onclick="fillDemo('hrofficer','officer123')"><code>hrofficer / officer123</code><i>HR Officer</i></div>
-        <div class="lg-demo-row" onclick="fillDemo('viewer','view123')"><code>viewer / view123</code><i>Viewer (read-only)</i></div>
-      </div>
       <div id="boot-ok">Engine loaded — ready to sign in</div>
       <div class="lg-foot">© <span id="lg-year"></span> Imo Chicken &amp; Agro (Pvt) Ltd · All rights reserved</div>
     </div>
@@ -528,13 +521,6 @@ body.sb-collapsed .main-wrap{margin-left:72px}
     banner('<b>Application error:</b> ' + esc5(window.__imoBootError) +
       '<br>Please report this exact message. Tip: use Google Chrome, Microsoft Edge or Firefox.');
     return false;
-  };
-  window.fillDemo = function (u, p) {
-    var a = byId('lg-user'), b = byId('lg-pass'), e = byId('lg-err');
-    if (a) a.value = u;
-    if (b) b.value = p;
-    if (e) e.style.display = 'none';
-    if (b) b.focus();
   };
   var y = byId('lg-year'); if (y) y.textContent = String(new Date().getFullYear());
   window.__imoSubmit = function () {
@@ -761,8 +747,6 @@ function nid(k){ db.seq[k] = (db.seq[k] || 0) + 1; return k + '_' + db.seq[k]; }
 /* ---------- seed database ---------- */
 function seedDB() {
   const now = Date.now(), DAY = 864e5;
-  const rng = mulberry32(20240117);
-  const pick = a => a[Math.floor(rng() * a.length)];
   const d = {
     seq: {}, users: [], transportTypes: [], departments: [], sections: [],
     vehicles: [], employees: [], loginLogs: [], auditLogs: [],
@@ -776,61 +760,23 @@ function seedDB() {
   };
   const nidL = k => { d.seq[k] = (d.seq[k] || 0) + 1; return k + '_' + d.seq[k]; };
   const U = [
-    ['admin','System Administrator','admin@imochicken.lk','+94 11 234 5678','Administrator','admin123',210],
-    ['hrmanager','Rukmal Perera','rukmal.p@imochicken.lk','+94 77 310 4455','HR Manager','manager123',180],
-    ['hrofficer','Sanduni Fernando','sanduni.f@imochicken.lk','+94 71 855 9021','HR Officer','officer123',150],
-    ['viewer','Kasun Jayasuriya','kasun.j@imochicken.lk','+94 76 220 1188','Viewer','view123',120]
+    ['admin','System Administrator','admin@imochicken.lk','+94 11 234 5678','Administrator','admin123',0]
   ];
   U.forEach(function (u, i) {
     d.users.push({ id: 'u' + (i + 1), username: u[0], fullName: u[1], email: u[2], contact: u[3], password: hash(u[5]), role: u[4], status: 'Active', createdAt: now - u[6] * DAY, lastLogin: i === 0 ? now - DAY : null });
   });
-  ['Bus','Van','Staff Vehicle','Hiace'].forEach(function (n, i) {
-    d.transportTypes.push({ id: 'tt' + (i + 1), name: n, status: 'Active', createdAt: now - 220 * DAY });
-  });
-  const deptDefs = [
-    ['Production', ['Hatchery', 'Broiler Farm', 'Feed Mill']],
-    ['Processing', ['Processing Plant', 'Packing']],
-    ['Logistics', ['Fleet Operations', 'Distribution']],
-    ['Quality Assurance', ['QA Laboratory', 'Compliance']],
-    ['Human Resources', ['HR Administration', 'Recruitment']],
-    ['Finance', ['Accounts', 'Payroll']],
-    ['Sales & Marketing', ['Field Sales', 'Customer Care']],
-    ['Maintenance', ['Electrical', 'Civil Works']]
-  ];
-  deptDefs.forEach(function (dd, i) {
-    const dep = { id: 'dp' + (i + 1), name: dd[0], status: 'Active', createdAt: now - 200 * DAY };
-    d.departments.push(dep);
-    dd[1].forEach(function (sn) { d.sections.push({ id: nidL('sec'), departmentId: dep.id, name: sn, status: 'Active', createdAt: now - 190 * DAY }); });
-  });
-  const vehDefs = [
-    ['tt1','WP NA 5521',54,1.00], ['tt1','WP NA 7382',54,0.93], ['tt1','CP NA 1180',45,1.00],
-    ['tt1','NC NA 3305',45,0.71], ['tt4','WP GK 4410',18,0.89], ['tt4','CP GK 7742',18,0.56],
-    ['tt2','WP NB 4567',15,1.00], ['tt2','WP NB 8123',15,0.80], ['tt2','SP NB 2290',15,0.40],
-    ['tt3','WP CAB 1234',30,0.90], ['tt3','WP CAB 7789',12,0.33], ['tt4','SP GK 9014',18,0.61]
-  ];
-  const FIRST = ['Nimal','Sunil','Kasun','Chamara','Ruwan','Pradeep','Sampath','Ajith','Dilshan','Tharindu','Lasith','Nuwan','Gayan','Suresh','Mahesh','Ishara','Sanduni','Nadeesha','Thilini','Dinuka','Chathura','Hasitha','Manoj','Roshan','Priyantha','Anura','Kapila','Jagath','Rohana','Amaya','Hansika','Niluka','Saman','Upul','Asanka','Chandana','Damith','Gihan','Janaka','Lahiru','Madusha','Nirosh','Pubudu','Rangana','Shameera','Udayanga','Vasantha','Wasana','Yohan','Malsha'];
-  const LAST = ['Perera','Fernando','Silva','Jayasuriya','Wickramasinghe','Bandara','Rathnayake','Gunawardena','Herath','Dias','Weerasinghe','De Silva','Ekanayake','Senanayake','Kodikara','Dissanayake','Hewage','Jayawardena','Kumara','Liyanage','Munasinghe','Nanayakkara','Peiris','Rajapaksha','Samarasinghe','Wijesinghe','Zoysa','Attanayake'];
-  let empSeq = 0;
-  vehDefs.forEach(function (vd) {
-    const v = { id: nidL('veh'), transportTypeId: vd[0], vehicleNumber: vd[1], totalSeats: vd[2], status: 'Active', createdAt: now - 170 * DAY, updatedAt: now - 20 * DAY };
-    d.vehicles.push(v);
-    const occ = Math.round(vd[2] * vd[3]);
-    for (let i = 0; i < occ; i++) {
-      const dep = pick(d.departments);
-      const secs = d.sections.filter(s => s.departmentId === dep.id);
-      empSeq++;
-      const ts = now - Math.floor(rng() * 90) * DAY;
-      d.employees.push({ id: nidL('emp'), empNo: 'IMO-' + (1001 + empSeq), name: pick(FIRST) + ' ' + pick(LAST), departmentId: dep.id, sectionId: pick(secs).id, transportTypeId: vd[0], vehicleId: v.id, createdAt: ts, updatedAt: ts });
-    }
-  });
-  d.auditLogs.push({ id: nidL('aud'), userId: null, username: 'system', action: 'System Initialized', record: 'Database', description: 'Sample transport database created.', ts: now - 5 * DAY });
-  d.loginLogs.push({ id: nidL('log'), userId: 'u1', username: 'admin', loginTime: now - DAY, logoutTime: now - DAY + 36e5, sessionStatus: 'Closed' });
+  d.auditLogs.push({ id: nidL('aud'), userId: null, username: 'system', action: 'System Initialized', record: 'Database', description: 'Transport database initialized.', ts: now });
   return d;
 }
 function loadDB() {
   const raw = store.get(DB_KEY);
   if (raw) {
-    try { const parsed = JSON.parse(raw); if (parsed && parsed.users && parsed.vehicles) { db = parsed; return; } } catch (e) { /* reseed */ }
+    try {
+      const parsed = JSON.parse(raw);
+      const isLegacyDemo = parsed && parsed.auditLogs && parsed.auditLogs.some(a => a.description === 'Sample transport database created.');
+      if (isLegacyDemo) { db = seedDB(); save(); return; }
+      if (parsed && parsed.users && parsed.vehicles) { db = parsed; return; }
+    } catch (e) { /* reseed */ }
   }
   db = seedDB(); save();
 }
@@ -2327,8 +2273,8 @@ function renderSetBody() {
       '<div class="field"><label>Default Page After Login</label><select id="st-landing">' + opt('home','Home',s.defaultPage!=='dashboard') + opt('dashboard','Dashboard',s.defaultPage==='dashboard') + '</select></div>' +
       '<div class="field"><label>Rows Per Page (tables)</label><select id="st-rows">' + [10,15,25,50].map(n => opt(n, n + ' rows', s.rowsPerPage === n)).join('') + '</select></div>' +
       '</div><div class="frm-actions" style="border:none;padding-top:14px"><button class="btn btn-primary" onclick="saveSystem()">' + icon('save', 15) + ' Save System Settings</button></div>' +
-      '<div class="danger-zone"><b>Danger Zone</b><p style="font-size:13px;color:var(--muted);margin:5px 0 10px">Reset the database to the original sample data. All changes will be lost.</p>' +
-      '<button class="btn btn-danger" onclick="resetData()">' + icon('refresh', 15) + ' Reset Demo Data</button></div></div>';
+      '<div class="danger-zone"><b>Danger Zone</b><p style="font-size:13px;color:var(--muted);margin:5px 0 10px">Reset the database to its initial empty state. All changes will be lost.</p>' +
+      '<button class="btn btn-danger" onclick="resetData()">' + icon('refresh', 15) + ' Reset Database</button></div></div>';
   } else if (setTab === 'profile') {
     const u = state.user;
     b.innerHTML = '<div style="max-width:560px"><div class="pv-head" style="margin-bottom:18px">' +
@@ -2388,7 +2334,7 @@ function saveSystem() {
   renderSetBody();
 }
 function resetData() {
-  confirmDialog({ title:'Reset Demo Data', msg:'This will <b>erase all current data</b> and restore the original sample database. Are you sure you want to continue?', ok:'Reset Data', tone:'danger',
+  confirmDialog({ title:'Reset Database', msg:'This will <b>erase all current data</b> and restore the initial empty database. Are you sure you want to continue?', ok:'Reset Database', tone:'danger',
     onOk(){
       clearTimeout(driveSync.timer);
       driveSync.pending = null;
