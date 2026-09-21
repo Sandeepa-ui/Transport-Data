@@ -544,14 +544,6 @@ body.sb-collapsed .main-wrap{margin-left:72px}
   };
   var form = byId('login-form');
   if (form) form.addEventListener('submit', function (e) { e.preventDefault(); e.stopPropagation(); window.__imoSubmit(); });
-  setTimeout(function () {
-    if (!window.__imoReady) {
-      var ua = navigator.userAgent || '';
-      if (ua.length > 90) ua = ua.substring(0, 90);
-      banner('<b>The application engine did not start.</b> ' + (window.__imoBootError ? ('Error: ' + esc5(window.__imoBootError)) : '') +
-        '<br>Re-copy the entire file, save it as .html, and open it directly in Chrome / Edge / Firefox.<br><span style="opacity:.7">Browser: ' + esc5(ua) + '</span>');
-    }
-  }, 2500);
   var es6 = false;
   try { es6 = !!new Function('const f=(a,b)=>`x${a+b}y`;return f(1,2)==="x3y"')(); } catch (e) { es6 = false; }
   if (!es6) {
