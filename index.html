@@ -795,19 +795,19 @@ function vstats(v) {
   const occupied = db.employees.filter(e => e.vehicleId === v.id).length;
   const available = total - occupied;
   const util = total ? (occupied / total) * 100 : 0;
-  const status = available <= 0 ? 'Full' : (util >= 85 ? 'Nearly Full' : 'Available');
+  const status = occupied > total ? 'Seat Capacity Exceeded' : (available === 0 ? 'Full' : (util >= 85 ? 'Nearly Full' : 'Available'));
   return { total: total, occupied: occupied, available: available, util: util, status: status };
 }
 function totals() {
-  let totalSeats = 0, occupied = 0, full = 0, nearly = 0, availVeh = 0;
+  let totalSeats = 0, occupied = 0, full = 0, exceeded = 0, nearly = 0, availVeh = 0;
   db.vehicles.forEach(function (v) {
     const s = vstats(v);
     totalSeats += s.total; occupied += s.occupied;
-    if (s.status === 'Full') full++; else if (s.status === 'Nearly Full') nearly++; else availVeh++;
+    if (s.status === 'Seat Capacity Exceeded') exceeded++; else if (s.status === 'Full') full++; else if (s.status === 'Nearly Full') nearly++; else availVeh++;
   });
   const available = totalSeats - occupied;
   const util = totalSeats ? (occupied / totalSeats) * 100 : 0;
-  return { employees: db.employees.length, vehicles: db.vehicles.length, totalSeats: totalSeats, occupied: occupied, available: available, util: util, full: full, nearly: nearly, availVeh: availVeh };
+  return { employees: db.employees.length, vehicles: db.vehicles.length, totalSeats: totalSeats, occupied: occupied, available: available, util: util, full: full, exceeded: exceeded, nearly: nearly, availVeh: availVeh };
 }
 function fmtDate(ts) {
   const d = new Date(ts), f = db.settings.dateFormat;
@@ -893,7 +893,7 @@ function confirmDialog(o) {
   $('#cf-ok').onclick = () => { closeModal(); if (o.onOk) o.onOk(); };
 }
 function pill(status) {
-  const map = { 'Available':'p-ok', 'Nearly Full':'p-warn', 'Full':'p-full', 'Active':'p-ok', 'Inactive':'p-inact' };
+  const map = { 'Available':'p-ok', 'Nearly Full':'p-warn', 'Full':'p-full', 'Seat Capacity Exceeded':'p-full', 'Active':'p-ok', 'Inactive':'p-inact' };
   return '<span class="pill ' + (map[status] || 'p-out') + '"><span class="dot"></span>' + esc(status) + '</span>';
 }
 function mErr(msg){ const e = $('#m-err'); if (e) e.textContent = msg; }
@@ -968,7 +968,7 @@ function hbars(items) {
     '<div class="hb-v">' + it.value + '</div></div>').join('') + '</div>';
 }
 function capBar(st) {
-  const pct = st.total ? (st.occupied / st.total) * 100 : 0;
+  const pct = st.total ? Math.min(100, (st.occupied / st.total) * 100) : 0;
   return '<div class="capbar" data-tipc="' + st.occupied + ' occupied · ' + st.available + ' available" style="min-width:90px"><span style="width:' + pct.toFixed(1) + '%"></span></div>';
 }
 
@@ -1427,7 +1427,8 @@ function renderDashboard() {
   const statusRows = [
     { l:'Available', n:t.availVeh, c:C.royal4, p:'p-ok' },
     { l:'Nearly Full', n:t.nearly, c:C.gold, p:'p-warn' },
-    { l:'Full', n:t.full, c:C.royal, p:'p-full' }
+    { l:'Full', n:t.full, c:C.royal, p:'p-full' },
+    { l:'Seat Capacity Exceeded', n:t.exceeded, c:C.royal, p:'p-full' }
   ];
   const dnU = donutChart([
     { label:'Occupied Seats', value:t.occupied, color:C.royal },
@@ -1658,7 +1659,7 @@ function renderEmployeeForm(p) {
     '<p class="sub">' + (isEdit ? 'Modify transport allocation for ' + esc(emp.empNo) : 'Register a new employee and assign a transport seat') + '</p></div>' +
     '<button class="btn btn-plain" onclick="nav(\'employees\')">' + icon('arrowL', 15) + ' Back to Employees</button></div>' +
     '<div class="card frm-card"><div class="frm-sec"><h3>' + icon('user', 18) + ' Employee Information</h3>' +
-    '<p>All fields marked <span class="req">*</span> are mandatory. Seats are validated against vehicle capacity.</p></div>' +
+    '<p>All fields marked <span class="req">*</span> are mandatory. Vehicle capacity is tracked, but assignments may exceed the defined seat capacity.</p></div>' +
     '<div class="frm-body"><form id="emp-form" novalidate><div class="fgrid">' +
       '<div class="field"><label>EMP No <span class="req">*</span></label><input id="f-empno" value="' + esc(emp ? emp.empNo : '') + '" placeholder="e.g. IMO-1001" maxlength="20"><div class="f-err" id="e-f-empno"></div></div>' +
       '<div class="field"><label>Employee Name <span class="req">*</span></label><input id="f-name" value="' + esc(emp ? emp.name : '') + '" placeholder="Full name"><div class="f-err" id="e-f-name"></div></div>' +
@@ -1677,12 +1678,10 @@ function renderEmployeeForm(p) {
     if (!vid) { hint.innerHTML = ''; return; }
     const v = vehOf(vid), st = vstats(v);
     const current = isEdit && emp.vehicleId === vid;
-    if (!current && st.available <= 0) {
-      hint.innerHTML = '<div class="hint err">' + icon('alertC', 15) + ' <b>' + esc(v.vehicleNumber) + '</b> is full — no additional seats are available.</div>';
-      return;
-    }
     let cls = 'hint', extra = '';
     if (current) extra = ' · currently assigned to this employee';
+    else if (st.available < 0) { cls = 'hint err'; extra = ' · seat capacity exceeded'; }
+    else if (st.available === 0) { cls = 'hint warn'; extra = ' · seat capacity reached'; }
     else if (st.available === 1) { cls = 'hint warn'; extra = ' · last remaining seat'; }
     else if (st.util >= 85) { cls = 'hint warn'; extra = ' · nearly full'; }
     hint.innerHTML = '<div class="' + cls + '">' + icon(cls === 'hint warn' ? 'alertT' : 'info', 15) + ' <b>' + esc(v.vehicleNumber) + '</b> — ' + st.occupied + ' of ' + st.total + ' seats occupied · <b>' + st.available + '</b> available' + extra + '</div>';
@@ -1700,8 +1699,8 @@ function renderEmployeeForm(p) {
     db.vehicles.filter(v => v.transportTypeId === tv).forEach(v => {
       const st = vstats(v);
       const current = isEdit && emp.vehicleId === v.id;
-      const full = st.available <= 0 && !current;
-      opts += '<option value="' + v.id + '"' + (current ? ' selected' : '') + (full ? ' disabled' : '') + '>' + esc(v.vehicleNumber) + ' — ' + st.available + ' seat' + (st.available === 1 ? '' : 's') + ' available' + (full ? ' (Full)' : '') + '</option>';
+      const full = st.available === 0 && !current;
+      opts += '<option value="' + v.id + '"' + (current ? ' selected' : '') + '>' + esc(v.vehicleNumber) + ' — ' + st.available + ' seat' + (st.available === 1 ? '' : 's') + ' available' + (full ? ' (Full)' : '') + (st.available < 0 ? ' (Seat Capacity Exceeded)' : '') + '</option>';
     });
     vSel.innerHTML = '<option value="">Select Vehicle</option>' + opts;
     vSel.disabled = false;
@@ -1727,13 +1726,7 @@ function renderEmployeeForm(p) {
     if (!tv) { fErr('f-type', 'Transport Type is required.'); bad = true; }
     if (!vv) { fErr('f-vehicle', 'Vehicle is required.'); bad = true; }
     if (bad) { notify('error', 'Validation Failed', 'Please correct the highlighted fields.'); return; }
-    const v = vehOf(vv), st = vstats(v);
-    const stays = isEdit && emp.vehicleId === vv;
-    if (!stays && st.available <= 0) {
-      fErr('f-vehicle', 'Vehicle is full. No additional seats are available.');
-      notify('error', 'Vehicle Full', v.vehicleNumber + ' is full. No additional seats are available.');
-      return;
-    }
+    const v = vehOf(vv);
     const ts = Date.now();
     if (isEdit) {
       const oldV = vehOf(emp.vehicleId);
@@ -1748,7 +1741,8 @@ function renderEmployeeForm(p) {
       notify('success', 'Employee Added', name + ' successfully added and assigned to ' + v.vehicleNumber + '.');
     }
     const st2 = vstats(v);
-    if (st2.status === 'Nearly Full') notify('warning', 'Vehicle Nearly Full', v.vehicleNumber + ' is nearly full — only ' + st2.available + ' seat(s) remaining.');
+    if (st2.status === 'Seat Capacity Exceeded') notify('warning', 'Seat Capacity Exceeded', v.vehicleNumber + ' now has ' + st2.occupied + ' assigned employee(s) for ' + st2.total + ' seat(s).');
+    else if (st2.status === 'Nearly Full') notify('warning', 'Vehicle Nearly Full', v.vehicleNumber + ' is nearly full — only ' + st2.available + ' seat(s) remaining.');
     else if (st2.status === 'Full') notify('warning', 'Vehicle Full', v.vehicleNumber + ' is now fully occupied (0 seats available).');
     nav('employees');
   };
@@ -2053,7 +2047,7 @@ const REPDEFS = [
   { k:'occupancy', l:'Vehicle Occupancy Report',    d:'Capacity, occupied & available', ic:'activity' },
   { k:'trend',     l:'Seat Occupancy Trend Report', d:'Occupied seats by day / week / month / year', ic:'activity' },
   { k:'available', l:'Available Seat Report',       d:'Vehicles with open seats',       ic:'checkC' },
-  { k:'full',      l:'Full Vehicle Report',         d:'Vehicles with 0 available seats',ic:'alertT' }
+  { k:'full',      l:'Full Vehicle Report',         d:'Vehicles at or above seat capacity',ic:'alertT' }
 ];
 function renderReports() {
   $('#page-reports').innerHTML =
@@ -2068,7 +2062,7 @@ function renderReports() {
       '<div class="field"><label>To Date (trend report)</label><input type="date" id="rf-to" value="' + esc(repState.to) + '"></div>' +
       '<div class="field"><label>Transport Type</label><select id="rf-type"><option value="">All Types</option>' + db.transportTypes.map(t => opt(t.id, t.name, repState.typeF === t.id)).join('') + '</select></div>' +
       '<div class="field"><label>Vehicle</label><select id="rf-veh"><option value="">All Vehicles</option>' + db.vehicles.map(v => opt(v.id, v.vehicleNumber, repState.veh === v.id)).join('') + '</select></div>' +
-      '<div class="field"><label>Capacity Status</label><select id="rf-status">' + opt('', 'All', repState.status === '') + opt('Available', 'Available', repState.status === 'Available') + opt('Nearly Full', 'Nearly Full', repState.status === 'Nearly Full') + opt('Full', 'Full', repState.status === 'Full') + '</select></div>' +
+      '<div class="field"><label>Capacity Status</label><select id="rf-status">' + opt('', 'All', repState.status === '') + opt('Available', 'Available', repState.status === 'Available') + opt('Nearly Full', 'Nearly Full', repState.status === 'Nearly Full') + opt('Full', 'Full', repState.status === 'Full') + opt('Seat Capacity Exceeded', 'Seat Capacity Exceeded', repState.status === 'Seat Capacity Exceeded') + '</select></div>' +
       '<div class="field"><label>Search (employee report)</label><div class="search" style="max-width:none">' + icon('search', 14) + '<input id="rf-q" placeholder="EMP No / name" value="' + esc(repState.q) + '"></div></div>' +
       '<button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:4px" onclick="generateReport()">' + icon('file', 15) + ' Generate Report</button>' +
     '</div></div><div class="card" id="rep-out"></div></div>';
@@ -2110,8 +2104,8 @@ function buildReport() {
     let list = db.vehicles.slice().sort((a, b) => a.vehicleNumber.localeCompare(b.vehicleNumber));
     if (f.typeF) list = list.filter(v => v.transportTypeId === f.typeF);
     if (f.status) list = list.filter(v => vstats(v).status === f.status);
-    r = { title:'Vehicle Capacity Report', columns:['Vehicle Type','Vehicle Number','Total Seats','Occupied Seats','Available Seats','Utilization %'],
-      rows:list.map(v => { const s = vstats(v); return [typeName(v.transportTypeId) || '—', v.vehicleNumber, s.total, s.occupied, s.available, s.util.toFixed(1) + '%']; }),
+    r = { title:'Vehicle Capacity Report', columns:['Vehicle Type','Vehicle Number','Total Seats','Occupied Seats','Available Seats','Utilization %','Status'],
+      rows:list.map(v => { const s = vstats(v); return [typeName(v.transportTypeId) || '—', v.vehicleNumber, s.total, s.occupied, s.available, s.util.toFixed(1) + '%', s.status]; }),
       summary:'Vehicles: ' + list.length + ' · Total Seats: ' + list.reduce((a, v) => a + vstats(v).total, 0) + ' · Occupied: ' + list.reduce((a, v) => a + vstats(v).occupied, 0) + ' · Available: ' + list.reduce((a, v) => a + vstats(v).available, 0) };
   } else if (f.type === 'dept') {
     const rows = db.departments.map(d => {
@@ -2166,11 +2160,11 @@ function buildReport() {
       rows:list.map(v => { const s = vstats(v); return [v.vehicleNumber, typeName(v.transportTypeId) || '—', s.total, s.occupied, s.available, s.util.toFixed(1) + '%']; }),
       summary: list.length + ' vehicle(s) with ' + list.reduce((a, v) => a + vstats(v).available, 0) + ' seat(s) available' };
   } else {
-    let list = db.vehicles.filter(v => vstats(v).available === 0);
+    let list = db.vehicles.filter(v => vstats(v).available <= 0);
     if (f.typeF) list = list.filter(v => v.transportTypeId === f.typeF);
     r = { title:'Full Vehicle Report', columns:['Vehicle Number','Vehicle Type','Total Seats','Occupied Employees','Status'],
-      rows:list.map(v => { const s = vstats(v); return [v.vehicleNumber, typeName(v.transportTypeId) || '—', s.total, s.occupied, 'Full']; }),
-      summary: list.length ? list.length + ' vehicle(s) are fully occupied (0 available seats)' : 'No vehicles are currently full' };
+      rows:list.map(v => { const s = vstats(v); return [v.vehicleNumber, typeName(v.transportTypeId) || '—', s.total, s.occupied, s.status]; }),
+      summary: list.length ? list.length + ' vehicle(s) are at or above seat capacity' : 'No vehicles are currently full or over capacity' };
   }
   r.filters = filters;
   return r;
